@@ -1,1 +1,1 @@
-web: gunicorn QurdobaSys.wsgi 
+web: gunicorn main.wsgi 
