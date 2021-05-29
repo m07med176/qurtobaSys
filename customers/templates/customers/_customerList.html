@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<form>{% csrf_token %}</form>
+<div id="result"></div>
+
+{% endblock content %}
+
+{% block script %}
+<script>
+    $(document).ready(function(){
+        if($('#result') != null){  Read(); }
+
+    
+        $(document).on('click', '.delete', function(){
+            $id = $(this).attr('name');
+            $.ajax({
+                url: 'deleteCustomer/' + $id,
+                type: 'POST',
+                data: {
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+                },
+                
+                success:function(response){
+                    if (response.status == "true"){
+                    Read();
+                    $(window).scrollTop(0);
+                    $('#box_message_success').text(response.message);
+                    $('#box_message_success').fadeIn(500);
+                    $('#box_message_success').fadeOut(100);
+                    window.location = response.link;
+                    }
+                },
+                error:function(error){
+                if (error.status == "false"){
+                $(window).scrollTop(0);
+                $('#box_message_success').text(response.message);
+                $('#box_message_danger').fadeIn(500);
+                $('#box_message_success').fadeOut(100);
+                window.location = response.link;
+                }}
+            
+            });
+        });
+
+    });
+    
+    function Read(){
+        alert('test');
+        $.ajax({
+    url: 'read',
+    type: 'POST',
+    async: false,
+    data:{
+    res: 1,
+    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+    },
+    success: function(response){
+        
+    $('#result').html(response);
+    }
+        });
+    }
+</script>
+{% endblock script %}

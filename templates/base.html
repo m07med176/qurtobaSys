@@ -1,0 +1,136 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>قرطبة للإتصالات</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/favicon.ico' %}">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Local css files relative -->
+    <link rel="stylesheet" href="{% static 'bootstrap/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/font-awesome.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'main/style.css' %}">
+
+
+</head>
+<body>
+<div class="wrapper d-flex align-items-stretch">
+			<nav id="sidebar">
+				<div class="p-4 pt-5">
+		  		<a href="#" class="img logo rounded-circle mb-5" style="background-image: url({% static 'images/logo.png' %});"></a>
+	        <ul class="list-unstyled components mb-5">
+	          <li class="active">
+	            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">القائمة الرئسيسة</a>
+	            <ul class="collapse list-unstyled" id="homeSubmenu">
+                <li>
+                    <a href="#">Home 1</a>
+                </li>
+                <li>
+                    <a href="#">Home 2</a>
+                </li>
+                <li>
+                    <a href="#">Home 3</a>
+                </li>
+	            </ul>
+	          </li>
+	          <li>
+	              <a href="{% url 'create' %}">إضافة عميل</a>
+            </li>
+            
+            <li>
+              <a href="{% url 'showList' %}">قائمة العملاء</a>
+          </li>
+          
+          <!--
+            <li>
+              <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Patient List</a>
+              <ul class="collapse list-unstyled" id="pageSubmenu">
+                <li>
+                    <a href="#">Page 1</a>
+                </li>
+                <li>
+                    <a href="#">Page 2</a>
+                </li>
+                <li>
+                    <a href="#">Page 3</a>
+                </li>
+              </ul>
+	          </li>
+          -->
+	          
+<!-- 	          <li>
+              <a href="#">Print Prescription</a>
+	          </li>
+	          <li>
+              <a href="#">Medically compromised Patient</a>
+	          </li> -->
+	        </ul>
+
+	        <div class="footer">
+                <!-- <p>developed by mohamed arafa</p> -->
+              </div>
+
+	      </div>
+    	</nav>
+
+        <!-- Page Content  -->
+      <div id="content" class="p-4 p-md-5">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <div class="container-fluid">
+
+            <button type="button" id="sidebarCollapse" class="btn btn-primary">
+              <i class="fa fa-bars"></i>
+              <span class="sr-only">Toggle Menu</span>
+            </button>
+            <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa fa-bars"></i>
+            </button>
+
+            <!-- <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="nav navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Add Patient</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Patient List</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Print Prescription</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Medically compromised Patient</a>
+                </li>
+              </ul>
+            </div>
+             -->
+          </div>
+        </nav>
+        <!-- message of crud -->
+        <div class="alert alert-success" style="display: none;" role="alert" id="box_message_success"></div>
+        <div class="alert alert-danger" style="display: none;" role="alert" id="box_message_danger"></div>
+        
+      {% block content %}
+      {% endblock content %}
+      </div>
+		</div>
+
+
+                                    <!-- LOCAL js relative -->
+        <script src="{% static 'jquery/jquery.min.js' %}"></script>
+        <script src="{% static 'main/popper-min.js' %}"></script>
+        <script src="{% static 'bootstrap/bootstrap.min.js' %}"></script>
+        <script src="{% static 'assets/fontawsome-all.min.js' %}"></script>
+        <script src="{% static 'main/myjs.js' %}"></script>
+        {% block script %}
+        {% endblock script %}
+
+</body>
+</html>

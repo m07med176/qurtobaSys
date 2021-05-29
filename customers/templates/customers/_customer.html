@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-md-6">
+ 
+                <!-- form card login -->
+<form class="form" id="form">
+    <!-- message of crud -->
+    <div class="alert alert-success" style="display: none;" role="alert" id="box_message_success"></div>
+    <div class="alert alert-danger" style="display: none;" role="alert" id="box_message_danger"></div>
+     
+  {% csrf_token %}
+    <div class="card card-outline-secondary">
+        <span class="anchor" id="formLogin"></span>
+      <div class="card-header">
+        <h3 class="mb-0"> إضافة عميل <i class="far fa-stethoscope"></i></h3>
+      </div>
+      <div class="card-body">
+
+        {{form|crispy}}
+
+        
+        <button id="submitting" class="form-control btn btn-success btn-lg float-center text-light" >حفظ</button>
+      </div>
+    </div>
+</form>
+  </div>
+</div>
+{% endblock content %}
+
+
+{% block script %}
+<script>
+   
+$(document).ready(function(event) {
+
+// ------------------ start ajax section --------------------- \\
+        const form =  document.getElementById('form');
+        //const message_box =  document.getElementById('box');
+        //$(this).serialize(),
+        const csrf = document.getElementsByName('csrfmiddlewaretoken');
+        const url = "";
+        //form.addEventListener('submit',(e)=>{
+        $(document).on('click','#submitting',function (e) {
+        var data = new FormData($('form')[0]);
+
+
+            e.preventDefault();
+            $.ajax({
+              type:'POST',
+              enctype: 'multipart/form-data',
+              url:url,
+              data:data,
+              dataType: 'json',
+              cache: false,
+              processData: false,
+              contentType: false,
+              beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                },
+                success:function(response){
+                    if (response.status == "true"){
+                    $('#form')[0].reset();
+                    $(window).scrollTop(0);
+                    
+                    $('#box_message_success').text(response.message);
+                    $('#box_message_success').fadeIn(500);
+                    $('#box_message_success').fadeOut(100);
+                    window.location = response.link;
+                    }
+                },
+                error:function(error){
+                if (error.status == "false"){
+
+                $('#form')[0].reset();
+                $(window).scrollTop(0);
+
+                
+                $('#box_message_success').text(response.message);
+                $('#box_message_danger').fadeIn(500);
+                $('#box_message_success').fadeOut(100);
+                window.location = response.link;
+                }}
+            });
+        });
+    // ------------------ end ajax section --------------------- \\
+});
+</script>
+{% endblock script %}

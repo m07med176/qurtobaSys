@@ -1,0 +1,128 @@
+{% extends 'querriesTraders/base.html' %}
+{% load static %}
+{% block content %}
+<table id="dt-filter-select" class="table table-striped table-bordered dt-responsive nowrap bg-light" style="width:100%">
+        <thead>
+            <tr>
+            <th class="th-sm" >#</th>
+            <th class="th-sm" >إسم المندوب</th>
+            <th class="th-sm" >المنطقة</th>
+            <th class="th-sm" >نوع النشاط</th>
+            <th class="th-sm" >إسم المحل</th>
+            <th class="th-sm" >إسم صاحب العمل</th>
+            <th class="th-sm" >رقم التليفون</th>
+            <th class="th-sm" >العنوان بالتفصيل</th>
+            <th class="th-sm" >مكن الدفع الإلكترونى</th>
+            <th class="th-sm" >الكارت</th>
+            <th class="th-sm" >الطاير</th>
+            <th class="th-sm" >نية التعامل</th>
+            <th class="th-sm" >حجم التعامل</th>
+            <th class="th-sm" >نوع اجهزه المحمول</th>
+            <th class="th-sm" >التقييم</th>
+            <th class="th-sm" >الملاحظات</th>
+            <th class="th-sm" >التاريخ</th>
+            <th class="th-sm" >الوقت</th>
+            </tr>
+        </thead>
+           <tbody>
+        {% for data in all_data%}
+          <tr class="fixed">
+            <td>{{data.id}}</td>
+            <td>{{data.nameOfMandoop}}</td>
+            <td>{{data.area}}</td>
+            <td>{{data.activityKind}}</td>
+            <td>{{data.shopName}}</td>
+            <td>{{data.ownerName}}</td>
+            <td>{{data.phoneNumber}}</td>
+            <td>{{data.address}}</td>
+            <td>{{data.machinesOfepay}}</td>
+            <td>{{data.sim}}</td>
+            <td>{{data.tayer}}</td>
+            <td>{{data.intention}}</td>
+            <td>{{data.amountOfTreat}}</td>
+            <td>{{data.kindOfMobile}}</td>
+            <td>{{data.evaluate}}</td>
+            <td>{{data.notes}}</td>
+            <td>{{data.time}}</td>
+            <td>{{data.date}}</td>
+
+        </tr>
+    {% endfor %}
+    </tbody>
+<tfoot>
+    <tr>
+            <th>#</th>
+            <th>إسم المندوب</th>
+            <th>المنطقة</th>
+            <th>نوع النشاط</th>
+            <th>إسم المحل</th>
+            <th>إسم صاحب العمل</th>
+            <th>رقم التليفون</th>
+            <th>العنوان بالتفصيل</th>
+            <th>مكن الدفع الإلكترونى</th>
+            <th>الكارت</th>
+            <th>الطاير</th>
+            <th>نية التعامل</th>
+            <th>حجم التعامل</th>
+            <th>نوع اجهزه المحمول</th>
+            <th>التقييم</th>
+            <th>الملاحظات</th>
+            <th>التاريخ</th>
+            <th>الوقت</th>
+    </tr>
+  </tfoot>
+    </table>
+<br>
+<a href="{% url 'extract' %}" class="btn btn-warning d-flex justify-content-center">إستخراج ملف الإكسل</a>
+
+
+{% endblock %}
+
+{% block script %}
+<script type='text/javascript'>
+    $(document).ready(function(){
+
+    $('#example').DataTable();
+
+    $('#dt-filter-select').dataTable({
+    "fnInitComplete": function () {
+    var myCustomScrollbar = document.querySelector('#dt-horizontal-scroll_wrapper .dataTables_scrollBody');
+    var ps = new PerfectScrollbar(myCustomScrollbar);
+    },
+    "scrollX": true,
+    fixedColumns:   {
+    leftColumns: 1,
+    rightColumns: 1
+    },"pagingType": "first_last_numbers",
+    initComplete: function () {
+    this.api().columns().every( function () {
+        var column = this;
+        var select = $('<select  class="browser-default custom-select form-control-sm"><option value="" selected>Search</option></select>')
+            .appendTo( $(column.footer()).empty() )
+            .on( 'change', function () {
+                var val = $.fn.dataTable.util.escapeRegex(
+                    $(this).val()
+                );
+
+                column
+                    .search( val ? '^'+val+'$' : '', true, false )
+                    .draw();
+            } );
+
+        column.data().unique().sort().each( function ( d, j ) {
+            select.append( '<option value="'+d+'">'+d+'</option>' )
+        } );
+    } );
+    }
+
+
+
+    });
+
+    $('#dt-filter-select_filter input').attr('placeholder','قم بالبحث هنه');
+    $('option:selected').text('ابحث');
+    $('#dt-filter-select_first a').html('الأول');
+    $('#dt-filter-select_last a').html('اللأخر');
+  });
+    </script>
+{% endblock %}

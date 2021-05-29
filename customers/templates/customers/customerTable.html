@@ -1,0 +1,42 @@
+<table class="table table-bordered">
+    <thead class="alert-success">
+        <tr>
+            <th>الإســم</th>
+            <th>الرقم القومى</th>
+            <th>إسم المحل</th>
+            <th>نوع المحل</th>
+            <th>رقم التليفون</th>
+            <th>العنوان</th>
+            <th>التاريخ</th>
+            <th>رقم الحساب</th>
+            <th>الوقت</th>
+            <th>تحكم</th>
+        </tr>
+
+    </thead>
+    
+    <tbody>
+        {% for data in all %}
+        <tr>
+            <td>{{ data.name }}</td>
+            <td>{{ data.idNo }}</td>
+            <td>{{ data.shopName }}</td>
+            <td>{{ data.shopKind }}</td>
+            <td>{{ data.phoneNo }}</td>
+            <td>{{ data.address }}</td>
+            <td>{{ data.date }}</td>
+            <td>{{ data.account.name }}</td>
+            <td>{{ data.time }}</td>
+            <td>
+                <center>
+                    <form>
+                        {% csrf_token %}
+                    <a class="btn btn-sm btn-warning text-light edit" href="{% url 'updateCustomer' data.id %}">عدل</a> 
+                    <a class="btn btn-sm btn-danger text-light delete" name="{{ data.id }}">إحذف</a>
+                </form>
+                </center>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
