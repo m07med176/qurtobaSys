@@ -6,8 +6,15 @@ db = FirebaseManager()
 def home(request):
     return render(request,'analysDataTable.html')
 
+def analysMandop(request,mandoop):
+    return render(request,'analysDataTable.html')
+
 def dataTable(request):
     return render(request,'datatable.html',{'all_data':db.getAllData()})
+
+def dataTableMandoop(request,mandoop):
+    return render(request,'datatable.html',{'all_data':db.getMandopData(mandoop)})
+
 
 def getDataList(request):
     if request.is_ajax and request.method == "GET":

@@ -5,6 +5,9 @@ from django.conf.urls.static import static
 
 urlpatterns = [
             path('analys' , views.home),
-            path('table',views.dataTable),              
+            path('analys/<str:mandoop>' , views.analysMandop),
+            path('table',views.dataTable),      
+            path('table/<str:mandoop>',views.dataTableMandoop),        
             path('getData',views.getDataList ,name = "getData"), 
+            
             ]
