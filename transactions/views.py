@@ -5,4 +5,4 @@ db = FirebaseServerice()
 
 def getDataList(request):
     #return JsonResponse(, safe=False)
-    return render(request,'transactions\dataTable.html',{'all_data':db.getAllSellers()})
+    return render(request,'transactions\accountTable.html',{'all_data':db.getAllSellers()})
