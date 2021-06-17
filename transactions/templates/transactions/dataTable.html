@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+{% extends 'transactions/base.html' %}
+{% load static %}
+
+{% block links %}
+            <!-- CDN css files -->
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+            <link href="https://fonts.googleapis.com/css2?family=Tajawal&display=swap" rel="stylesheet">
+            <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+{% endblock %}
+            
+            
+{% block content %}
+<table id="example" class="table table-striped table-bordered dt-responsive nowrap bg-light" style="width:100%">
+        
+        <thead>
+        <tr>
+        <th class="th-sm text-primary" >#</th>
+        <th class="th-sm text-primary" >إسم المندوب</th>
+        <th class="th-sm text-info" >إسم العميل</th> 
+            
+        <th class="th-sm text-danger" >الرصيد</th>
+        <th class="th-sm text-danger" >قيمة أخر التحويل</th>
+        <th class="th-sm text-secondary" >التاريخ</th>
+        <th class="th-sm text-secondary" >الوقت</th>
+        <!-- بيانات اخرى -->
+        <th class="th-sm text-info" >المنطقة</th>
+        <th class="th-sm text-info" >رقم التليفون</th>
+        <th class="th-sm text-info" >العنوان</th>
+        <th class="th-sm text-info" >رقم الحساب</th>
+        </tr>
+        </thead>
+        <tbody>
+            
+            
+            {% for data in all_data%}
+            <tr >
+                <td data-mdb-field="checkbox">{{ forloop.counter }}<div class="form-check hideforadmin"> </div></td>
+                <td>{{data.mandopName}}</td>
+                <td>{{data.customerName}}</td>
+                <td>{{data.rest}}</td>
+                <td>{{data.lastTrans}}</td>
+                <td>{{data.date}}</td>
+                <td>{{data.time}}</td>
+
+                <td>{{data.area}}</td>
+                <td>{{data.phoneNo}}</td>
+                <td>{{data.address}}</td>
+                <td>{{data.deviceNo}}</td>    
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+            <th>#</th>
+            <th>إسم المندوب</th>
+            <th>إسم العميل</th>
+            <th>الرصيد</th>
+            <th>قيمة أخر التحويل</th>
+            <th>التاريخ</th>
+            <th>الوقت</th>
+
+            <th>المنطقة</th>
+            <th>رقم التليفون</th>
+            <th>العنوان</th>
+            <th>رقم الحساب</th>
+            </tr> 
+        </tfoot>
+
+    </table>
+<br>
+
+{% endblock %}
+
+{% block script %}
+ <!-- CDN js -->
+ <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+ <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+ <!-- CDN data table js -->
+ <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+ <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+ <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+
+ <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.6/js/dataTables.responsive.min.js"></script>
+ <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.6/js/responsive.bootstrap4.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $('#success').show();
+        $('#loading').hide();
+        $('#deletebtn').hide();
+        $('input.datatable-row-checkbox').change(function() {
+        if(this.checked) {
+        $('#deletebtn').fadeIn(1000);
+        $(this).closest('tr').addClass("table-danger");
+        console.log('fd');
+        }
+        });
+
+        $('#example').dataTable({
+        "fnInitComplete": function () {
+        var myCustomScrollbar = document.querySelector('#dt-horizontal-scroll_wrapper .dataTables_scrollBody');
+        var ps = new PerfectScrollbar(myCustomScrollbar);;
+        },
+        "scrollX": true,
+        fixedColumns:   {
+        leftColumns: 1,
+        rightColumns: 1
+        },"pagingType": "first_last_numbers",
+        initComplete: function () {
+        this.api().columns().every( function () {
+        var column = this;
+        var select = $('<select  class="browser-default custom-select form-control-sm"><option value="" selected>Search</option></select>')
+        .appendTo( $(column.footer()).empty() )
+        .on( 'change', function () {
+            var val = $.fn.dataTable.util.escapeRegex(
+                $(this).val()
+            );
+
+            column
+                .search( val ? '^'+val+'$' : '', true, false )
+                .draw();
+        } );
+
+        column.data().unique().sort().each( function ( d, j ) {
+        select.append( '<option value="'+d+'">'+d+'</option>' )
+        } );
+        } );
+        }
+
+
+
+        });
+
+        $('#dt-filter-select_filter input').attr('placeholder',' ..قم بالبحث هنا');
+        //$('option:selected').text('ابحث');
+        $('#dt-filter-select_first a').html('الأول');
+        $('#dt-filter-select_last a').html('اللأخر');
+        $('.down').hide();
+
+
+        });
+
+</script>
+{% endblock %}

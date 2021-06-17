@@ -4,71 +4,62 @@
 <html lang="ar">
         <head>
             <meta charset="UTF-8">
-            <title>{% block title %} قرطبة للإتصالات{% endblock %}</title>
-            <!--    <link rel="stylesheet" href="{% static 'main/normalize.css' %}">-->
-            <!--    <link rel="stylesheet" href="{% static 'bootstrap/bootstrap.min.css' %}">-->
+            <title>{% block title %} جدول التجار{% endblock %}</title>
+
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
             <link href="https://fonts.googleapis.com/css2?family=Tajawal&display=swap" rel="stylesheet">
             <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
             <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css"/>
-            <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css"/>
-            <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.6/css/responsive.bootstrap4.min.css"/>
-
-            <!--    <link rel="stylesheet" href="{% static 'icons/font-awesome.min.css' %}">-->
-            <!--    <link rel="stylesheet" href="{% static 'main/main.css' %}">-->
+            {% block links %}{% endblock %}
+            
+            
             <style>
-                    @font-face{
-                font-family: 'Tajawal', sans-serif;
 
-            //  src: url('../fonts/Tajawal/Tajawal-Regular.ttf')format("truetype"),
-            //  local('Tajawal');
+            *{
+            box-sizing: border-box;
             }
-
-*{
-  box-sizing: border-box;
-}
-.arrow{
-  cursor: pointer;
-  position:relative;
-  display:block;
-  margin: 100px 0 0 100px;
-  width:100px;
-  height: 100px;
-  border: solid 6px #999;
-  border-radius: 100%;
-  z-index: 1;
-  transition: all .2s linear;
-  &:before, &:after{
-    content:"";
-    position: absolute;
-    width:35%;
-    height: 10%;
-    top:41%;
-    left:55%;
-    background: #999;
-    z-index: 2;
-    transform: translate(-50%, -50%) rotate(45deg);
-    transition: all .2s linear;
-  }
-  &:after{
-    z-index: 3;
-    top:59%;
-    left:55%;
-    transform: translate(-50%, -50%) rotate(-45deg);
-  }
-  &:hover{
-    border: solid 8px #777;
-    &:after, &:before{
-      background: #777;
-    }
-  }
-  &:active{
-    border: solid 8px #555;
-    &:after, &:before{
-      background: #111;
-    }
-  }
-}
+            .arrow{
+            cursor: pointer;
+            position:relative;
+            display:block;
+            margin: 100px 0 0 100px;
+            width:100px;
+            height: 100px;
+            border: solid 6px #999;
+            border-radius: 100%;
+            z-index: 1;
+            transition: all .2s linear;
+            &:before, &:after{
+                content:"";
+                position: absolute;
+                width:35%;
+                height: 10%;
+                top:41%;
+                left:55%;
+                background: #999;
+                z-index: 2;
+                transform: translate(-50%, -50%) rotate(45deg);
+                transition: all .2s linear;
+            }
+            &:after{
+                z-index: 3;
+                top:59%;
+                left:55%;
+                transform: translate(-50%, -50%) rotate(-45deg);
+            }
+            &:hover{
+                border: solid 8px #777;
+                &:after, &:before{
+                background: #777;
+                }
+            }
+            &:active{
+                border: solid 8px #555;
+                &:after, &:before{
+                background: #111;
+                }
+            }
+            }
 
             html , body{
                 direction: rtl;
@@ -243,41 +234,7 @@
             </style>
         </head>
         <body>
-        <!--<nav class="navbar navbar-expand-lg navbar-light bg-light">-->
-        <!--  <a class="navbar-brand" href="#">قرطبة للإتصالات</a>-->
-        <!--  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">-->
-        <!--    <span class="navbar-toggler-icon"></span>-->
-        <!--  </button>-->
 
-        <!--  <div class="collapse navbar-collapse" id="navbarSupportedContent">-->
-        <!--    <ul class="navbar-nav mr-auto">-->
-        <!--      <li class="nav-item active">-->
-        <!--        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>-->
-        <!--      </li>-->
-        <!--      <li class="nav-item">-->
-        <!--        <a class="nav-link" href="#">Link</a>-->
-        <!--      </li>-->
-        <!--      <li class="nav-item dropdown">-->
-        <!--        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
-        <!--          Dropdown-->
-        <!--        </a>-->
-        <!--        <div class="dropdown-menu" aria-labelledby="navbarDropdown">-->
-        <!--          <a class="dropdown-item" href="#">Action</a>-->
-        <!--          <a class="dropdown-item" href="#">Another action</a>-->
-        <!--          <div class="dropdown-divider"></div>-->
-        <!--          <a class="dropdown-item" href="#">Something else here</a>-->
-        <!--        </div>-->
-        <!--      </li>-->
-        <!--      <li class="nav-item">-->
-        <!--        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>-->
-        <!--      </li>-->
-        <!--    </ul>-->
-        <!--    <form class="form-inline my-2 my-lg-0">-->
-        <!--      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">-->
-        <!--      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
-        <!--    </form>-->
-        <!--  </div>-->
-        <!--</nav>-->
             <div id="loading">
                 <svg version="1.1"
                 xmlns="http://www.w3.org/2000/svg"
@@ -295,29 +252,25 @@
         <div id="success">
             <div class="container py-3">
             <div class="row">
-              <div class="col-md-12">
+            <div class="col-md-12">
                 <h2 class="text-center mb-3">قرطبة للإتصالات</h2>
 
             {% block content %}
             {% endblock %}
 
-                  </div><!--/col-->
+            </div><!--/col-->
             </div><!--/row-->
-          </div><!--/container-->
+        </div><!--/container-->
         </div>
 
+        
         <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
-        <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
-        <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
-        <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.6/js/dataTables.responsive.min.js"></script>
-        <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.6/js/responsive.bootstrap4.min.js"></script>
-
-
-        <script type='text/javascript'>
+ 
+        <script type="text/javascript">
         // --------------- Start page loading ------------------\\
 
         // Function for adding User data and removing loading animation
@@ -368,10 +321,6 @@
         {% block script %}
         {% endblock %}
         
-        <!--<script src="{% static 'jquery/jquery-3.5.1.slim.min.js' %}"></script>-->
-        <!--<script src="{% static 'main/popper-min.js' %}"></script>-->
-        <!--<script src="{% static 'bootstrap/bootstrap.min.js' %}"></script>-->
-        <!--<script src="{% static 'icons/fontawosme-all.min.js' %}"></script>-->
 
         </body>
 </html>

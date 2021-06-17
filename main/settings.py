@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'home',
     'customers',
     'dataEltogar',
+    'transactions',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

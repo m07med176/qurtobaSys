@@ -1,19 +1,20 @@
 from django.shortcuts import render
 from django.http import HttpResponse , FileResponse , JsonResponse
 import json
-from .firebase import FirebaseManager
-db = FirebaseManager()
+from firebaseServerDB import FirebaseServerice
+db = FirebaseServerice()
+
 def home(request):
-    return render(request,'analysDataTable.html')
+    return render(request,'dataEltogar/analysDataTable.html')
 
 def analysMandop(request,mandoop):
-    return render(request,'analysDataTable.html')
+    return render(request,'dataEltogar/analysDataTable.html')
 
 def dataTable(request):
-    return render(request,'datatable.html',{'all_data':db.getAllData()})
+    return render(request,'dataEltogar/datatable.html',{'all_data':db.getAllData()})
 
 def dataTableMandoop(request,mandoop):
-    return render(request,'datatable.html',{'all_data':db.getMandopData(mandoop)})
+    return render(request,'dataEltogar/datatable.html',{'all_data':db.getMandopData(mandoop)})
 
 
 def getDataList(request):

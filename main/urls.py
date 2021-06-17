@@ -21,4 +21,5 @@ urlpatterns = [
     path('', include('home.urls')),
     path('customers/',include('customers.urls')),
     path('dataEltogar/',include('dataEltogar.urls')),
+    path('transactions/',include('transactions.urls')),
 ]

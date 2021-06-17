@@ -1,57 +1,106 @@
-{% extends 'querriesTraders/base.html' %}
+<!DOCTYPE html>
+{% extends 'dataEltogar/base.html' %}
 {% load static %}
+
+{% block links %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.6/css/responsive.bootstrap4.min.css"/>
+{% endblock %}
+            
+            
 {% block content %}
 <table id="dt-filter-select" class="table table-striped table-bordered dt-responsive nowrap bg-light" style="width:100%">
+        
         <thead>
-            <tr>
-            <th class="th-sm" >#</th>
-            <th class="th-sm" >إسم المندوب</th>
-            <th class="th-sm" >المنطقة</th>
-            <th class="th-sm" >نوع النشاط</th>
-            <th class="th-sm" >إسم المحل</th>
-            <th class="th-sm" >إسم صاحب العمل</th>
-            <th class="th-sm" >رقم التليفون</th>
-            <th class="th-sm" >العنوان بالتفصيل</th>
-            <th class="th-sm" >مكن الدفع الإلكترونى</th>
-            <th class="th-sm" >الكارت</th>
-            <th class="th-sm" >الطاير</th>
-            <th class="th-sm" >نية التعامل</th>
-            <th class="th-sm" >حجم التعامل</th>
-            <th class="th-sm" >نوع اجهزه المحمول</th>
-            <th class="th-sm" >التقييم</th>
-            <th class="th-sm" >الملاحظات</th>
-            <th class="th-sm" >التاريخ</th>
-            <th class="th-sm" >الوقت</th>
-            </tr>
-        </thead>
-           <tbody>
-        {% for data in all_data%}
-          <tr class="fixed">
-            <td>{{data.id}}</td>
-            <td>{{data.nameOfMandoop}}</td>
-            <td>{{data.area}}</td>
-            <td>{{data.activityKind}}</td>
-            <td>{{data.shopName}}</td>
-            <td>{{data.ownerName}}</td>
-            <td>{{data.phoneNumber}}</td>
-            <td>{{data.address}}</td>
-            <td>{{data.machinesOfepay}}</td>
-            <td>{{data.sim}}</td>
-            <td>{{data.tayer}}</td>
-            <td>{{data.intention}}</td>
-            <td>{{data.amountOfTreat}}</td>
-            <td>{{data.kindOfMobile}}</td>
-            <td>{{data.evaluate}}</td>
-            <td>{{data.notes}}</td>
-            <td>{{data.time}}</td>
-            <td>{{data.date}}</td>
+       <tr>
+       <!--التاجر--> 
+        <th class="th-sm text-primary" >#</th>
+        <th class="th-sm text-primary" >إسم المندوب</th>
+        <th class="th-sm text-primary" >المنطقة</th>
+        <th class="th-sm text-primary" >نوع النشاط</th>
+        <th class="th-sm text-primary" >إسم المحل</th>
+        <th class="th-sm text-primary" >إسم صاحب العمل</th>
+        <th class="th-sm text-primary" >رقم التليفون</th>
+        <th class="th-sm text-primary" >العنوان بالتفصيل</th>
+       <!--الدفع الإلكترونى--> 
+        <th class="th-sm text-info" >مكن الدفع الإلكترونى</th>
+        <th class="th-sm text-info" >هل يحتاج</th>
+        <th class="th-sm text-info" ><i class="fas fa-sort-amount-up"></i></th><!--حجم التعامل-->
 
+       <!--البكر--> 
+        <th class="th-sm text-secondary" >البكر الحرارى</th>
+        <th class="th-sm text-secondary" >معدل الشراء</th>
+       <!--الكارت--> 
+        <th class="th-sm text-success" >الكارت</th>
+       <!--الطاير--> 
+        <th class="th-sm text-danger" >الطاير</th>
+        <th class="th-sm text-danger" >قابليته للتعامل</th>
+        <th class="th-sm text-danger" > <i class="fas fa-sort-amount-up"></i> </th>
+        <th class="th-sm text-danger" > مصدر الشراء </th>
+       <!--الكاش--> 
+        <th class="th-sm text-warning" >الكاش</th>
+        <th class="th-sm text-warning" ><i class="fas fa-sort-amount-up"></i></th><!--حجم التعامل فى الكاش
+
+       <!--المحمول--> 
+        <th class="th-sm text-info" >نوع اجهزه المحمول</th>
+        <th class="th-sm text-info" >مصدر الشراء</th>
+
+       <!--بيقة بيانات التاجر--> 
+        <th class="th-sm text-primary" >التقييم</th>
+        <th class="th-sm text-primary" >الملاحظات</th>
+
+        <th class="th-sm text-primary" >التاريخ</th>
+        <th class="th-sm text-primary" >الوقت</th>
+        <th class="th-sm text-primary" >التحكم</th>
         </tr>
-    {% endfor %}
-    </tbody>
-<tfoot>
-    <tr>
+        </thead>
+        <tbody>
+            {% for data in all_data%}
+            <tr >
+                <!--التاجر-->
+                <td data-mdb-field="checkbox">{{ forloop.counter }}<div class="form-check hideforadmin"> </div></td>
+                <td>{{data.nameOfMandoop}}</td>
+                <td>{{data.area}}</td>
+                <td>{{data.activityKind}}</td>
+                <td>{{data.shopName}}</td>
+                <td>{{data.ownerName}}</td>
+                <td>{{data.phoneNumber}}</td>
+                <td>{{data.address}}</td>
+                <!--الدفع الإلكترونى-->
+                <td>{{data.machinesOfepay}}</td>
+                <td>{{data.machinesOfepayIsNeedMachine}}</td>
+                <td>{{data.amountOfTreat}}</td>
+                <!--البكر-->
+                <td>{{data.bakar}}  {{data.bakarNotes}}</td>
+                <td>{{data.bakar_intention}} {{data.bakar_withdraw}} {{data.bakarFromWho}} </td>
+                <!--الكارت-->
+                <td>{{data.sim}} {{data.cardNotes}}</td>
+                <!--الطاير-->
+                <td>{{data.tayer}}</td>
+                <td>{{data.intention}}</td>
+                <td>{{data.amountPayTayer}}</td>
+                <td>{{data.tayerFromWho}}</td>
+                <!--الكاش-->
+                <td>{{data.cash}} {{data.amountPayCash}} </td>
+                <td>{{data.intent_cash}}  </td>
+                <!--المحمول-->
+                <td>{{data.kindOfMobile}}  {{data.mobileNotes}}</td>
+                <td>{{data.mobileFromWhow}}</td>
+                <!--بيقه بيانات التاجر-->
+                <td>{{data.evaluate}}</td>
+                <td>{{data.notes}}</td>
+                <td>{{data.time}}</td>
+                <td>{{data.date}}</td>
+                <!--التحكم-->
+                <td> </td>
+    
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
             <th>#</th>
+            <!-- التاجر--> 
             <th>إسم المندوب</th>
             <th>المنطقة</th>
             <th>نوع النشاط</th>
@@ -59,27 +108,48 @@
             <th>إسم صاحب العمل</th>
             <th>رقم التليفون</th>
             <th>العنوان بالتفصيل</th>
+            <!-- الدفع الإلكترونى--> 
             <th>مكن الدفع الإلكترونى</th>
-            <th>الكارت</th>
-            <th>الطاير</th>
-            <th>نية التعامل</th>
+            <th>هل يحتاج</th>
             <th>حجم التعامل</th>
+            <!-- البكر--> 
+            <th>البكر الحرارى</th>
+            <th>معدل الشراء</th>
+            <!-- الكارت--> 
+            <th>الكارت</th>
+            <!-- الطاير--> 
+            <th>الطاير</th>
+            <th>قابليته للتعامل</th>
+            <th><i class="fas fa-sort-amount-up"></i></th>
+            <th>مصدر الشراء</th>
+            <!-- الكاش--> 
+            <th>الكاش</th>
+            <th><i class="fas fa-sort-amount-up"></i></th> <!--حجم التعامل فى الكاش--> 
+            <!-- المحمول--> 
             <th>نوع اجهزه المحمول</th>
+            <th>مصدر الشراء</th>
+            <!--بيقية بيانات التاجر--> 
             <th>التقييم</th>
             <th>الملاحظات</th>
             <th>التاريخ</th>
             <th>الوقت</th>
-    </tr>
-  </tfoot>
+            <th>التحكم</th>
+            </tr> 
+        </tfoot>
+
     </table>
 <br>
-<a href="{% url 'extract' %}" class="btn btn-warning d-flex justify-content-center">إستخراج ملف الإكسل</a>
-
 
 {% endblock %}
 
 {% block script %}
-<script type='text/javascript'>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.6/js/dataTables.responsive.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.6/js/responsive.bootstrap4.min.js"></script>
+
+
+<script type="text/javascript">
     $(document).ready(function(){
 
     $('#example').DataTable();
@@ -125,4 +195,5 @@
     $('#dt-filter-select_last a').html('اللأخر');
   });
     </script>
+
 {% endblock %}
