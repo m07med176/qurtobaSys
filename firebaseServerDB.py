@@ -120,7 +120,7 @@ class FirebaseServerice:
                                                 trans = ["غير معروف","غير معروف","غير معروف","غير معروف","غير معروف","غير معروف","غير معروف","غير معروف","غير معروف"]
                                                 #print(e,"trans")
                                         tableRaw["mandopName"] = names[n]
-                                        tableRaw["customerName"] = customer[1]
+                                        tableRaw["customerName"] = " ".join(customer[1].split(" ")[0:2])
                                         tableRaw["deviceNo"] = deviceNo
                                         tableRaw["rest"] = singleRest
                                         tableRaw["lastTrans"] = trans[2]
@@ -137,6 +137,3 @@ class FirebaseServerice:
                                 continue
                 return dataTable
                 #customers = [i.get('Customers') for i in csv]
-
-
-                        
