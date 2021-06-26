@@ -16,6 +16,9 @@ def dataTable(request):
 def dataTableMandoop(request,mandoop):
     return render(request,'dataEltogar/datatable.html',{'all_data':db.getMandopData(mandoop)})
 
+def dataTableEmbed(request):
+    return render(request,'dataEltogar/datatable_.html',{'all_data':db.getAllData()})
+
 
 def getDataList(request):
     if request.is_ajax and request.method == "GET":

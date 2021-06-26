@@ -9,5 +9,8 @@ urlpatterns = [
             path('table',views.dataTable),      
             path('table/<str:mandoop>',views.dataTableMandoop),        
             path('getData',views.getDataList ,name = "getData"), 
+            path('table_data',views.dataTableEmbed,name = "table"),  
             
             ]
+urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_URL)
+

@@ -1,6 +1,8 @@
 from django.urls import path,include
 from customers import views
 from django.conf.urls import url
+from django.conf.urls.static import static
+from django.conf import settings
 
 #-----------------------------
 from .views import Customer_infoL
@@ -20,3 +22,4 @@ urlpatterns = [
     # api
      path('api/', include(router.urls)),
 ]
+urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_URL)
