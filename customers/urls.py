@@ -19,7 +19,9 @@ urlpatterns = [
     url(r'^read$', views.customerTable),
     url(r'^deleteCustomer/(?P<id>\d+)$', views.deleteCustomer, name='deleteCustomer'),
 
+    # manadeep customer
+    path('customers_manadeep',views.manadeepCustomers,name="customers_manadeep" ),
     # api
-     path('api/', include(router.urls)),
+    path('api/', include(router.urls)),
 ]
 urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_URL)

@@ -4,12 +4,7 @@ import json
 from firebaseServerDB import FirebaseServerice
 db = FirebaseServerice()
 
-def home(request):
-    return render(request,'dataEltogar/analysDataTable.html')
-
-def analysMandop(request,mandoop):
-    return render(request,'dataEltogar/analysDataTable.html')
-
+# datatable
 def dataTable(request):
     return render(request,'dataEltogar/datatable.html',{'all_data':db.getAllData()})
 
@@ -18,6 +13,17 @@ def dataTableMandoop(request,mandoop):
 
 def dataTableEmbed(request):
     return render(request,'dataEltogar/datatable_.html',{'all_data':db.getAllData()})
+
+
+# analys
+def home(request):
+    return render(request,'dataEltogar/analysDataTable.html')
+
+def analysMandop(request,mandoop):
+    return render(request,'dataEltogar/analysDataTable.html')
+
+def analysMandopEmbed(request):
+    return render(request,'dataEltogar/analys_.html',{'all_data':db.getAllData()})
 
 
 def getDataList(request):

@@ -4,6 +4,7 @@ from datetime import time
 from firebase_admin import credentials
 from firebase_admin import db
 import firebase_admin
+import collections
 import os
 import json
 import pandas as pd
@@ -12,6 +13,7 @@ import io
 
 class FirebaseServerice:
         def __init__(self):
+            self.deviceNom = []
             try:
                 self.initTransactions = firebase_admin.get_app('qurdoba')
             except ValueError:
@@ -21,6 +23,7 @@ class FirebaseServerice:
             except ValueError:
                 self.initDataEltogar = self.dataEltogar()
 
+        # ------------ Server ------------ #
         def dataEltogar(self):
                 self.REALDB_URL = "https://data-eltogar-default-rtdb.asia-southeast1.firebasedatabase.app/"
                         ## config ##
@@ -63,7 +66,58 @@ class FirebaseServerice:
                 )
                 return firebase_admin.initialize_app(cred,{ 'databaseURL':self.REALDB_URL },name="qurdoba")
 
-        # ---------------- get all items ---------------- #
+        # ---------------- Manadeep Customer ---------------- #
+        def getDublicatedNo(self):
+                if len(self.deviceNom) > 0:
+                        dublicates = [item for item, count in collections.Counter(self.deviceNom).items() if count > 1]
+                        print(dublicates)
+                        return {"state":True,
+                                "content":dublicates}
+                else:
+                        return {"state":False,
+                                "content":[]}
+        def getAllMandopCustomer(self):
+                #.equal_to(subjectId) order_by_child
+
+                # root
+                ref = db.reference(app=firebase_admin.get_app('qurdoba')).child('sellers').get()
+                data = [val for _,val in ref.items()]
+                # manadeep name
+                names = [i.get('user_name') for i in [ i['user_info'] for i in data]]
+                # get each mandop database
+                csv = [val.get('DataBases') for _,val in ref.items()]
+                customerHead = "id,name,deviceNo,phoneNo,area,address,a\n"
+                dataTable = []
+                
+                for n,i in enumerate(csv):
+                        try:
+                                customers = pd.read_csv(  io.StringIO( customerHead + i['Customers'])  , sep=",")
+                                if names[n] in ['قرطبة للإتصالات','عطيه','3-إبراهيم',"6-الكنانى","5-منير"]:
+                                        continue
+                                for customer in customers.values.tolist():
+                                        
+                                        tableRaw = {}
+                                        deviceNo = customer[2]
+                                        self.deviceNom.append(deviceNo)
+                                        tableRaw["mandopName"] = names[n]
+                                        tableRaw["customerName"] = " ".join(customer[1].split(" ")[0:2])
+                                        tableRaw["deviceNo"] = deviceNo
+                                        tableRaw["phoneNo"] = "0"+customer[5]
+                                        tableRaw["area"] = customer[4]
+                                        tableRaw["address"] = customer[3]
+                                        dataTable.append(tableRaw)
+                                
+                        except Exception as e:
+                                #print(e)
+                                continue
+                return dataTable
+                #customers = [i.get('Customers') for i in csv]
+
+        # ---------------- Data Eltogar ---------------- #
+        def getMandopData(self,mandopName):
+                ref = db.reference("customersdata/alldata")
+                querry = ref.order_by_child("nameOfMandoop").equal_to(mandopName)
+                return [val for _,val in querry.get().items()]
         def getAllData(self):
                         ref = db.reference("customersdata/alldata",app=firebase_admin.get_app('Data Eltogar'))
                         data = []
@@ -73,18 +127,12 @@ class FirebaseServerice:
                                 except Exception:
                                         continue
                         return data
-                        # ---------------- get single item ---------------- #
-        
+                        # ---------------- get single item ---------------- #  
         def getDataItem(self,itemId):
                 ref = db.reference("customersdata/alldata")
                 return [val for _,val in ref.child(itemId).get().items()]
 
-        # ---------------- Querry mandop ---------------- #
-        def getMandopData(self,mandopName):
-                ref = db.reference("customersdata/alldata")
-                querry = ref.order_by_child("nameOfMandoop").equal_to(mandopName)
-                return [val for _,val in querry.get().items()]
-
+        # ---------------- Manadeep Transactions ---------------- #
         def getAllSellers(self):
                 #.equal_to(subjectId) order_by_child
                 ref = db.reference(app=firebase_admin.get_app('qurdoba')).child('sellers').get()
@@ -127,7 +175,7 @@ class FirebaseServerice:
                                         tableRaw["date"] = trans[6]
                                         tableRaw["time"] = trans[7]
 
-                                        tableRaw["phoneNo"] = customer[5]
+                                        tableRaw["phoneNo"] = "0"+customer[5]
                                         tableRaw["area"] = customer[4]
                                         tableRaw["address"] = customer[3]
                                         dataTable.append(tableRaw)
@@ -137,3 +185,44 @@ class FirebaseServerice:
                                 continue
                 return dataTable
                 #customers = [i.get('Customers') for i in csv]
+        # ----------------- Accounts of Office ------------------- #
+        def getAccountOffice(self,seller):
+                #.equal_to(subjectId) order_by_child
+                ref = db.reference(app=firebase_admin.get_app('qurdoba')).child('sellers').get()
+                data = [[node,val] for node,val in ref.items() if node in ['alandalus10418@gmail0com',seller]]
+                customerHead = "id,name,deviceNo,phoneNo,area,address,a\n"
+                restHead = "id,deviceNo,value,date,d\n"
+                transHead = "id,kind,value,name,deviceNo,f,date,time,datetime\n"
+                customers = pd.read_csv(  io.StringIO( customerHead +  data[1][1]['DataBases']['Customers']  )  , sep=",")
+                rest = pd.read_csv(  io.StringIO( restHead  + data[0][1]['DataBases']['Rest'] )  , sep=",") 
+                #transactions =pd.read_csv(  io.StringIO( transHead + data[0][1]['DataBases']['Transactions'] )  , sep=",")
+                areas = customers['area'].unique()
+                allData = []
+                for area in areas:
+                        header = {}
+                        if area != '':
+                                areaM = area
+                        else:
+                                areaM = 'غير معروف'
+                        header['deviceNo'] = 0
+                        header['customerName'] = areaM
+                        header['phoneNo'] = '1111111111111112111111111'
+                        header['rest'] = 0.0
+                        allData.append(header)
+                        data = customers.loc[customers['area'] == area ].values.tolist()
+                        for i in data:
+                                try:
+                                        row = {}
+                                        row['deviceNo'] = i[2]
+                                        row['customerName'] = i[1]
+                                        row['phoneNo'] = i[3]
+                                        row['rest'] = rest.loc[rest['deviceNo'] == i[2] ].tail(1).values.tolist()[0][0]
+                                        allData.append(row)
+                                except IndexError as e:
+                                        continue
+                        
+                return allData
+                #customers = [i.get('Customers') for i in csv]
+if __name__ == '__main__':
+        master = FirebaseServerice()
+        master.getAccountOffice('ibrahim0sakr55055@gmail0com')

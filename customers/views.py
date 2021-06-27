@@ -10,6 +10,10 @@ from rest_framework import viewsets
 from .serializers import SCustomer_info,SCustomer_Image,SCustomer_account
 from .models import Customer_info,Customer_Image,Customer_account
 
+# firebase 
+import json
+from firebaseServerDB import FirebaseServerice
+db = FirebaseServerice()
 class Customer_infoL(viewsets.ModelViewSet):
     queryset = Customer_info.objects.all().prefetch_related('images')
     serializer_class = SCustomer_info
@@ -50,6 +54,11 @@ def showList(request):
 
 def customerTable(request):
     return render(request,'customers/customerTable.html',{"all":Customer_info.objects.all()})
+
+
+def manadeepCustomers(request):
+    return render(request,'customers/datatable_.html',{'all_data':db.getAllMandopCustomer()})
+
 
 def deleteCustomer(request,id):
     dataRespose = {'message':"عفوا حدث خطأ أثناء الحذف",'status':"false","link":"#"}
