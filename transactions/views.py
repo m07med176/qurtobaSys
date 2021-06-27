@@ -20,7 +20,7 @@ def getMandopTrans(request,seller):
 class ApiView(APIView):
     permission_classes = (permissions.AllowAny,)
     def get(self,request,seller):
-        return Response(db.getAccountOffice(seller))
+        return Response({"data":db.getAccountOffice(seller)})
 
 
 
