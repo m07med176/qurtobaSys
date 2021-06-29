@@ -19,8 +19,8 @@ def getMandopTrans(request,seller):
 
 class ApiView(APIView):
     permission_classes = (permissions.AllowAny,)
-    def get(self,request,seller):
-        return Response({"data":db.getAccountOffice(seller)})
+    def get(self,request,seller,manager):
+        return Response({"data":db.getAccountOffice(seller,manager)})
 
 
 

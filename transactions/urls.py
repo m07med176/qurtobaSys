@@ -6,7 +6,7 @@ urlpatterns = [
         path('' , views.getDataList),
         path('transactions' , views.getDataListEmbed , name= "transactions"),
         path('trans/<str:seller>',views.getMandopTrans , name ='trans' ),
-        path('transApi/<str:seller>',views.ApiView.as_view() , name ='transApi' )
+        path('transApi/<str:manager>/<str:seller>',views.ApiView.as_view() , name ='transApi' )
         #path('analys/<str:mandoop>' , views.analysMandop),
         #path('table',views.dataTable),      
         #path('table/<str:mandoop>',views.dataTableMandoop),        

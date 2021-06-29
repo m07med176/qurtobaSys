@@ -54,10 +54,15 @@ def showList(request):
 
 def customerTable(request):
     return render(request,'customers/customerTable.html',{"all":Customer_info.objects.all()})
-
-
+    
 def manadeepCustomers(request):
-    return render(request,'customers/datatable_.html',{'all_data':db.getAllMandopCustomer()})
+    return render(request,'customers/datatable_.html',db.getAllMandopCustomer())
+
+def migrateCustomers(request,email):
+    db.collectCustomers(email)
+    return HttpResponse("<h1>تمت العملية بنجاح<h1>")
+
+    
 
 
 def deleteCustomer(request,id):

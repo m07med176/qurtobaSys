@@ -9,7 +9,7 @@ import os
 import json
 import pandas as pd
 import io 
-
+import re
 
 class FirebaseServerice:
         def __init__(self):
@@ -78,40 +78,85 @@ class FirebaseServerice:
                                 "content":[]}
         def getAllMandopCustomer(self):
                 #.equal_to(subjectId) order_by_child
-
                 # root
                 ref = db.reference(app=firebase_admin.get_app('qurdoba')).child('sellers').get()
                 data = [val for _,val in ref.items()]
                 # manadeep name
                 names = [i.get('user_name') for i in [ i['user_info'] for i in data]]
+                namesEmail =  [[email,val["user_info"].get('user_name')] for email,val in ref.items()]
                 # get each mandop database
                 csv = [val.get('DataBases') for _,val in ref.items()]
                 customerHead = "id,name,deviceNo,phoneNo,area,address,a\n"
                 dataTable = []
-                
                 for n,i in enumerate(csv):
                         try:
-                                customers = pd.read_csv(  io.StringIO( customerHead + i['Customers'])  , sep=",")
-                                if names[n] in ['قرطبة للإتصالات','عطيه','3-إبراهيم',"6-الكنانى","5-منير"]:
+                                # if name is none
+                                if names[n] is None:
+                                        continue
+                                try:
+                                        customers = pd.read_csv(  io.StringIO( customerHead + i['Customers'])  , sep=",")
+                                except Exception as e:
+                                        continue
+                                # if name in this black list (:
+                                if names[n] in ['قرطبة للإتصالات','عطيه',"6-الكنانى","5-منير"]:
                                         continue
                                 for customer in customers.values.tolist():
-                                        
                                         tableRaw = {}
                                         deviceNo = customer[2]
                                         self.deviceNom.append(deviceNo)
-                                        tableRaw["mandopName"] = names[n]
+                                        
+                                        nameOfM = names[n].replace("-","")
+                                        tableRaw["mandopName"] = re.sub("\d","",nameOfM)
                                         tableRaw["customerName"] = " ".join(customer[1].split(" ")[0:2])
                                         tableRaw["deviceNo"] = deviceNo
-                                        tableRaw["phoneNo"] = "0"+customer[5]
+                                        try:
+                                                tableRaw["phoneNo"] = "0" + customer[5]
+                                        except TypeError as e:
+                                                tableRaw["phoneNo"] = ""
                                         tableRaw["area"] = customer[4]
                                         tableRaw["address"] = customer[3]
-                                        dataTable.append(tableRaw)
-                                
+                                        dataTable.append(tableRaw)                                
                         except Exception as e:
-                                #print(e)
                                 continue
-                return dataTable
+                if len(self.deviceNom) > 0:
+                        dublicates = [item for item, count in collections.Counter(self.deviceNom).items() if count > 1]
+                        return {"state":True,
+                                "content":dublicates,
+                                "all_data":dataTable,
+                                "manadeep":namesEmail}
+                else:
+                        return {"state":False,
+                                "content":[],
+                                "all_data":dataTable,
+                                "manadeep":namesEmail}
                 #customers = [i.get('Customers') for i in csv]
+        def collectCustomers(self,email):
+                #.equal_to(subjectId) order_by_child
+                # root
+                ref = db.reference(app=firebase_admin.get_app('qurdoba')).child('sellers').get()
+                data = [val for _,val in ref.items()]
+                # manadeep name
+                names = [i.get('user_name') for i in [ i['user_info'] for i in data]]
+                namesEmail =  [[email,val["user_info"].get('user_name')] for email,val in ref.items()]
+                # get each mandop database
+                csv = [val.get('DataBases') for _,val in ref.items()]
+                customerHead = ""
+                dataTable = []
+                for n,i in enumerate(csv):
+                        try:
+                                # if name is none
+                                if names[n] is None:
+                                        continue
+                                # if name in this black list (:
+                                if names[n] in ['قرطبة للإتصالات','عطيه',"6-الكنانى","5-منير"]:
+                                        continue
+                                try:
+                                        customerHead+= i['Customers']
+                                except Exception as e:
+                                        continue
+                        except Exception as e:
+                                continue
+                db.reference(app=firebase_admin.get_app('qurdoba')).child(f"sellers/{email}/DataBases").update({ f'Customers':customerHead })
 
         # ---------------- Data Eltogar ---------------- #
         def getMandopData(self,mandopName):
@@ -186,41 +231,49 @@ class FirebaseServerice:
                 return dataTable
                 #customers = [i.get('Customers') for i in csv]
         # ----------------- Accounts of Office ------------------- #
-        def getAccountOffice(self,seller):
+        def getAccountOffice(self,seller,manager):
                 #.equal_to(subjectId) order_by_child
                 ref = db.reference(app=firebase_admin.get_app('qurdoba')).child('sellers').get()
-                data = [[node,val] for node,val in ref.items() if node in ['alandalus10418@gmail0com',seller]]
                 customerHead = "id,name,deviceNo,phoneNo,area,address,a\n"
                 restHead = "id,deviceNo,value,date,d\n"
-                transHead = "id,kind,value,name,deviceNo,f,date,time,datetime\n"
-                customers = pd.read_csv(  io.StringIO( customerHead +  data[1][1]['DataBases']['Customers']  )  , sep=",")
-                rest = pd.read_csv(  io.StringIO( restHead  + data[0][1]['DataBases']['Rest'] )  , sep=",") 
+                customers = ""
+                rest =  ""
+                data = [[node,val] for node,val in ref.items() if node in [manager,seller]]
+                for email,data in ref.items():
+                        if email == manager:
+                                rest = pd.read_csv(  io.StringIO( restHead  + data['DataBases']['Rest'] )  , sep=",").fillna('') 
+                        if email == seller:
+                                customers = pd.read_csv(  io.StringIO( customerHead +  data['DataBases']['Customers']  )  , sep=",").fillna('')                
+                #transHead = "id,kind,value,name,deviceNo,f,date,time,datetime\n"
                 #transactions =pd.read_csv(  io.StringIO( transHead + data[0][1]['DataBases']['Transactions'] )  , sep=",")
                 areas = customers['area'].unique()
                 allData = []
                 for area in areas:
                         header = {}
-                        if area != '':
-                                areaM = area
-                        else:
-                                areaM = 'غير معروف'
+                        if area != '': areaM = area
+                        else: areaM = 'غير معروف'
                         header['deviceNo'] = 0
                         header['customerName'] = areaM
                         header['phoneNo'] = '1111111111111112111111111'
                         header['rest'] = 0.0
                         allData.append(header)
                         data = customers.loc[customers['area'] == area ].values.tolist()
+                        repeat = False
                         for i in data:
                                 try:
                                         row = {}
                                         row['deviceNo'] = i[2]
                                         row['customerName'] = i[1]
                                         row['phoneNo'] = i[3]
-                                        row['rest'] = rest.loc[rest['deviceNo'] == i[2] ].tail(1).values.tolist()[0][0]
-                                        allData.append(row)
+                                        restN= rest.loc[rest['deviceNo'] == i[2] ].tail(1).values.tolist()
+                                        if len(restN)>0:
+                                                repeat = True
+                                                row['rest'] = restN[0][2]
+                                                allData.append(row)       
                                 except IndexError as e:
                                         continue
-                        
+                        if not repeat:
+                                allData.pop(-1)
                 return allData
                 #customers = [i.get('Customers') for i in csv]
 if __name__ == '__main__':

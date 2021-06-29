@@ -21,6 +21,8 @@ urlpatterns = [
 
     # manadeep customer
     path('customers_manadeep',views.manadeepCustomers,name="customers_manadeep" ),
+    path('customers_migrate/<str:email>',views.migrateCustomers,name="customers_migrate" ),
+    
     # api
     path('api/', include(router.urls)),
 ]

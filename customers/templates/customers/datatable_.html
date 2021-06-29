@@ -9,13 +9,36 @@
             
             
 {% block content %}
-
-
+<div>
+    <div class="group">
+        <input id="check" type="checkbox" class="check" checked>
+        <label for="check"><span class="icon"></span> نقل العملاء</label>
+    </div>
+    <div id= "control" class="text-success">
+            <div class="row"><div class="col-md-6">
+                <select id="disabledSelect" class="form-control">
+                    <option value="dd">Enabled select</option>
+                    {% for k,v in manadeep %}
+                        <option value="{{k}}">{{v}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="button" class="btn btn-success">نقل</button>
+        </div>
+    </div>
+</div>
+{% if state %}
+    <h1>أرقام الحسابات المتشابهه</h1>
+    <ul>
+        {% for i in content %}
+            <li>{{i}}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
 <table id="dt-filter-select" class="table table-striped table-bordered dt-responsive nowrap bg-light" style="width:100%">
         
         <thead>
         <tr>
-        <!--التاجر--> 
         <th class="th-sm text-primary" >#</th>
         <th class="th-sm text-primary" >إسم المندوب</th>
         <th class="th-sm text-primary" >إسم العميل</th>
