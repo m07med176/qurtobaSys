@@ -22,6 +22,10 @@ class ApiView(APIView):
     def get(self,request,seller,manager):
         return Response({"data":db.getAccountOffice(seller,manager)})
 
+class GetTrans(APIView):
+    permission_classes = (permissions.AllowAny,)
+    def get(self,request,manager,deviceNo):
+        return Response({"data":db.getOfficeTransactions(manager,deviceNo)})
 
 
 

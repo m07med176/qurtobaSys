@@ -296,6 +296,27 @@ class FirebaseServerice:
                                 allData.pop(-1)
                 return allData
                 #customers = [i.get('Customers') for i in csv]
+
+        def getOfficeTransactions(self,manager,deviceNo):
+                ref = db.reference(app=firebase_admin.get_app('qurdoba')).child(f'sellers/{manager}/DataBases/Transactions').get()
+                transHead = "id,kind,value,name,deviceNo,f,date,time,datetime\n"
+                transactions =pd.read_csv(  io.StringIO( transHead + ref )  , sep=",")
+                transactions = transactions.loc[transactions['deviceNo'] == deviceNo ].sort_values('datetime',ascending=False).values.tolist()
+                allData = []
+                for trans in transactions:
+                        data ={}
+                        data['transections_id'] = trans[0]
+                        data['transections_accountno'] = trans[4]
+                        data['transections_isdone'] = trans[5]
+                        data['transections_type'] = trans[1]
+                        data['transections_customer'] = trans[3]
+                        data['transections_date'] = trans[6]
+                        data['transections_time'] = trans[7]
+                        data['transections_datetime'] = trans[8]
+                        data['transections_value'] = trans[2]
+                        allData.append(data)
+                return allData
+                
 if __name__ == '__main__':
         master = FirebaseServerice()
         master.getAccountOffice('ibrahim0sakr55055@gmail0com')
