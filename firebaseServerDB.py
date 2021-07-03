@@ -87,39 +87,56 @@ class FirebaseServerice:
                 # get each mandop database
                 csv = [val.get('DataBases') for _,val in ref.items()]
                 customerHead = "id,name,deviceNo,phoneNo,area,address,a\n"
+
+                mainCustomers = pd.concat(
+                        [pd.read_csv(  io.StringIO( customerHead + data['Customers'])  , sep=",", error_bad_lines=False) for data in csv if data is not None] 
+                        )
+                dublicates  = list(set(mainCustomers[mainCustomers['deviceNo'].duplicated(keep=False)]['deviceNo'].values.tolist()))
                 dataTable = []
-                for n,i in enumerate(csv):
+                for customer in mainCustomers.values.tolist():
+                        tableRaw = {}
+                        deviceNo = customer[2]                                        
+                        nameOfM = "غير معروف" #names[n].replace("-","")
+                        tableRaw["mandopName"] = re.sub("\d","",nameOfM)
+                        tableRaw["customerName"] = customer[1] #" ".join(customer[1].split(" ")[0:2])
+                        tableRaw["deviceNo"] = deviceNo
                         try:
-                                # if name is none
-                                if names[n] is None:
-                                        continue
-                                try:
-                                        customers = pd.read_csv(  io.StringIO( customerHead + i['Customers'])  , sep=",")
-                                except Exception as e:
-                                        continue
-                                # if name in this black list (:
-                                if names[n] in ['قرطبة للإتصالات','عطيه',"6-الكنانى","5-منير"]:
-                                        continue
-                                for customer in customers.values.tolist():
-                                        tableRaw = {}
-                                        deviceNo = customer[2]
-                                        self.deviceNom.append(deviceNo)
-                                        
-                                        nameOfM = names[n].replace("-","")
-                                        tableRaw["mandopName"] = re.sub("\d","",nameOfM)
-                                        tableRaw["customerName"] = " ".join(customer[1].split(" ")[0:2])
-                                        tableRaw["deviceNo"] = deviceNo
-                                        try:
-                                                tableRaw["phoneNo"] = "0" + customer[5]
-                                        except TypeError as e:
-                                                tableRaw["phoneNo"] = ""
-                                        tableRaw["area"] = customer[4]
-                                        tableRaw["address"] = customer[3]
-                                        dataTable.append(tableRaw)                                
-                        except Exception as e:
-                                continue
-                if len(self.deviceNom) > 0:
-                        dublicates = [item for item, count in collections.Counter(self.deviceNom).items() if count > 1]
+                                tableRaw["phoneNo"] = "0" + customer[5]
+                        except TypeError as e:
+                                tableRaw["phoneNo"] = ""
+                        tableRaw["area"] = customer[4]
+                        tableRaw["address"] = customer[3]
+                        dataTable.append(tableRaw)                                
+                        
+                # for n,i in enumerate(csv):
+                #         try:
+                #                 # if name is none
+                #                 if names[n] is None:
+                #                         continue
+                #                 try:
+                #                         customers = pd.read_csv(  io.StringIO( customerHead + i['Customers'])  , sep=",")
+                #                 except Exception as e:
+                #                         continue
+                #                 # if name in this black list (:
+                #                 if names[n] in ['قرطبة للإتصالات','عطيه',"6-الكنانى","5-منير"]:
+                #                         continue
+                #                 for customer in customers.values.tolist():
+                #                         tableRaw = {}
+                #                         deviceNo = customer[2]                                        
+                #                         nameOfM = names[n].replace("-","")
+                #                         tableRaw["mandopName"] = re.sub("\d","",nameOfM)
+                #                         tableRaw["customerName"] = " ".join(customer[1].split(" ")[0:2])
+                #                         tableRaw["deviceNo"] = deviceNo
+                #                         try:
+                #                                 tableRaw["phoneNo"] = "0" + customer[5]
+                #                         except TypeError as e:
+                #                                 tableRaw["phoneNo"] = ""
+                #                         tableRaw["area"] = customer[4]
+                #                         tableRaw["address"] = customer[3]
+                #                         dataTable.append(tableRaw)                                
+                #         except Exception as e:
+                #                 continue
+                if len(dublicates) > 0:
                         return {"state":True,
                                 "content":dublicates,
                                 "all_data":dataTable,
@@ -237,13 +254,15 @@ class FirebaseServerice:
                 customerHead = "id,name,deviceNo,phoneNo,area,address,a\n"
                 restHead = "id,deviceNo,value,date,d\n"
                 customers = ""
-                rest =  ""
+                rest =""
                 data = [[node,val] for node,val in ref.items() if node in [manager,seller]]
                 for email,data in ref.items():
                         if email == manager:
                                 rest = pd.read_csv(  io.StringIO( restHead  + data['DataBases']['Rest'] )  , sep=",").fillna('') 
                         if email == seller:
-                                customers = pd.read_csv(  io.StringIO( customerHead +  data['DataBases']['Customers']  )  , sep=",").fillna('')                
+                                customers = pd.read_csv(  io.StringIO( customerHead +  data['DataBases']['Customers']  )  , sep=",", error_bad_lines=False).fillna('')                
+                                
+
                 #transHead = "id,kind,value,name,deviceNo,f,date,time,datetime\n"
                 #transactions =pd.read_csv(  io.StringIO( transHead + data[0][1]['DataBases']['Transactions'] )  , sep=",")
                 areas = customers['area'].unique()
@@ -268,8 +287,9 @@ class FirebaseServerice:
                                         restN= rest.loc[rest['deviceNo'] == i[2] ].tail(1).values.tolist()
                                         if len(restN)>0:
                                                 repeat = True
-                                                row['rest'] = restN[0][2]
-                                                allData.append(row)       
+                                                if int(restN[0][2]) !=0:
+                                                        row['rest'] = restN[0][2]
+                                                        allData.append(row)       
                                 except IndexError as e:
                                         continue
                         if not repeat:
