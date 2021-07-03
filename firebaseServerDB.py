@@ -223,12 +223,12 @@ class FirebaseServerice:
                                                 singleRest = rest.loc[rest['deviceNo'] == deviceNo ].tail(1).values.tolist()[0][2]
                                         except Exception as e:
                                                 singleRest = "غير معروف"
-                                                #print(e,"singleRest")
+
                                         try:
                                                 trans = transactions.loc[transactions['deviceNo'] == deviceNo ].tail(1).values.tolist()[0]
                                         except Exception as e:
                                                 trans = ["غير معروف","غير معروف","غير معروف","غير معروف","غير معروف","غير معروف","غير معروف","غير معروف","غير معروف"]
-                                                #print(e,"trans")
+
                                         tableRaw["mandopName"] = names[n]
                                         tableRaw["customerName"] = " ".join(customer[1].split(" ")[0:2])
                                         tableRaw["deviceNo"] = deviceNo
@@ -286,8 +286,8 @@ class FirebaseServerice:
                                         row['phoneNo'] = i[3]
                                         restN= rest.loc[rest['deviceNo'] == i[2] ].tail(1).values.tolist()
                                         if len(restN)>0:
-                                                repeat = True
                                                 if int(restN[0][2]) !=0:
+                                                        repeat = True
                                                         row['rest'] = restN[0][2]
                                                         allData.append(row)       
                                 except IndexError as e:
