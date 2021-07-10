@@ -7,6 +7,13 @@ from rest_framework.generics import ListAPIView
 from vono.models import VodafoneNumber
 from .serializers import VodafoneNumberSer
 class GetNumbersAPI(ListAPIView):
-    queryset = VodafoneNumber.objects.all()
+    # def __init__(self,branch):
+    #     self.branch = branch
+    #     print(self.branch)
+   # queryset = VodafoneNumber.objects.all()
     serializer_class = VodafoneNumberSer
     pagination_class = PageNumberPagination
+    def get_queryset(self):
+        # branch = self.request.branch
+        branch = self.kwargs['branch']
+        return VodafoneNumber.objects.filter(branch=branch)

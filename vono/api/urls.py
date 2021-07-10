@@ -3,5 +3,5 @@ from .views import GetNumbersAPI
 app_name = "vono"
 
 urlpatterns = [
-    path('vono',GetNumbersAPI.as_view(),name="vono_api")
+    path('vono/<str:branch>',GetNumbersAPI.as_view(),name="vono_api")
 ]
