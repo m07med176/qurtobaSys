@@ -25,7 +25,7 @@ SECRET_KEY = '-8s9ut4mjnvn3muph+%7cab8%7&ilw%bb&5w%mndt0rkp+7+k-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['qurtoba.herokuapp.com','127.0.0.1']
+ALLOWED_HOSTS = ['qurtoba.herokuapp.com','127.0.0.1','192.168.1.109']
 
 
 # Application definition
@@ -37,20 +37,26 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Utils #
     'phone_field',
     'crispy_forms',
     'search_admin_autocomplete',
     'rest_framework',
-    
-    # apps
+    # apps #
     'home',
     'customers',
     'dataEltogar',
     'transactions',
+    'fawryCodes',
+    'vono',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE':16
+}
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -86,10 +92,21 @@ WSGI_APPLICATION = 'main.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'd84lv9hqj4cvad',
+        'HOST': 'ec2-34-254-69-72.eu-west-1.compute.amazonaws.com',
+        'PORT': 5432,
+        'USER': 'pkekjaplofajah',
+        'PASSWORD': '5f23b729fd13ec1e966727ead1da9717e48c44bd830a6753ee23f54e14d3b099',
     }
 }
 

@@ -17,9 +17,15 @@ from django.contrib import admin
 from django.urls import path,include
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', include('home.urls')),
+    path('admin/', admin.site.urls),
     path('customers/',include('customers.urls')),
     path('dataEltogar/',include('dataEltogar.urls')),
     path('transactions/',include('transactions.urls')),
+    path('fawryCodes/',include('fawryCodes.urls')),
+
+    # REST FRAMEWORK APIs
+    path('api/fawryCodes/',include('fawryCodes.api.urls','fawry_api')),
+    path('api/vono/',include('vono.api.urls','vono_api')),
+
 ]
