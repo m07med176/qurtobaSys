@@ -10,7 +10,7 @@ class GetNumbersAPI(ListAPIView):
     # def __init__(self,branch):
     #     self.branch = branch
     #     print(self.branch)
-   # queryset = VodafoneNumber.objects.all()
+    # queryset = VodafoneNumber.objects.all()
     serializer_class = VodafoneNumberSer
     pagination_class = PageNumberPagination
     def get_queryset(self):

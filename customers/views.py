@@ -54,16 +54,6 @@ def showList(request):
 
 def customerTable(request):
     return render(request,'customers/customerTable.html',{"all":Customer_info.objects.all()})
-    
-def manadeepCustomers(request):
-    return render(request,'customers/datatable_.html',db.getAllMandopCustomer())
-
-def migrateCustomers(request,email):
-    db.collectCustomers(email)
-    return HttpResponse("<h1>تمت العملية بنجاح<h1>")
-
-    
-
 
 def deleteCustomer(request,id):
     dataRespose = {'message':"عفوا حدث خطأ أثناء الحذف",'status':"false","link":"#"}
@@ -77,4 +67,14 @@ def deleteCustomer(request,id):
             json.dumps(dataRespose),
             content_type="application/json")
     return HttpResponseRedirect('/')
+
+# firebase
+def manadeepCustomers(request):
+    return render(request,'customers/datatable_.html',db.getAllMandopCustomer())
+
+def migrateCustomers(request,email):
+    db.collectCustomers(email)
+    return HttpResponse("<h1>تمت العملية بنجاح<h1>")
+
+    
 

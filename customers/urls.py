@@ -19,7 +19,7 @@ urlpatterns = [
     url(r'^read$', views.customerTable),
     url(r'^deleteCustomer/(?P<id>\d+)$', views.deleteCustomer, name='deleteCustomer'),
 
-    # manadeep customer
+    # manadeep customers
     path('customers_manadeep',views.manadeepCustomers,name="customers_manadeep" ),
     path('customers_migrate/<str:email>',views.migrateCustomers,name="customers_migrate" ),
     

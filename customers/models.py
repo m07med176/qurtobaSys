@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from datetime import date
-from phone_field import PhoneField
+#from phone_field import PhoneField
 
 
 
@@ -21,15 +21,15 @@ class Customer_account(models.Model):
         managed = True
         db_table = 'customers_customer_account'
 
-class Customer_Image(models.Model):
-    image1 = models.ImageField(upload_to="arshiv/Customerimages",verbose_name="وجه البطاقة",null=True)
-    image2 = models.ImageField(upload_to="arshiv/Customerimages",verbose_name="ظهر البطاقة",null=True)
-    image3 = models.ImageField(upload_to="arshiv/Customerimages",verbose_name="صورة مستند",null=True)
-    class Meta:
-        verbose_name = "صور عميل"
-        verbose_name_plural = "أرشيف صور العملاء"
-        managed = True
-        db_table = 'customers_customer_image'
+# class Customer_Image(models.Model):
+#     image1 = models.ImageField(upload_to="arshiv/Customerimages",verbose_name="وجه البطاقة",null=True)
+#     image2 = models.ImageField(upload_to="arshiv/Customerimages",verbose_name="ظهر البطاقة",null=True)
+#     image3 = models.ImageField(upload_to="arshiv/Customerimages",verbose_name="صورة مستند",null=True)
+#     class Meta:
+#         verbose_name = "صور عميل"
+#         verbose_name_plural = "أرشيف صور العملاء"
+#         managed = True
+#         db_table = 'customers_customer_image'
 
 class Customer_info(models.Model):
     """
@@ -57,16 +57,33 @@ class Customer_info(models.Model):
         ("شخصى", "شخصى"),
            ]
     shopKind = models.CharField(max_length=50,choices=shops,null=True,verbose_name = "نوع المحل",default=1)
-    phoneNo = PhoneField(blank=True, help_text='قم بكتابة رقم التليفون ',verbose_name = "رقم التليفون")
+    phoneNo = models.CharField(max_length=11,blank=True, help_text='قم بكتابة رقم التليفون ',verbose_name = "رقم التليفون")
     address = models.TextField(max_length=150,verbose_name="العنوان",null=True)
     
     #chronicDisease = models.ManyToManyField(ChronicDisease,verbose_name="Chronic Disease",null=True)
     #diagnosis = models.ManyToManyField(Diagnosis,verbose_name="Diagnosis",null=True)
-    images = models.OneToOneField(Customer_Image,on_delete = models.CASCADE,verbose_name="المستندات",null=True)
-    account = models.OneToOneField('Customer_account',on_delete = models.CASCADE,verbose_name="حساب العميل",null=True)
+    # images = models.OneToOneField(Customer_Image,on_delete = models.CASCADE,verbose_name="المستندات",null=True)
+    #account = models.OneToOneField('Customer_account',on_delete = models.CASCADE,verbose_name="حساب العميل",null=True)
     date = models.DateField(null=True,verbose_name = "Date",default=timezone.now)
     time = models.TimeField(null=True,verbose_name = "Time",default=timezone.now) #default=date.today
     
+
+    ### Accounts #### 
+    machines=[
+        ("vx520c", "vx520c"),
+        ("vx520 contact", "vx520 contact"),
+        ("nexgo", "nexgo"),
+        ("mobile app", "mobile app"),
+        ("newland", " newland")]
+    machineKind = models.CharField(max_length=50,choices=machines,null=True,verbose_name = " نوع المكن",default=1)
+    
+    sims=[
+    ("vodafone", "vodafone"),
+    ("etsalat", "etsalat"),
+    ("orange", " orange"),
+        ]
+    sim = models.CharField(max_length=50,choices=sims,null=True,verbose_name = "نوع الشريحه",default=1)
+
     def __str__(self):
         return str(self.name)
     class Meta:
