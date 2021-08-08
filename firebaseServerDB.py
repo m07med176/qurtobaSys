@@ -250,10 +250,8 @@ class FirebaseServerice:
         # ----------------- Accounts of Office ------------------- #
         def getAccountOffice(self,seller,manager):
                 #.equal_to(subjectId) order_by_child
-                print("seller: "+seller)
-                print("manager: "+manager)
                 ref = db.reference(app=firebase_admin.get_app('qurdoba')).child('sellers').get()
-                customerHead = "id,name,deviceNo,phoneNo,area,address,a\n"
+                customerHead = "id,name,deviceNo,shop,area,phoneNo,address\n"
                 restHead = "id,deviceNo,value,date,d\n"
                 customers = ""
                 rest =""
@@ -268,6 +266,9 @@ class FirebaseServerice:
                 #transHead = "id,kind,value,name,deviceNo,f,date,time,datetime\n"
                 #transactions =pd.read_csv(  io.StringIO( transHead + data[0][1]['DataBases']['Transactions'] )  , sep=",")
                 areas = customers['area'].unique()
+                if len(areas) == 0:
+                        areas = customers['area'].tolist()
+
                 allData = []
                 for area in areas:
                         header = {}
@@ -292,8 +293,7 @@ class FirebaseServerice:
                                                         repeat = True
                                                         row['rest'] = restN[0][2]
                                                         allData.append(row)       
-                                except IndexError as e:
-                                        continue
+                                except IndexError as e: continue
                         if not repeat:
                                 allData.pop(-1)
                 return allData

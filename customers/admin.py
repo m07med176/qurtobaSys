@@ -39,8 +39,6 @@ class Customer2Admin(admin.ModelAdmin):
         'time' ,
     )
 
-  
-
 
 """         
         'images',
