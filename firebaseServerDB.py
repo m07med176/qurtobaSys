@@ -250,6 +250,8 @@ class FirebaseServerice:
         # ----------------- Accounts of Office ------------------- #
         def getAccountOffice(self,seller,manager):
                 #.equal_to(subjectId) order_by_child
+                print("seller: "+seller)
+                print("manager: "+manager)
                 ref = db.reference(app=firebase_admin.get_app('qurdoba')).child('sellers').get()
                 customerHead = "id,name,deviceNo,phoneNo,area,address,a\n"
                 restHead = "id,deviceNo,value,date,d\n"

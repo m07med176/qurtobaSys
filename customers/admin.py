@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import Customer_info,Customer_Image,Customer,Customer_account
+from .models import Customer_info,Customer,Customer_account #Customer_Image,
 from search_admin_autocomplete.admin import SearchAutoCompleteAdmin
 #admin.site.register(models.Customer_info)
-admin.site.register(Customer_Image)
+# admin.site.register(Customer_Image)
 admin.site.register(Customer_account)
 
 @admin.register(Customer)
@@ -35,8 +35,6 @@ class Customer2Admin(admin.ModelAdmin):
         'shopKind',
         'phoneNo',
         'address',
-        'images',
-        'account',
         'date',
         'time' ,
     )
@@ -44,7 +42,10 @@ class Customer2Admin(admin.ModelAdmin):
   
 
 
-"""         metrics = {
+"""         
+        'images',
+        'account',
+metrics = {
             'total': Count('id'),
             'total_sales': Sum('price'),
         }

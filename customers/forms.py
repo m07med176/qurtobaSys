@@ -13,10 +13,10 @@ class FCustomer_info(forms.ModelForm):
         model = models.Customer_info
         fields = '__all__'
 
-class FCustomer_Image(forms.ModelForm):
-    class Meta:
-        model = models.Customer_Image
-        fields = '__all__'
+# class FCustomer_Image(forms.ModelForm):
+#     class Meta:
+#         model = models.Customer_Image
+#         fields = '__all__'
 
 class FCustomer(forms.ModelForm):
     """

@@ -2,13 +2,12 @@ from django.shortcuts import render
 from django.http import HttpResponse , FileResponse , JsonResponse,HttpResponseRedirect
 import json
 from django.shortcuts import get_object_or_404
-from .forms import FCustomer_info , FCustomer_Image , FCustomer
-from .models import Customer_info,Customer_Image,Customer,Customer_account
+from .forms import FCustomer_info  , FCustomer #FCustomer_Image
+from .models import Customer_info,Customer,Customer_account #Customer_Image
 
 
 from rest_framework import viewsets
-from .serializers import SCustomer_info,SCustomer_Image,SCustomer_account
-from .models import Customer_info,Customer_Image,Customer_account
+from .serializers import SCustomer_info,SCustomer_account #SCustomer_Image
 
 # firebase 
 import json
