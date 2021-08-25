@@ -1,29 +1,37 @@
 from django.urls import path,include
-from customers import views
 from django.conf.urls import url
 from django.conf.urls.static import static
 from django.conf import settings
-
+# ----------- Views ----------#
+from customers.api import views as api
+from customers.firebase import views as firebase
+from customers.web import views as web
 #-----------------------------
-from .views import Customer_infoL
+
 from rest_framework import routers
 # like admin register 
 router = routers.DefaultRouter()
-router.register('data',Customer_infoL)
+router.register('customers',api.Customer_infoL)
+router.register('sellers',api.Mandop_InfoL)
+# router.register('accounts',api.Customer_accountL)
+
 #-----------------------------
 
 urlpatterns = [
-    path('', views.showList,name='showList'),
-    path('create/',views.createCustomer,name="create" ),
-    path('update/<str:id>/',views.updateCustomer,name="updateCustomer" ),
-    url(r'^read$', views.customerTable),
-    url(r'^deleteCustomer/(?P<id>\d+)$', views.deleteCustomer, name='deleteCustomer'),
+    # web
+    path('', web.showList,name='showList'),
+    path('create/',web.createCustomer,name="create" ),
+    path('update/<str:id>/',web.updateCustomer,name="updateCustomer" ),
+    url(r'^read$', web.customerTable),
+    url(r'^deleteCustomer/(?P<id>\d+)$', web.deleteCustomer, name='deleteCustomer'),
 
-    # manadeep customers
-    path('customers_manadeep',views.manadeepCustomers,name="customers_manadeep" ),
-    path('customers_migrate/<str:email>',views.migrateCustomers,name="customers_migrate" ),
+    # firebase
+    path('customers_manadeep',firebase.manadeepCustomers,name="customers_manadeep" ),
+    path('customers_migrate/<str:email>',firebase.migrateCustomers,name="customers_migrate" ),
     
     # api
     path('api/', include(router.urls)),
+    path('api_customer/',api.GetCustomersData.as_view() , name = 'customers_data')
+
 ]
 urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_URL)

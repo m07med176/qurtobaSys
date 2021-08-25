@@ -261,10 +261,10 @@ class FirebaseServerice:
                                 rest = pd.read_csv(  io.StringIO( restHead  + data['DataBases']['Rest'] )  , sep=",").fillna('') 
                         if email == seller:
                                 customers = pd.read_csv(  io.StringIO( customerHead +  data['DataBases']['Customers']  )  , sep=",", error_bad_lines=False).fillna('')                
-                                
 
-                #transHead = "id,kind,value,name,deviceNo,f,date,time,datetime\n"
-                #transactions =pd.read_csv(  io.StringIO( transHead + data[0][1]['DataBases']['Transactions'] )  , sep=",")
+                transHead = "id,kind,value,name,deviceNo,f,date,time,datetime\n"
+                transactions =pd.read_csv(  io.StringIO( transHead + data[0][1]['DataBases']['Transactions'] )  , sep=",")
+                
                 areas = customers['area'].unique()
                 if len(areas) == 0:
                         areas = customers['area'].tolist()
