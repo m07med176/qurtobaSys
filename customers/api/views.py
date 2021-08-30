@@ -21,7 +21,7 @@ class Mandop_InfoL(viewsets.ModelViewSet):
 class GetCustomersData(APIView):
     permission_classes = (permissions.AllowAny,)
     def customSerializers(self):
-        queryset  =  CustomerInfo.objects.all()#.select_related('accounts')
+        queryset  =  CustomerInfo.objects.all().select_related('seller')
         data = []
         for i in queryset:
             row =  {

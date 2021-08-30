@@ -30,8 +30,9 @@ class CustomerInfo(models.Model):
     name,shopName,shopKind,phoneNo,address,seller,accounts,time,date
     """
     name = models.CharField(blank=False,max_length=100,verbose_name="الإســم",null=False)
+    surName = models.CharField(blank=True,max_length=50,verbose_name=" إسم الشهره",null=True)
     shopName = models.CharField(max_length=45,verbose_name="إسم المحل",null=True)
-    deviceNo = models.IntegerField(blank=True,verbose_name="الرقم الكودى",null=True)
+    deviceNo = models.IntegerField(blank=True,verbose_name="الرقم الكودى",null=True,unique=True)
     shops=[
         ("بقالة", "بقالة"),
         ("منظفات", "منظفات"),
@@ -48,7 +49,8 @@ class CustomerInfo(models.Model):
     
     seller = models.ForeignKey('MandopInfo',related_name="seller",on_delete = models.PROTECT,verbose_name="المندوب المسئول",null=False,blank=False)
     # jasonData = { "accountsKind": "فورى", "value": deviceNo}
-    accounts = models.JSONField(default=dict ,null=True,blank=True,verbose_name="حسابات العميل")
+    # accounts = models.JSONField(default=dict ,null=True,blank=True,verbose_name="حسابات العميل")
+    accounts = models.TextField(default="" ,null=True,blank=True,verbose_name="حسابات العميل")
 
     date = models.DateField(null=True,verbose_name = "Date",default=timezone.now)
     time = models.TimeField(null=True,verbose_name = "Time",default=timezone.now) #default=date.today

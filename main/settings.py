@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'search_admin_autocomplete',
     'rest_framework',
+    'debug_toolbar',
     # apps #
     'home',
     'customers',
@@ -66,6 +67,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'main.urls'
@@ -152,3 +155,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
