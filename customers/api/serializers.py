@@ -1,7 +1,6 @@
 from customers.models import CustomerInfo, MandopInfo #Customer_Image
 
 from rest_framework import serializers
-
 class SCustomer_info(serializers.ModelSerializer):
     #seller = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     #seller = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
