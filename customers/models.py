@@ -46,7 +46,7 @@ class CustomerInfo(models.Model):
     shopKind = models.CharField(max_length=50,choices=shops,null=True,verbose_name = "نوع المحل",default=1)
     phoneNo = models.CharField(max_length=11,blank=True, help_text='قم بكتابة رقم التليفون ',verbose_name = "رقم التليفون")
     address = models.TextField(max_length=150,verbose_name="العنوان",null=True,blank=True)
-    
+    area = models.CharField(max_length=50,verbose_name="المنطقة",null=True)
     seller = models.ForeignKey('MandopInfo',related_name="seller",on_delete = models.PROTECT,verbose_name="المندوب المسئول",null=False,blank=False)
     # jasonData = { "accountsKind": "فورى", "value": deviceNo}
     # accounts = models.JSONField(default=dict ,null=True,blank=True,verbose_name="حسابات العميل")
