@@ -9,17 +9,17 @@ class DatabaseManager:
                 password="5f23b729fd13ec1e966727ead1da9717e48c44bd830a6753ee23f54e14d3b099")
             cursor = connection.cursor()
             print(data)
-            return "تم تنزيل الداتابيز بنجاح  "
+            return "تم تنزيل الداتابيز بنجاح "
 
         except (Exception, psycopg2.Error) as error:
-            print("Error while fetching data from PostgreSQL", error)
+            return "Error while fetching data from PostgreSQL "+ error
 
         finally:
             # closing database connection.
             if connection:
                 cursor.close()
                 connection.close()
-                print("PostgreSQL connection is closed")
+                return "PostgreSQL connection is closed"
 
 
     def getDataSchema(self):
@@ -63,11 +63,11 @@ class DatabaseManager:
             return shema
 
         except (Exception, psycopg2.Error) as error:
-            print("Error while fetching data from PostgreSQL", error)
+            return "Error while fetching data from PostgreSQL"+ error
 
         finally:
             # closing database connection.
             if connection:
                 cursor.close()
                 connection.close()
-                print("PostgreSQL connection is closed")
+                return "PostgreSQL connection is closed"

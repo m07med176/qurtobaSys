@@ -7,6 +7,6 @@ from rest_framework.decorators import api_view
 def getSchema(request):
     db = DatabaseManager()
     if request.method == 'POST':
-        result = db.insertSchema()
+        result = db.insertSchema(request.database)
         return Response({"message": result})
     return Response({"results": db.getDataSchema()})
