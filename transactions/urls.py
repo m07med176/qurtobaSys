@@ -28,6 +28,7 @@ urlpatterns = [
         # api
         path('api/', include(router.urls)),
         path('getRest/<str:name>/',api.GetRest.as_view() , name = 'customer_rest'),
+        
     ]
 urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_URL)
 

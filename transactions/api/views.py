@@ -1,5 +1,4 @@
 from rest_framework import viewsets
-
 from django.db.models import Q
 from django.db.models import Prefetch
 # ------------ APIVIEW -----------#
@@ -22,14 +21,11 @@ class RecordL(viewsets.ModelViewSet):
     queryset = Record.objects.all()
     serializer_class = SRecord
 
-#
-
-
 class GetRest(APIView):
     permission_classes = (permissions.AllowAny,)
     def customSerializers(self,name):
         if name.isdigit():
-            customer = CustomerInfo.objects.filter(Q(deviceNo=name)) # | 
+            customer = CustomerInfo.objects.filter(Q(deviceNo=name)) 
         else:
             customer = CustomerInfo.objects.filter(Q(name=name))
         if len(customer) == 0:
