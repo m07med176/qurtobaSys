@@ -28,6 +28,8 @@ class DatabaseManager:
                             row.append(m.strftime('%Y-%m-%d'))
                         elif str(type(m)) == "<class 'datetime.time'>":
                             row.append(m.strftime("%H:%M:%S"))
+                        elif m == None:
+                            row.append("")
                         else:
                             row.append(m)
                     data.append(tuple(row))
