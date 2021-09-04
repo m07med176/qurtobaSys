@@ -19,7 +19,6 @@ class DatabaseManager:
             if connection:
                 cursor.close()
                 connection.close()
-                return "PostgreSQL connection is closed"
 
 
     def getDataSchema(self):
@@ -70,4 +69,3 @@ class DatabaseManager:
             if connection:
                 cursor.close()
                 connection.close()
-                return "PostgreSQL connection is closed"
