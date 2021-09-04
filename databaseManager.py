@@ -1,5 +1,27 @@
 import psycopg2
 class DatabaseManager:
+    def insertSchema(self,data):
+        try:
+            connection = psycopg2.connect(
+                host="ec2-34-254-69-72.eu-west-1.compute.amazonaws.com",
+                database="d84lv9hqj4cvad",
+                user="pkekjaplofajah",
+                password="5f23b729fd13ec1e966727ead1da9717e48c44bd830a6753ee23f54e14d3b099")
+            cursor = connection.cursor()
+            print(data)
+            return "تم تنزيل الداتابيز بنجاح  "
+
+        except (Exception, psycopg2.Error) as error:
+            print("Error while fetching data from PostgreSQL", error)
+
+        finally:
+            # closing database connection.
+            if connection:
+                cursor.close()
+                connection.close()
+                print("PostgreSQL connection is closed")
+
+
     def getDataSchema(self):
         try:
             connection = psycopg2.connect(
@@ -19,7 +41,6 @@ class DatabaseManager:
             for table in tables.keys():
                 sql = f"select * from {table}"
                 cursor.execute(sql)
-
                 data = []
                 for i in cursor.fetchall():
                     row = []
@@ -40,9 +61,6 @@ class DatabaseManager:
                 shema+=data
                 # for row in data:
             return shema
-
-
-
 
         except (Exception, psycopg2.Error) as error:
             print("Error while fetching data from PostgreSQL", error)
