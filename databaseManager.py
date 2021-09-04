@@ -34,7 +34,7 @@ class DatabaseManager:
 
                 # data = tables[table]+",".join(data) + +";"
 
-                data = tables[table]+",".join([str(i) for i in data ])+";\n#$" # i[2]. strftime('%Y-%m-%d')
+                data = tables[table]+",".join([str(i) for i in data ])+";\n#0#" # i[2]. strftime('%Y-%m-%d')
                 shema+=data
                 # for row in data:
             return shema
