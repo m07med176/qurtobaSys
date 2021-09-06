@@ -25,9 +25,10 @@ urlpatterns = [
         #path('table/<str:mandoop>',views.dataTableMandoop),        
         #path('getData',views.getDataList ,name = "getData"), 
     
-        # api
+        #---| api |---#
         path('api/', include(router.urls)),
         path('getRest/<str:name>/',api.GetRest.as_view() , name = 'customer_rest'),
+        path('restSeller/<str:email>/',api.getSellerRest , name ='restSeller' ),
         
     ]
 urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_URL)

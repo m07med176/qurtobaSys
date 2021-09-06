@@ -8,7 +8,7 @@ class Rest(models.Model):
     date = models.DateField(null=True,verbose_name = "Date",default=timezone.now)
     time = models.TimeField(null=True,verbose_name = "Time",default=timezone.now)
     def __str__(self):
-        return str(self.rest)
+        return str(self.value)
 
     class Meta:
         verbose_name = "المتبقى"
