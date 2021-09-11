@@ -1,7 +1,7 @@
 from transactions.models import Rest,Record
 from rest_framework import serializers
 
-from customers.api.serializers import SCustomer_info
+from customers.api.serializers import SCustomerShort
 
 
 class SRest(serializers.ModelSerializer):
@@ -10,6 +10,7 @@ class SRest(serializers.ModelSerializer):
         fields = '__all__'
 
 class SRecord(serializers.ModelSerializer):
+    customerData = SCustomerShort()
     class Meta:
         model = Record
         fields = '__all__'
@@ -33,7 +34,6 @@ class SMainRest(serializers.ModelSerializer):
     class Meta:
         model = Rest
         fields = ['value','customer','date','time']
-        #fields = '__all__'
 
 
         """

@@ -27,8 +27,28 @@ urlpatterns = [
     
         #---| api |---#
         path('api/', include(router.urls)),
-        path('getRest/<str:name>/',api.GetRest.as_view() , name = 'customer_rest'),
+        path('api/getRest/<str:name>/',api.GetRest.as_view() , name = 'customer_rest'),
+        # seller should pay
         path('restSeller/<str:email>/',api.getSellerRest , name ='restSeller' ),
+        path('api/getAllRest/',api.getAllRest , name ='getAllRest' ),
+
+        # transactions
+        path('api/customerTrans/<str:deviceNo>/',api.getTransactionsCustomer),
+        path('api/todayTrans/',api.getTransactionsToday),
+        path('api/dateTrans/<str:dateSelect>/',api.getTransactionsDate),
+        path('api/dateAndcustomerTrans/<str:deviceNo>/<str:dateSelect>/',api.getTransactionsCustomerAndDate ),
+        path('api/dateFromToTrans/<str:dateFrom>/<str:dateTo>/',api.getTransactionsDateFromTo ),
+        path('api/dateFromToAndcustomerTrans/<str:deviceNo>/<str:dateFrom>/<str:dateTo>/',api.getTransactionsCustomerAndDateFromTo ),
+
+        path('api/lastTrans/',api.getLastDateAndTime , name ='lastTrans' ),
+        # accounts
+        path('api/customerAccounts/<str:deviceNo>/',api.getAccountsCustomer),
+        path('api/todayAccounts/',api.getAccountsToday),
+        path('api/dateAccounts/<str:dateSelect>/',api.getAccountsDate),
+        path('api/dateAndcustomerAccounts/<str:deviceNo>/<str:dateSelect>/',api.getAccountsCustomerAndDate ),
+        path('api/dateFromToAccounts/<str:dateFrom>/<str:dateTo>/',api.getAccountsDateFromTo ),
+        path('api/dateFromToAndcustomerAccounts/<str:deviceNo>/<str:dateFrom>/<str:dateTo>/',api.getAccountsCustomerAndDateFromTo ),
+
         
     ]
 urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_URL)
