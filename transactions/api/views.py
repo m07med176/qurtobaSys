@@ -123,7 +123,6 @@ def getTransactionsCustomerAndDateFromTo(request,deviceNo,dateFrom,dateTo):
 @api_view(['GET',])
 def getTransactionsDate(request,dateSelect):
     record = Record.objects.filter(date=datetime.datetime.fromisoformat(dateSelect)).order_by(F('time').desc(nulls_last=True))
-    if len(record) == 0:return Response({"data": ""})
     serializer = SRecord(record,many=True)
     return Response({"data":serializer.data})
 
@@ -133,7 +132,6 @@ def getTransactionsCustomerAndDate(request,deviceNo,dateSelect):
         record=Record.objects.filter(date=datetime.datetime.fromisoformat(dateSelect),customerData__deviceNo=deviceNo).order_by(F('time').desc(nulls_last=True))
     else:
         record=Record.objects.filter(date=datetime.datetime.fromisoformat(dateSelect),customerData__name=deviceNo).order_by(F('time').desc(nulls_last=True))
-    if len(record) == 0:return Response({"data": ""})
     serializer = SRecord(record,many=True)
     return Response({"data":serializer.data})
 
@@ -143,7 +141,6 @@ def getTransactionsCustomer(request,deviceNo):
         record=Record.objects.filter(customerData__deviceNo=deviceNo).select_related('customerData').order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
     else:
         record=Record.objects.filter(customerData__name=deviceNo).select_related('customerData').order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
-    if len(record) == 0:return Response({"data": ""})
     serializer = SRecord(record,many=True)
     return Response({"data":serializer.data})
 
@@ -157,7 +154,6 @@ def getTransactionsCustomerById(request,id):
 @api_view(['GET',])
 def getTransactionsToday(request):
     record=Record.objects.filter(date=datetime.datetime.now()).order_by(F('time').desc(nulls_last=True))
-    if len(record) == 0:return Response({"data": ""})
     serializer = SRecord(record,many=True)
     return Response({"data":serializer.data})
 
