@@ -148,6 +148,13 @@ def getTransactionsCustomer(request,deviceNo):
     return Response({"data":serializer.data})
 
 @api_view(['GET',])
+def getTransactionsCustomerById(request,id):
+
+    record=Record.objects.filter(customerData_id=id).select_related('customerData').order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
+    serializer = SRecord(record,many=True)
+    return Response({"data":serializer.data,"sum":db.getCustomerRest(id)})
+
+@api_view(['GET',])
 def getTransactionsToday(request):
     record=Record.objects.filter(date=datetime.datetime.now()).order_by(F('time').desc(nulls_last=True))
     if len(record) == 0:return Response({"data": ""})

@@ -1,4 +1,5 @@
 import psycopg2
+import datetime
 class DatabaseManager:
     def insertSchema(self,data):
         try:
@@ -207,42 +208,31 @@ class DatabaseManager:
                 user="pkekjaplofajah",
                 password="5f23b729fd13ec1e966727ead1da9717e48c44bd830a6753ee23f54e14d3b099")
             cursor = connection.cursor()
-            """
-            INSERT INTO transactions_rest (value,customer_id,DATE,time) VALUES(
-            (
-            SELECT COALESCE(SUM(transactions_record.value),0) 
-            FROM transactions_record WHERE 
-            transactions_record."isDown" = false 
-            AND transactions_record."isDone" = false 
-            AND transactions_record."customerData_id" = 12 
-            ),
-            12,'2021-09-12','16:17:30.538022') 
-            ON CONFLICT (customer_id) 
-            DO 
-            UPDATE SET 
-                VALUE = (
-                SELECT COALESCE(SUM(transactions_record.value),0) 
-            FROM transactions_record WHERE 
-            transactions_record."isDown" = false 
-            AND transactions_record."isDone" = false 
-            AND transactions_record."customerData_id" = 12 
-                ),
-                
-                date = '2021-09-15',time ='16:17:30';
-            """
+            
+            
             sql = f"""SELECT COALESCE(
-                (SELECT COALESCE(SUM(value),0) FROM transactions_record WHERE isDown = 0 AND isDone = 0 AND customerData_id = {id})
+                (SELECT COALESCE(SUM(transactions_record.value),0) FROM transactions_record WHERE transactions_record."isDown" = false AND transactions_record."isDone" = false AND transactions_record."customerData_id" = {id} )
                 -
-                (SELECT COALESCE(SUM(value),0) FROM transactions_record WHERE isDown = 1 AND isDone = 0 AND customerData_id = {id} )
+                (SELECT COALESCE(SUM(transactions_record.value),0) FROM transactions_record WHERE transactions_record."isDown" = true AND transactions_record."isDone" = false AND transactions_record."customerData_id" = {id} )
                 ,0) AS rest """
+            
             cursor.execute(sql)
-
-            data =cursor.fetchall()
-            print(data)
-                
+            date = str(datetime.datetime.now().date())
+            time = str(datetime.datetime.now().time()).split(".")[0]
+            value =cursor.fetchone()[0]
+            
+            sql = f"""
+            INSERT INTO transactions_rest (value,customer_id,date,time) VALUES(
+            {value},{id},'{date}','{time}') 
+            ON CONFLICT (customer_id) 
+            DO UPDATE SET VALUE = {value},date = '{date}',time ='{time}';
+            """
+            cursor.execute(sql)
+            connection.commit()
+            return value
 
         except (Exception, psycopg2.Error) as error:
-            return "Error while fetching data from PostgreSQL"+ error
+            print( "Error while fetching data from PostgreSQL", error)
 
         finally:
             # closing database connection.
@@ -251,5 +241,5 @@ class DatabaseManager:
                 connection.close()
 if __name__ == '__main__':
     db = DatabaseManager()
-    result = db.accounts()
-    print(result)
+    value = db.getCustomerRest(12)
+    print(value)

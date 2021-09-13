@@ -33,7 +33,9 @@ urlpatterns = [
         path('api/getAllRest/',api.getAllRest ),
 
         # transactions
-        path('api/customerTrans/<str:deviceNo>/',api.getTransactionsCustomer),
+        path('api/customerTrans/<str:deviceNo>/',api.getTransactionsCustomer),# 
+        path('api/trans_rest_customer/<int:id>/',api.getTransactionsCustomerById),# 
+
         path('api/todayTrans/',api.getTransactionsToday),
         path('api/dateTrans/<str:dateSelect>/',api.getTransactionsDate),
         path('api/dateAndcustomerTrans/<str:deviceNo>/<str:dateSelect>/',api.getTransactionsCustomerAndDate ),
