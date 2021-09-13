@@ -62,13 +62,13 @@ class GetCustomersData(APIView):
 @api_view(['GET',])
 def getSellersNamesAndAccountsNo(request):
     names = MandopInfo.objects.values('name','code')
-    return Response({"results":list(names)})
+    return Response({"data":list(names)})
 
 # get customer names and account no list
 @api_view(['GET',])
 def getCustomersNamesAndAccountsNo(request):
     names = CustomerInfo.objects.values('name','deviceNo')
-    return Response({"results":list(names)})
+    return Response({"data":list(names)})
 
 # get customer areas
 @api_view(['GET',])
@@ -104,9 +104,8 @@ def getCustomerByDeviceNoOrName(request,name):
             customer = CustomerInfo.objects.filter(Q(deviceNo=name)).select_related('seller') #deviceNo__startswith
         else:
             customer = CustomerInfo.objects.filter(Q(name=name)).select_related('seller')
-        if len(customer) == 0:return Response({"data": ""})
         serializer = SCustomer(customer, many=True)
-        return Response({"data": serializer.data})
+        return Response({"results": serializer.data})
 
 @api_view(['GET',])
 def getSellerByAccountNoOrName(request,name):
@@ -114,6 +113,5 @@ def getSellerByAccountNoOrName(request,name):
             seller = MandopInfo.objects.filter(Q(code=name)) 
         else:
             seller = MandopInfo.objects.filter(Q(name=name))
-        if len(seller) == 0:return Response({"data": ""})
         serializer = SMandop_Info(seller,many=True)
-        return Response({"data": serializer.data})
+        return Response({"results": serializer.data})
