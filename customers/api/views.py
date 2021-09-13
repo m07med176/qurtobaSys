@@ -62,15 +62,13 @@ class GetCustomersData(APIView):
 @api_view(['GET',])
 def getSellersNamesAndAccountsNo(request):
     names = MandopInfo.objects.values('name','code')
-    if len(names) == 0:return Response({"data": ""})
-    return Response({"data":list(names)})
+    return Response({"results":list(names)})
 
 # get customer names and account no list
 @api_view(['GET',])
 def getCustomersNamesAndAccountsNo(request):
     names = CustomerInfo.objects.values('name','deviceNo')
-    if len(names) == 0:return Response({"data": ""})
-    return Response({"data":list(names)})
+    return Response({"results":list(names)})
 
 # get customer areas
 @api_view(['GET',])
