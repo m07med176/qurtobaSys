@@ -31,7 +31,7 @@ class CustomerInfo(models.Model):
     """
     name = models.CharField(blank=False,max_length=100,verbose_name="الإســم",null=False)
     surName = models.CharField(blank=True,max_length=50,verbose_name=" إسم الشهره",null=True)
-    shopName = models.CharField(max_length=45,verbose_name="إسم المحل",null=True)
+    shopName = models.CharField(max_length=45,verbose_name="إسم المحل",null=Trueوblank=True)
     deviceNo = models.IntegerField(blank=True,verbose_name="الرقم الكودى",null=True,unique=True)
     shops=[
         ("بقالة", "بقالة"),

@@ -31,13 +31,19 @@ urlpatterns = [
     
     # api
     path('api/', include(router.urls)),
-    path('api_customer/',api.GetCustomersData.as_view() , name = 'customers_data'),
 
-    path('api/sellers_names/',api.getSellersNamesAndAccountsNo , name = 'sellers_names_api'),
-    path('api/customers_names/',api.getCustomersNamesAndAccountsNo , name = 'customers_names_api'),
-    path('api/customers_areas/',api.getCustomersAreas , name = 'customers_areas_api'),
-    path('api/sellers_areas/',api.getSellersAreas , name = 'sellers_areas_api'),
-    path('api/customers_qname/<str:name>/',api.getCustomerByDeviceNoOrName , name = 'customers_qname_api'),
-    path('api/sellers_qname/<str:name>/',api.getSellerByAccountNoOrName , name = 'sellers_qname_api'),
+    # customer
+    path('api_customer/',api.GetCustomersData.as_view() ),
+    path('api/customers_names/',api.getCustomersNamesAndAccountsNo ),
+    path('api/customers_areas/',api.getCustomersAreas),
+    path('api/customers_qname/<str:name>/',api.getCustomerByDeviceNoOrName),
+
+    # seller
+    path('api/sellers_names/',api.getSellersNamesAndAccountsNo),
+    path('api/sellers_areas/',api.getSellersAreas),
+    path('api/sellers_qname/<str:name>/',api.getSellerByAccountNoOrName),
+
+    path('api/autoComplete/',api.getAllAutocompleteData),
 ]
+
 urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_URL)

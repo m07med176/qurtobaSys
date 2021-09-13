@@ -86,6 +86,20 @@ def getSellersAreas(request):
     if len(areas) == 0:return Response({"data": ""})
     return Response({"data":list(areas)})
 
+# get all auto complete data
+@api_view(['GET',])
+def getAllAutocompleteData(request):
+    sellerAreas = MandopInfo.objects.values('region').order_by('region').distinct('region')
+    customerAreas = CustomerInfo.objects.values('area').order_by('area').distinct('area')
+    customerNames = CustomerInfo.objects.values('name','deviceNo')
+    sellerNames = MandopInfo.objects.values('name','code')
+    return Response({
+        "sellerAreas":list(sellerAreas),
+        "customerAreas":list(customerAreas),
+        "sellerNames":list(sellerNames),
+        "customerNames":list(customerNames)
+    })
+
 @api_view(['GET',])
 def getCustomerByDeviceNoOrName(request,name):
         if name.isdigit():

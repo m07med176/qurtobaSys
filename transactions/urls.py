@@ -27,10 +27,10 @@ urlpatterns = [
     
         #---| api |---#
         path('api/', include(router.urls)),
-        path('api/getRest/<str:name>/',api.GetRest.as_view() , name = 'customer_rest'),
+        path('api/getRest/<str:name>/',api.GetRest.as_view()),
         # seller should pay
-        path('restSeller/<str:email>/',api.getSellerRest , name ='restSeller' ),
-        path('api/getAllRest/',api.getAllRest , name ='getAllRest' ),
+        path('restSeller/<str:email>/',api.getSellerRest),
+        path('api/getAllRest/',api.getAllRest ),
 
         # transactions
         path('api/customerTrans/<str:deviceNo>/',api.getTransactionsCustomer),
@@ -47,10 +47,6 @@ urlpatterns = [
         path('api/dateAccounts/<str:dateSelect>/',api.getAccountsDate),
         path('api/dateAndcustomerAccounts/<str:deviceNo>/<str:dateSelect>/',api.getAccountsCustomerAndDate ),
         path('api/dateFromToAccounts/<str:dateFrom>/<str:dateTo>/',api.getAccountsDateFromTo ),
-        path('api/dateFromToAndcustomerAccounts/<str:deviceNo>/<str:dateFrom>/<str:dateTo>/',api.getAccountsCustomerAndDateFromTo ),
-
-        
+        path('api/dateFromToAndcustomerAccounts/<str:deviceNo>/<str:dateFrom>/<str:dateTo>/',api.getAccountsCustomerAndDateFromTo )
     ]
 urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_URL)
-
-

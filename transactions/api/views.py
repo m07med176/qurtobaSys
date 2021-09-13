@@ -25,6 +25,7 @@ import datetime
 # --------------- DATABASE MANAGER ------------------#
 from databaseManager import DatabaseManager
 db = DatabaseManager()
+
 # --------------- Office Rest ---------------------- #
 class RestL(viewsets.ModelViewSet):
     queryset = Rest.objects.all()
@@ -101,7 +102,7 @@ def getTransactionsDateFromTo(request,dateFrom,dateTo):
     start = datetime.datetime.fromisoformat(dateFrom) 
     end = datetime.datetime.fromisoformat(dateTo)   
 
-    record=Record.objects.filter(date__range = (start,end)).order_by(F('time').desc(nulls_last=True))
+    record=Record.objects.filter(date__range = (start,end)).order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
 
     serializer = SRecord(record,many=True)
     return Response({"data":serializer.data})
@@ -112,9 +113,9 @@ def getTransactionsCustomerAndDateFromTo(request,deviceNo,dateFrom,dateTo):
     end = datetime.datetime.fromisoformat(dateTo)   
 
     if deviceNo.isdigit():
-        record=Record.objects.filter(date__range = (start,end),customerData__deviceNo=deviceNo).order_by(F('date').desc(nulls_last=True))
+        record=Record.objects.filter(date__range = (start,end),customerData__deviceNo=deviceNo).order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
     else:
-        record=Record.objects.filter(date__range = (start,end),customerData__name=deviceNo).order_by(F('date').desc(nulls_last=True))
+        record=Record.objects.filter(date__range = (start,end),customerData__name=deviceNo).order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
 
     serializer = SRecord(record,many=True)
     return Response({"data":serializer.data})
@@ -139,9 +140,9 @@ def getTransactionsCustomerAndDate(request,deviceNo,dateSelect):
 @api_view(['GET',])
 def getTransactionsCustomer(request,deviceNo):
     if deviceNo.isdigit():
-        record=Record.objects.filter(customerData__deviceNo=deviceNo).select_related('customerData').order_by(F('date','time').desc(nulls_last=True))
+        record=Record.objects.filter(customerData__deviceNo=deviceNo).select_related('customerData').order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
     else:
-        record=Record.objects.filter(customerData__name=deviceNo).select_related('customerData').order_by(F('date','time').desc(nulls_last=True))
+        record=Record.objects.filter(customerData__name=deviceNo).select_related('customerData').order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
     if len(record) == 0:return Response({"data": ""})
     serializer = SRecord(record,many=True)
     return Response({"data":serializer.data})
