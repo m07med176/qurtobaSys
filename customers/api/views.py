@@ -13,6 +13,7 @@ from .serializers import SCustomer_info,SMandop_Info,SCustomer,SMandopShort
 # ------------ MODELS -----------#
 # MODELS
 from customers.models import CustomerInfo ,MandopInfo
+from transactions.models import Rest
 # UTILS
 from django.db.models import Q
 
@@ -124,3 +125,17 @@ def deleteSeller(request,id):
         return Response({"results": "تم حذف المندوب بنجاح","status":True})
     else:
         return Response({"results": f"يملك المندوب {customer} عميل لا يمكن حذفه","status":False})
+
+@api_view(['DELETE',])
+def deleteCustomer(request,id):
+    rest = Rest.objects.filter(customer_id=id).exists()
+    if rest:
+        value = Rest.objects.get(customer_id=id).value
+        if value == 0:
+            CustomerInfo.objects.get(id=id).delete()
+            return Response({"results": "تم حذف العميل بنجاح","status":True})
+        else:
+            return Response({"results": f"مطلوب من العميل مبلغ وقدره {value} جنيه لا يمكن حذفه","status":False})
+    else:
+            CustomerInfo.objects.get(id=id).delete()
+            return Response({"results": "تم حذف العميل بنجاح","status":True})
