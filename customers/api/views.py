@@ -63,14 +63,14 @@ class GetCustomersData(APIView):
 def getAllSellers(request):
     sellers = MandopInfo.objects.all()
     serializer = SMandop_Info(sellers, many=True)
-    return Response({"data":serializer.data})
+    return Response({"results":serializer.data})
 
 # Get All Customer
 @api_view(['GET',])
 def getAllCustomer(request):
     customers = CustomerInfo.objects.all()
     serializer = SCustomer(customers, many=True)
-    return Response({"data":serializer.data})
+    return Response({"results":serializer.data})
 
 # get seller names and account no list
 @api_view(['GET',])
