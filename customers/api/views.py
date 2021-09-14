@@ -58,6 +58,19 @@ class GetCustomersData(APIView):
 # rowData = i.accounts.all()
 # [{"accountsKind":d.accountsKind,"value":d.value} for d in rowData if len(rowData) != 0]
 
+# Get All Seller
+@api_view(['GET',])
+def getAllSellers(request):
+    sellers = MandopInfo.objects.all()
+    serializer = SMandop_Info(sellers, many=True)
+    return Response({"data":serializer.data})
+
+# Get All Customer
+@api_view(['GET',])
+def getAllCustomer(request):
+    customers = CustomerInfo.objects.all()
+    serializer = SCustomer(customers, many=True)
+    return Response({"data":serializer.data})
 
 # get seller names and account no list
 @api_view(['GET',])
