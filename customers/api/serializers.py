@@ -5,6 +5,10 @@ class SMandop_Info(serializers.ModelSerializer):
     class Meta:
         model = MandopInfo
         fields = '__all__'
+class SCustomerInfo(serializers.ModelSerializer):
+    class Meta:
+        model = CustomerInfo
+        fields = '__all__'
 
 class SMandopShort(serializers.ModelSerializer):
     class Meta:

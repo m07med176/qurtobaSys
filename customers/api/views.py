@@ -9,7 +9,7 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 # ------------ SERIALIZERS -----------#
-from .serializers import SCustomer_info,SMandop_Info,SCustomer,SMandopShort
+from .serializers import SCustomer_info,SCustomerInfo,SMandop_Info,SCustomer,SMandopShort
 # ------------ MODELS -----------#
 # MODELS
 from customers.models import CustomerInfo ,MandopInfo
@@ -18,12 +18,24 @@ from transactions.models import Rest
 from django.db.models import Q
 
 class Customer_infoL(viewsets.ModelViewSet):
-    queryset = CustomerInfo.objects.all()#.select_related('seller') #.prefetch_related('seller')
-    serializer_class = SCustomer_info
+    queryset = CustomerInfo.objects.all()
+    serializer_class = SCustomerInfo
+    def update(self, request, *args, **kwargs):
+        super(Customer_infoL, self).update(request, *args, **kwargs)
+        return Response({"message": "تم تعديل العميل بنجاح","status":  True})
+    def create(self, request, *args, **kwargs):
+        super(Customer_infoL, self).create(request, *args, **kwargs)
+        return Response({"message": "تم إضافة العميل بنجاح","status":  True})
 
 class Mandop_InfoL(viewsets.ModelViewSet):
     queryset = MandopInfo.objects.all()
     serializer_class = SMandop_Info
+    def update(self, request, *args, **kwargs):
+        super(Mandop_InfoL, self).update(request, *args, **kwargs)
+        return Response({"message": "تم تعديل المندوب بنجاح","status":  True})
+    def create(self, request, *args, **kwargs):
+        super(Mandop_InfoL, self).create(request, *args, **kwargs)
+        return Response({"message": "تم إضافة المندوب بنجاح","status":  True})
 
 class GetCustomersData(APIView):
     permission_classes = (permissions.AllowAny,)
@@ -71,6 +83,8 @@ def getAllCustomer(request):
     customers = CustomerInfo.objects.all()
     serializer = SCustomer(customers, many=True)
     return Response({"results":serializer.data})
+
+
 
 # get seller names and account no list
 @api_view(['GET',])
