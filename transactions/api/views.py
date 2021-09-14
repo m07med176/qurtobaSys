@@ -18,7 +18,7 @@ from django.db.models import F
 # from django.db.models import Prefetch
 # ------------ SERIALIZERS -----------#
 #from customers.api.serializers import SCustomer_info
-from transactions.api.serializers import SRecord,SRest ,SMainRest
+from transactions.api.serializers import SRecord,SRest ,SMainRest,SRecordSets
 from customers.api.serializers import SCustomer_info,SMandop_Info 
 # --------------- PYTHON UTILS ------------------#
 import datetime
@@ -94,7 +94,7 @@ class GetRest(APIView):
 # --------------- Transactions ---------------------- #
 class RecordL(viewsets.ModelViewSet):
     queryset = Record.objects.all()
-    serializer_class = SRecord
+    serializer_class = SRecordSets
     def create(self, request, *args, **kwargs):
         super(RecordL, self).create(request, *args, **kwargs)
         return Response({"message": "تم إضافة التحويل بنجاح","status":  True})

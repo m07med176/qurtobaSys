@@ -15,6 +15,10 @@ class SRecord(serializers.ModelSerializer):
         model = Record
         fields = '__all__'
 
+class SRecordSets(serializers.ModelSerializer):
+    class Meta:
+        model = Record
+        fields = '__all__'
 
 
 
