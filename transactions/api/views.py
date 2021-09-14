@@ -95,6 +95,9 @@ class GetRest(APIView):
 class RecordL(viewsets.ModelViewSet):
     queryset = Record.objects.all()
     serializer_class = SRecord
+    def create(self, request, *args, **kwargs):
+        super(RecordL, self).create(request, *args, **kwargs)
+        return Response({"message": "تم إضافة التحويل بنجاح","status":  True})
 
 @api_view(['GET',])
 def getTransactionsDateFromTo(request,dateFrom,dateTo):
