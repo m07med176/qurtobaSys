@@ -37,12 +37,14 @@ urlpatterns = [
     path('api/customers_names/',api.getCustomersNamesAndAccountsNo ),
     path('api/customers_areas/',api.getCustomersAreas),
     path('api/customers_qname/<str:name>/',api.getCustomerByDeviceNoOrName),
+    
 
     # seller
     path('api/sellers_names/',api.getSellersNamesAndAccountsNo),
     path('api/sellers_areas/',api.getSellersAreas),
     path('api/sellers_qname/<str:name>/',api.getSellerByAccountNoOrName),
-
+    path('api/delete_seller/<str:id>/',api.deleteSeller),
+    
     path('api/autoComplete/',api.getAllAutocompleteData),
 ]
 

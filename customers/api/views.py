@@ -115,3 +115,12 @@ def getSellerByAccountNoOrName(request,name):
             seller = MandopInfo.objects.filter(Q(name=name))
         serializer = SMandop_Info(seller,many=True)
         return Response({"results": serializer.data})
+
+@api_view(['DELETE',])
+def deleteSeller(request,id):
+    customer = CustomerInfo.objects.filter(seller_id = id).count()
+    if customer == 0:
+        MandopInfo.objects.get(id=id).delete()
+        return Response({"results": "تم حذف المندوب بنجاح","status":True})
+    else:
+        return Response({"results": f"يملك المندوب {customer} عميل لا يمكن حذفه","status":False})
