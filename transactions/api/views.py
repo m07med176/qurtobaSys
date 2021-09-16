@@ -40,6 +40,7 @@ def getRestByCustomSerializer(objectData):
             row['deviceNo'] = 0
             row['customerName'] = data.customer.area
             row['phoneNo'] = '1111111111111112111111111'
+            row['seller'] = ''
             row['rest'] = 0.0
             areaName = data.customer.area
             allData.append(row)
