@@ -82,7 +82,7 @@ def getSellerRest(request,email):
 def getAllRest(request):
     rest=Rest.objects.all().select_related('customer').order_by('customer__area')
     if len(rest) == 0:return Response({"data": []})
-    return Response({"data": getRestByCustomSerializer(rest,True)})
+    return Response({"data": getRestByCustomSerializer(rest)})
 
 # GET REST OF SEPCIFIC SELLER
 class GetRest(APIView):
