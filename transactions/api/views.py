@@ -36,29 +36,31 @@ def getRestByCustomSerializer(objectData):
     areaName = ''
     for data in objectData:
         if areaName != data.customer.area:
-            row = {}
-            row['deviceNo'] = 0
-            row['customerName'] = data.customer.area
-            row['phoneNo'] = '1111111111111112111111111'
-            row['seller'] = ''
-            row['rest'] = 0.0
-            areaName = data.customer.area
-            allData.append(row)
-            row = {}
-            row['deviceNo'] =data.customer.deviceNo
-            row['customerName'] = data.customer.name
-            row['phoneNo'] = data.customer.phoneNo
-            row['rest'] = data.value
-            row['seller'] = data.customer.seller.name
-            allData.append(row)
+            if data.value != 0:
+                row = {}
+                row['deviceNo'] = 0
+                row['customerName'] = data.customer.area
+                row['phoneNo'] = '1111111111111112111111111'
+                row['seller'] = ''
+                row['rest'] = 0
+                areaName = data.customer.area
+                allData.append(row)
+                row = {}
+                row['deviceNo'] =data.customer.deviceNo
+                row['customerName'] = data.customer.name
+                row['phoneNo'] = data.customer.phoneNo
+                row['rest'] = data.value
+                row['seller'] = data.customer.seller.name
+                allData.append(row)
         else: 
-            row = {}
-            row['deviceNo'] =data.customer.deviceNo
-            row['customerName'] = data.customer.name
-            row['phoneNo'] = data.customer.phoneNo
-            row['rest'] = data.value
-            row['seller'] = data.customer.seller.name
-            allData.append(row)
+            if data.value != 0:
+                row = {}
+                row['deviceNo'] =data.customer.deviceNo
+                row['customerName'] = data.customer.name
+                row['phoneNo'] = data.customer.phoneNo
+                row['rest'] = data.value
+                row['seller'] = data.customer.seller.name
+                allData.append(row)
             
     return allData
 
