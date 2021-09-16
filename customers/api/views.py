@@ -119,11 +119,13 @@ def getAllAutocompleteData(request):
     customerAreas = CustomerInfo.objects.values('area').order_by('area').distinct('area')
     customerNames = CustomerInfo.objects.values('name','deviceNo')
     sellerNames = MandopInfo.objects.values('name','code')
+    sellers = MandopInfo.objects.values('name')
     return Response({
         "sellerAreas":list(sellerAreas),
         "customerAreas":list(customerAreas),
         "sellerNames":list(sellerNames),
-        "customerNames":list(customerNames)
+        "customerNames":list(customerNames),
+        "sellers":list(sellers),
     })
 
 @api_view(['GET',])

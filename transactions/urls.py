@@ -31,6 +31,7 @@ urlpatterns = [
         # seller should pay
         path('restSeller/<str:email>/',api.getSellerRest),
         path('api/getAllRest/',api.getAllRest ),
+        path('api/getAllRestId/<str:id>/',api.getSellerRestId),
 
         # transactions
         path('api/customerTrans/<str:deviceNo>/',api.getTransactionsCustomer),# 

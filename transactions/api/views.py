@@ -48,6 +48,7 @@ def getRestByCustomSerializer(objectData):
             row['customerName'] = data.customer.name
             row['phoneNo'] = data.customer.phoneNo
             row['rest'] = data.value
+            row['seller'] = data.customer.seller.name
             allData.append(row)
         else: 
             row = {}
@@ -55,23 +56,32 @@ def getRestByCustomSerializer(objectData):
             row['customerName'] = data.customer.name
             row['phoneNo'] = data.customer.phoneNo
             row['rest'] = data.value
+            row['seller'] = data.customer.seller.name
             allData.append(row)
             
     return allData
 
 @api_view(['GET',])
+def getSellerRestId(request,id):
+    rest=Rest.objects.filter(customer__seller=id).select_related('customer').order_by('customer__area')
+    if len(rest) == 0:return Response({"data": []})
+    return Response({"data": getRestByCustomSerializer(rest)})
+
+@api_view(['GET',])
 def getSellerRest(request,email):
     seller = MandopInfo.objects.filter(Q(email=email))
-    if len(seller) == 0: return Response({"results": ""})
+    if len(seller) == 0: return Response({"data": []})
     rest=Rest.objects.filter(customer__seller=seller[0].id).select_related('customer').order_by('customer__area')
-    if len(rest) == 0:return Response({"results": ""})
+    if len(rest) == 0:return Response({"data": []})
     return Response({"data": getRestByCustomSerializer(rest)})
+
+
 
 @api_view(['GET',])
 def getAllRest(request):
     rest=Rest.objects.all().select_related('customer').order_by('customer__area')
-    if len(rest) == 0:return Response({"results": ""})
-    return Response({"data": getRestByCustomSerializer(rest)})
+    if len(rest) == 0:return Response({"data": []})
+    return Response({"data": getRestByCustomSerializer(rest,True)})
 
 # GET REST OF SEPCIFIC SELLER
 class GetRest(APIView):
