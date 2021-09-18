@@ -1,5 +1,8 @@
 from rest_framework.views import exception_handler
 
+def getMessage(data):
+    for i in data.keys():
+        return data[i][0]
 def custom_exception_handler(exc, context):
     # Call REST framework's default exception handler first,
     # to get the standard error response.
@@ -13,7 +16,7 @@ def custom_exception_handler(exc, context):
 
     if response.status_code == 400:
         response.data = {  
-            "message": str(exc.detail['name'][0]) ,  
+            "message": str(getMessage(exc.detail)) ,  
             "status":  False,  
         }
     return response
