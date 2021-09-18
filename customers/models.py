@@ -7,9 +7,9 @@ from django.utils import timezone
 
 class MandopInfo(models.Model):
     """id,name,email"""
-    code= models.IntegerField(blank=True,verbose_name="الرقم الكودى",null=True)
-    email= models.CharField(blank=True,max_length=100,verbose_name="الإيميل",null=True)
-    name= models.CharField(blank=False,max_length=100,verbose_name="إسم المندوب",null=False)
+    code= models.IntegerField(blank=True,verbose_name="الرقم الكودى",null=True,unique=True)
+    email= models.CharField(blank=True,max_length=100,verbose_name="الإيميل",null=True,unique=True)
+    name= models.CharField(blank=False,max_length=100,verbose_name="إسم المندوب",null=False,unique=True)
     phone= models.CharField(blank=True,max_length=11,verbose_name="رقم التليفون",null=True)
     region = models.CharField(blank=True,max_length=50,verbose_name="المنطقة",null=True)
 
@@ -29,7 +29,7 @@ class CustomerInfo(models.Model):
     """
     name,shopName,shopKind,phoneNo,address,seller,accounts,time,date
     """
-    name = models.CharField(blank=False,max_length=100,verbose_name="الإســم",null=False)
+    name = models.CharField(blank=False,max_length=100,verbose_name="الإســم",null=False,unique=True)
     surName = models.CharField(blank=True,max_length=50,verbose_name=" إسم الشهره",null=True)
     shopName = models.CharField(max_length=45,verbose_name="إسم المحل",null=True,blank=True)
     deviceNo = models.IntegerField(blank=True,verbose_name="الرقم الكودى",null=True,unique=True)
