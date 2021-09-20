@@ -13,6 +13,7 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 router.register('customers',api.Customer_infoL)
 router.register('sellers',api.Mandop_InfoL)
+router.register('getCustomers',api.GetCustomersData)
 # router.register('accounts',api.Customer_accountL)
 
 #-----------------------------
@@ -33,7 +34,6 @@ urlpatterns = [
     path('api/', include(router.urls)),
 
     # customer
-    path('api_customer/',api.GetCustomersData.as_view() ),
     path('api/customers_names/',api.getCustomersNamesAndAccountsNo ),
     path('api/customers_areas/',api.getCustomersAreas),
     path('api/customers_qname/<str:name>/',api.getCustomerByDeviceNoOrName),

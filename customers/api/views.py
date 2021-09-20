@@ -7,6 +7,8 @@ from django.http import JsonResponse
 from rest_framework import viewsets
 # APIVIEW
 from rest_framework.views import APIView
+from rest_framework.pagination import PageNumberPagination
+
 from rest_framework.decorators import api_view
 # ------------ SERIALIZERS -----------#
 from .serializers import SCustomer_info,SCustomerInfo,SMandop_Info,SCustomer,SMandopShort
@@ -37,31 +39,34 @@ class Mandop_InfoL(viewsets.ModelViewSet):
         super(Mandop_InfoL, self).create(request, *args, **kwargs)
         return Response({"message": "تم إضافة المندوب بنجاح","status":  True})
 
-class GetCustomersData(APIView):
-    permission_classes = (permissions.AllowAny,)
-    def customSerializers(self):
-        queryset  =  CustomerInfo.objects.all().select_related('seller')
-        data = []
-        for i in queryset:
-            row =  {
-                "name":i.name,
-                "shopName":i.shopName,
-                "shopKind":i.shopKind,
-                "phoneNo":i.phoneNo,
-                "address":i.address,
-                "seller":{
-                    "id":i.seller.id,
-                    "name":i.seller.name,
-                    "email":i.seller.email
-                },
-                "accounts": i.accounts,
-                "time":i.time,
-                "date":i.date}
-            data.append(row)
-        return data
+class GetCustomersData(viewsets.ModelViewSet):
+    queryset = CustomerInfo.objects.all()
+    serializer_class = SCustomer
 
-    def get(self,request):
-        return Response({"data":self.customSerializers()})
+
+    # def customSerializers(self):
+    #     queryset  =  CustomerInfo.objects.all().select_related('seller')
+    #     data = []
+    #     for i in queryset:
+    #         row =  {
+    #             "name":i.name,
+    #             "shopName":i.shopName,
+    #             "shopKind":i.shopKind,
+    #             "phoneNo":i.phoneNo,
+    #             "address":i.address,
+    #             "seller":{
+    #                 "id":i.seller.id,
+    #                 "name":i.seller.name,
+    #                 "email":i.seller.email
+    #             },
+    #             "accounts": i.accounts,
+    #             "time":i.time,
+    #             "date":i.date}
+    #         data.append(row)
+    #     return data
+
+    # def get(self,request):
+    #     return Response({"data":self.customSerializers()})
 
 #{"data":list(Customer_info.objects.all().select_related('seller'))}
 # serializer = SCustomer_info(queryset,many=True)
