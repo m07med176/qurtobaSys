@@ -8,15 +8,18 @@ def custom_exception_handler(exc, context):
     # to get the standard error response.
     response = exception_handler(exc, context)
 
-    if response is not None and response.status_code == 404:
-        response.data = {  
-            "message": "عفواً يوجد مشكله فى السيرفر",  
-            "status":  False,  
-        }
+    try:
+        if response is not None and response.status_code == 404:
+            response.data = {  
+                "message": "عفواً يوجد مشكله فى السيرفر",  
+                "status":  False,  
+            }
 
-    if response.status_code == 400:
-        response.data = {  
-            "message": str(getMessage(exc.detail)) ,  
-            "status":  False,  
-        }
+        if response.status_code == 400:
+            response.data = {  
+                "message": str(getMessage(exc.detail)) ,  
+                "status":  False,  
+            }
+    except Exception as e:
+        return response
     return response

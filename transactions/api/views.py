@@ -73,10 +73,14 @@ def getSellerRestId(request,id):
 @api_view(['GET',])
 def getSellerRest(request,email):
     seller = MandopInfo.objects.filter(Q(email=email))
-    if len(seller) == 0: return Response({"data": []})
+    latestDate = Record.objects.filter(customerData__seller=seller[0].id)
+    
+    if len(seller) == 0 or len(latestDate) == 0: return Response({"data": [],"date":""})
+    latestDate = latestDate.latest('date')
+    
     rest=Rest.objects.filter(customer__seller=seller[0].id).select_related('customer').order_by('customer__area')
-    if len(rest) == 0:return Response({"data": []})
-    return Response({"data": getRestByCustomSerializer(rest)})
+    if len(rest) == 0:return Response({"data": [],"date":""})
+    return Response({"data": getRestByCustomSerializer(rest),"date":latestDate.date})
 
 
 
