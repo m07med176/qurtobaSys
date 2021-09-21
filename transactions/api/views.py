@@ -77,10 +77,10 @@ def getSellerRest(request,email):
     
     if len(seller) == 0 or len(latestDate) == 0: return Response({"data": [],"date":""})
     latestDate = latestDate.latest('date')
-    
+
     rest=Rest.objects.filter(customer__seller=seller[0].id).select_related('customer').order_by('customer__area')
     if len(rest) == 0:return Response({"data": [],"date":""})
-    return Response({"data": getRestByCustomSerializer(rest),"date":latestDate.date})
+    return Response({"data": getRestByCustomSerializer(rest),"date":f"أخر تحويل: {latestDate.date} {latestDate.time}"})
 
 
 
