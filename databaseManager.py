@@ -152,7 +152,7 @@ class DatabaseManager:
         sum(accounts_data.rest) AS rest
         FROM accounts_data """
 
-        order = " ORDER BY accounts_data.date DESC "
+        order = " ORDER BY date DESC "
         customer = ''
         if deviceNo != '' and deviceNo.isdigit():
             customer = f" accounts_data.accountno = {deviceNo} "
@@ -257,5 +257,5 @@ class DatabaseManager:
                 connection.close()
 if __name__ == '__main__':
     db = DatabaseManager()
-    value = db.getCustomerRest(12)
+    value = db.accounts(id=1)
     print(value)
