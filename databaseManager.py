@@ -140,7 +140,7 @@ class DatabaseManager:
         sumData =""" SELECT ''::character varying AS seller,
         'المجموع'::character varying AS customer,
         0 AS accountno,
-        '1111-11-11'::date AS date,
+        '2222-11-11'::date AS date,
         sum(accounts_data.fawry) AS fawry,
         sum(accounts_data.aman) AS aman,
         sum(accounts_data.bee) AS bee,
