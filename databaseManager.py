@@ -137,27 +137,43 @@ class DatabaseManager:
                 connection.close()
 
     def accounts(self,id=0,deviceNo='',dateFrom='',dateTo=''):
+        sumData =""" SELECT ''::character varying AS seller,
+        'المجموع'::character varying AS customer,
+        0 AS accountno,
+        '1111-11-11'::date AS date,
+        sum(accounts_data.fawry) AS fawry,
+        sum(accounts_data.aman) AS aman,
+        sum(accounts_data.bee) AS bee,
+        sum(accounts_data.tayer) AS tayer,
+        sum(accounts_data.cash) AS cash,
+        sum(accounts_data.another) AS another,
+        sum(accounts_data.down) AS down,
+        sum(accounts_data.summition) AS summition,
+        sum(accounts_data.rest) AS rest
+        FROM accounts_data """
+
+        order = " ORDER BY accounts_data.date DESC "
         customer = ''
         if deviceNo != '' and deviceNo.isdigit():
-            customer = f" accounts.accountno = {deviceNo} "
+            customer = f" accounts_data.accountno = {deviceNo} "
         else: 
-            customer = f" accounts.customer = '{deviceNo}' "
+            customer = f" accounts_data.customer = '{deviceNo}' "
         filter = "";
         if id == 0:
             filter = "";
         elif id == 1:
-            filter = " WHERE accounts.date = CURRENT_DATE "
+            filter = " WHERE accounts_data.date = CURRENT_DATE "
         elif id == 2:
             filter = f" WHERE {customer} "
         elif id == 3:
-            filter = f" WHERE accounts.date = '{dateFrom}' "
+            filter = f" WHERE accounts_data.date = '{dateFrom}' "
         elif id == 4:
-            filter = f" WHERE ( {customer} )  AND accounts.date = '{dateFrom}' "
+            filter = f" WHERE ( {customer} )  AND accounts_data.date = '{dateFrom}' "
         elif id == 5:
-            filter =f" WHERE accounts.date >= '{dateTo}' AND accounts.date <= '{dateFrom}' "
+            filter =f" WHERE accounts_data.date >= '{dateTo}' AND accounts_data.date <= '{dateFrom}' "
         elif id == 6:
             filter0 = f" WHERE ( {customer} ) "
-            filter = filter0+f" AND (accounts.date >= '{dateTo}' AND accounts.date <= '{dateFrom}') "
+            filter = filter0+f" AND (accounts_data.date >= '{dateTo}' AND accounts_data.date <= '{dateFrom}') "
         try:
             connection = psycopg2.connect(
                 host="ec2-34-254-69-72.eu-west-1.compute.amazonaws.com",
@@ -165,7 +181,7 @@ class DatabaseManager:
                 user="pkekjaplofajah",
                 password="5f23b729fd13ec1e966727ead1da9717e48c44bd830a6753ee23f54e14d3b099")
             cursor = connection.cursor()
-            sql = "SELECT * FROM accounts "+filter
+            sql = sumData+filter+" UNION SELECT * FROM accounts_data "+filter+order
             cursor.execute(sql)
             data =  cursor.fetchall()
             allData = []
