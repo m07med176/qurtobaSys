@@ -40,14 +40,14 @@ class Mandop_InfoL(viewsets.ModelViewSet):
         return Response({"message": "تم إضافة المندوب بنجاح","status":  True})
 
 class GetCustomersData(viewsets.ModelViewSet):
-    queryset = CustomerInfo.objects.all()
+    queryset = CustomerInfo.objects.all().order_by('area','name')
     serializer_class = SCustomer
 
 class GetCustomersDataBySeller(viewsets.ReadOnlyModelViewSet):
     serializer_class = SCustomer
     def get_queryset(self,**kwargs):
         seller = self.kwargs['seller']
-        return CustomerInfo.objects.filter(seller=seller)
+        return CustomerInfo.objects.filter(seller=seller).order_by('area','name')
 
 
     # def customSerializers(self):
