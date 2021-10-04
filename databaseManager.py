@@ -86,7 +86,6 @@ class DatabaseManager:
                 cursor.close()
                 connection.close()
 
-
     def getDataSchema(self):
         try:
             connection = psycopg2.connect(
@@ -255,6 +254,7 @@ class DatabaseManager:
             if connection:
                 cursor.close()
                 connection.close()
+
 if __name__ == '__main__':
     db = DatabaseManager()
     value = db.accounts(id=1)

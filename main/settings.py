@@ -44,12 +44,18 @@ INSTALLED_APPS = [
     'rest_framework',
     'debug_toolbar',
     # apps #
-    'home',
+    'accountApp',
+    'homeApp',
     'customers',
-    'dataEltogar',
+    'dataEltogarApp',
     'transactions',
-    'fawryCodes',
-    'vono',
+    'fawryCodesApp',
+    'vonoApp',
+
+    'storeApp',
+    'productsSelesApp',
+    'fawrySelesApp',
+    'sellersApp',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -90,6 +96,7 @@ TEMPLATES = [
     },
 ]
 
+AUTH_USER_MODEL = 'accountApp.Account'
 WSGI_APPLICATION = 'main.wsgi.application'
 
 

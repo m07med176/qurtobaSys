@@ -9,12 +9,12 @@ from customers.web import views as web
 #-----------------------------
 
 from rest_framework import routers
-# like admin register 
 router = routers.DefaultRouter()
 router.register('customers',api.Customer_infoL)
 router.register('sellers',api.Mandop_InfoL)
 router.register('getCustomers',api.GetCustomersData)
-# router.register('accounts',api.Customer_accountL)
+router.register(r'getCustomersBySeller/(?P<seller>\d+?)',api.GetCustomersDataBySeller, basename='GetCustomersDataBySeller')
+
 
 #-----------------------------
 

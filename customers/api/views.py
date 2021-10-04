@@ -43,6 +43,12 @@ class GetCustomersData(viewsets.ModelViewSet):
     queryset = CustomerInfo.objects.all()
     serializer_class = SCustomer
 
+class GetCustomersDataBySeller(viewsets.ReadOnlyModelViewSet):
+    serializer_class = SCustomer
+    def get_queryset(self,**kwargs):
+        seller = self.kwargs['seller']
+        return CustomerInfo.objects.filter(seller=seller)
+
 
     # def customSerializers(self):
     #     queryset  =  CustomerInfo.objects.all().select_related('seller')

@@ -1,36 +1,39 @@
-"""main URL Configuration
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/3.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path,include
 import debug_toolbar
 from django.conf import settings
-
+from accountApp.web.views import (
+    registration_view,
+    logout_view,
+    login_view,
+    account_view )
 urlpatterns = [
-    path('', include('home.urls')), # root
-    path('admin/', admin.site.urls),
+    path('', include('homeApp.urls')), # root
+    path('account/', include('accountApp.urls')),
     path('customers/',include('customers.urls')),
-    path('dataEltogar/',include('dataEltogar.urls')),
+    path('dataEltogar/',include('dataEltogarApp.urls')),
     path('transactions/',include('transactions.urls')),
-    path('fawryCodes/',include('fawryCodes.urls')),
+    path('fawryCodes/',include('fawryCodesApp.urls')),
+
+    path('storeApp/',include('storeApp.urls')),
+    path('productsSelesApp/',include('productsSelesApp.urls')),
+    path('fawrySelesApp/',include('fawrySelesApp.urls')),
+    path('sellersApp/',include('sellersApp.urls')),
 
     # REST FRAMEWORK APIs
-    path('api/fawryCodes/',include('fawryCodes.api.urls','fawry_api')),
-    path('api/vono/',include('vono.api.urls','vono_api')),
+    path('api/fawryCodes/',include('fawryCodesApp.api.urls','fawry_api')),
+    path('api/vono/',include('vonoApp.api.urls','vono_api')),
+    
 
+        # accounts
+    path('admin/', admin.site.urls),
+    path('register/',registration_view,name= "register"),
+    path('logout/',logout_view,name= "logout"),
+    path('login/',login_view,name= "login"),
+    path('account/',account_view,name= "account"),
 ]
+
 
 if settings.DEBUG:
     urlpatterns +=path('__debug__/', include(debug_toolbar.urls)),
