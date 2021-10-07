@@ -27,7 +27,7 @@ class SCustomer(serializers.ModelSerializer):
     seller = SMandopShort()
     class Meta:
         model = CustomerInfo
-        fields = ('id','name','surName','area','deviceNo','seller','shopName','shopKind','phoneNo','address','accounts','time','date')
+        fields = ('id','name','surName','area','deviceNo','seller','shopName','shopKind','phoneNo','address','accounts','time','date','notes')
 
 class SCustomerShort(serializers.ModelSerializer):
     class Meta:

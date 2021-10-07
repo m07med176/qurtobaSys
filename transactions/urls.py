@@ -33,17 +33,23 @@ urlpatterns = [
         path('api/getAllRest/',api.getAllRest ),
         path('api/getAllRestId/<str:id>/',api.getSellerRestId),
 
-        # transactions
-        path('api/customerTrans/<str:deviceNo>/',api.getTransactionsCustomer),# 
-        path('api/trans_rest_customer/<int:id>/',api.getTransactionsCustomerById),# 
-
+        # region transactions
+        # region TRANSACTIONS UTILS
         path('api/todayTrans/',api.getTransactionsToday),
-        path('api/dateTrans/<str:dateSelect>/',api.getTransactionsDate),
-        path('api/dateAndcustomerTrans/<str:deviceNo>/<str:dateSelect>/',api.getTransactionsCustomerAndDate ),
-        path('api/dateFromToTrans/<str:dateFrom>/<str:dateTo>/',api.getTransactionsDateFromTo ),
-        path('api/dateFromToAndcustomerTrans/<str:deviceNo>/<str:dateFrom>/<str:dateTo>/',api.getTransactionsCustomerAndDateFromTo ),
-
+        path('api/trans_rest_customer/<int:id>/',api.getTransactionsCustomerById), 
         path('api/lastTrans/',api.getLastDateAndTime , name ='lastTrans' ),
+        # endregion
+        # region DATE FILTER
+        path('api/dateTrans/<str:dateSelect>/<str:type>/<str:seller>/',api.getTransactionsDate),
+        path('api/dateFromToTrans/<str:dateFrom>/<str:dateTo>/<str:type>/<str:seller>/',api.getTransactionsDateFromTo ),
+        # endregion
+        # region DEVICE NO FILTER
+        path('api/customerTrans/<str:deviceNo>/<str:type>/',api.getTransactionsCustomer),
+        path('api/dateAndcustomerTrans/<str:deviceNo>/<str:dateSelect>/<str:type>/',api.getTransactionsCustomerAndDate ),
+        path('api/dateFromToAndcustomerTrans/<str:deviceNo>/<str:dateFrom>/<str:dateTo>/<str:type>/',api.getTransactionsCustomerAndDateFromTo ),
+        # endregion
+        
+        # endregion
         # accounts
         path('api/customerAccounts/<str:deviceNo>/',api.getAccountsCustomer),
         path('api/todayAccounts/',api.getAccountsToday),

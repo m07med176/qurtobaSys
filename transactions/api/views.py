@@ -100,70 +100,107 @@ class GetRest(APIView):
             customer = CustomerInfo.objects.filter(Q(name=name))
         if len(customer) == 0:return "0"
         rest=Rest.objects.filter(customer__id=customer[0].id)
-        if len(rest) != 0:
-            return str(rest[0].rest)
-        else:
-            return "0"
+        if len(rest) != 0: return str(rest[0].rest)
+        else: return "0"
 
     def get(self,request,name):
         return Response({"data":self.customSerializers(name)})
 
-# --------------- Transactions ---------------------- #
+# region Transactions
 class RecordL(viewsets.ModelViewSet):
     queryset = Record.objects.all()
     serializer_class = SRecordSets
     def create(self, request, *args, **kwargs):
         super(RecordL, self).create(request, *args, **kwargs)
         return Response({"message": "تم إضافة التحويل بنجاح","status":  True})
-
+#   region ACCOUNT TRANSACTION FILTER
+#       region DATE FILTER
 @api_view(['GET',])
-def getTransactionsDateFromTo(request,dateFrom,dateTo):
+def getTransactionsDateFromTo(request,dateFrom,dateTo,type= 'الكل',seller= 0):
     # request.dateFrom # dateTo deviceNo
+    print(request)
+    start = datetime.datetime.fromisoformat(dateFrom) 
+    end = datetime.datetime.fromisoformat(dateTo)   
+    if seller == 0 and type == 'الكل':
+        record=Record.objects.filter(date__range = (start,end)).order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
+    elif seller != 0 and type != 'الكل':
+        record=Record.objects.filter(customerData__seller=seller,type=type,date__range = (start,end)).order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
+    elif seller == 0 and type != 'الكل':
+        record=Record.objects.filter(type=type,date__range = (start,end)).order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
+    elif seller != 0 and type == 'الكل':
+        record=Record.objects.filter(customerData__seller=seller,date__range = (start,end)).order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
+    
+    serializer = SRecord(record,many=True)
+    return Response({"data":serializer.data})
+
+@api_view(['GET',])
+def getTransactionsDate(request,dateSelect,type= 'الكل',seller= 0):
+    
+    if seller == 0 and type == 'الكل':
+        record = Record.objects.filter(date=datetime.datetime.fromisoformat(dateSelect)).order_by(F('time').desc(nulls_last=True))
+    elif seller != 0 and type != 'الكل':
+        record = Record.objects.filter(customerData__seller=seller,type=type,date=datetime.datetime.fromisoformat(dateSelect)).order_by(F('time').desc(nulls_last=True))
+    elif seller == 0 and type != 'الكل':
+        record = Record.objects.filter(type=type,date=datetime.datetime.fromisoformat(dateSelect)).order_by(F('time').desc(nulls_last=True))
+    elif seller != 0 and type == 'الكل':
+        record = Record.objects.filter(customerData__seller=seller,date=datetime.datetime.fromisoformat(dateSelect)).order_by(F('time').desc(nulls_last=True))
+    serializer = SRecord(record,many=True)
+    return Response({"data":serializer.data})
+#       endregion
+#       region DEVICE NUMBER FILTER
+@api_view(['GET',])
+def getTransactionsCustomerAndDateFromTo(request,deviceNo,dateFrom,dateTo,type= 'الكل'):
     start = datetime.datetime.fromisoformat(dateFrom) 
     end = datetime.datetime.fromisoformat(dateTo)   
 
-    record=Record.objects.filter(date__range = (start,end)).order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
-
-    serializer = SRecord(record,many=True)
-    return Response({"data":serializer.data})
-
-@api_view(['GET',])
-def getTransactionsCustomerAndDateFromTo(request,deviceNo,dateFrom,dateTo):
-    start = datetime.datetime.fromisoformat(dateFrom) 
-    end = datetime.datetime.fromisoformat(dateTo)   
-
-    if deviceNo.isdigit():
-        record=Record.objects.filter(date__range = (start,end),customerData__deviceNo=deviceNo).order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
+    if type== 'الكل':
+        if deviceNo.isdigit():
+            record=Record.objects.filter(date__range = (start,end),customerData__deviceNo=deviceNo).order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
+        else:
+            record=Record.objects.filter(date__range = (start,end),customerData__name=deviceNo).order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
     else:
-        record=Record.objects.filter(date__range = (start,end),customerData__name=deviceNo).order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
-
+        if deviceNo.isdigit():
+            record=Record.objects.filter(type=type,date__range = (start,end),customerData__deviceNo=deviceNo).order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
+        else:
+            record=Record.objects.filter(type=type,date__range = (start,end),customerData__name=deviceNo).order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
+    
     serializer = SRecord(record,many=True)
     return Response({"data":serializer.data})
 
 @api_view(['GET',])
-def getTransactionsDate(request,dateSelect):
-    record = Record.objects.filter(date=datetime.datetime.fromisoformat(dateSelect)).order_by(F('time').desc(nulls_last=True))
-    serializer = SRecord(record,many=True)
-    return Response({"data":serializer.data})
-
-@api_view(['GET',])
-def getTransactionsCustomerAndDate(request,deviceNo,dateSelect):
-    if deviceNo.isdigit():
-        record=Record.objects.filter(date=datetime.datetime.fromisoformat(dateSelect),customerData__deviceNo=deviceNo).order_by(F('time').desc(nulls_last=True))
+def getTransactionsCustomerAndDate(request,deviceNo,dateSelect,type= 'الكل'):
+    if type== 'الكل':
+        if deviceNo.isdigit():
+            record=Record.objects.filter(date=datetime.datetime.fromisoformat(dateSelect),customerData__deviceNo=deviceNo).order_by(F('time').desc(nulls_last=True))
+        else:
+            record=Record.objects.filter(date=datetime.datetime.fromisoformat(dateSelect),customerData__name=deviceNo).order_by(F('time').desc(nulls_last=True))
     else:
-        record=Record.objects.filter(date=datetime.datetime.fromisoformat(dateSelect),customerData__name=deviceNo).order_by(F('time').desc(nulls_last=True))
+        if deviceNo.isdigit():
+            record=Record.objects.filter(type=type,date=datetime.datetime.fromisoformat(dateSelect),customerData__deviceNo=deviceNo).order_by(F('time').desc(nulls_last=True))
+        else:
+            record=Record.objects.filter(type=type,date=datetime.datetime.fromisoformat(dateSelect),customerData__name=deviceNo).order_by(F('time').desc(nulls_last=True))
+    
     serializer = SRecord(record,many=True)
     return Response({"data":serializer.data})
 
 @api_view(['GET',])
-def getTransactionsCustomer(request,deviceNo):
-    if deviceNo.isdigit():
-        record=Record.objects.filter(customerData__deviceNo=deviceNo).select_related('customerData').order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
+def getTransactionsCustomer(request,deviceNo,type= 'الكل'):
+    if type== 'الكل':
+        if deviceNo.isdigit():
+            record=Record.objects.filter(customerData__deviceNo=deviceNo).select_related('customerData').order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
+        else:
+            record=Record.objects.filter(customerData__name=deviceNo).select_related('customerData').order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
     else:
-        record=Record.objects.filter(customerData__name=deviceNo).select_related('customerData').order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
+        if deviceNo.isdigit():
+            record=Record.objects.filter(type=type,customerData__deviceNo=deviceNo).select_related('customerData').order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
+        else:
+            record=Record.objects.filter(type=type,customerData__name=deviceNo).select_related('customerData').order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
+    
     serializer = SRecord(record,many=True)
     return Response({"data":serializer.data})
-
+#       endregion
+#   endregion
+#   region TRANSACTION UTILS
 @api_view(['GET',])
 def getTransactionsCustomerById(request,id):
 
@@ -181,7 +218,8 @@ def getTransactionsToday(request):
 def getLastDateAndTime(request):
     rest=Record.objects.all().order_by('date','time').first()
     return Response({"data":f"التحويلات : {rest.date} {rest.time}"})
-
+#   endregion
+# endregion
 
 # --------------- ACCOUNTS ---------------------- #
 @api_view(['GET',])

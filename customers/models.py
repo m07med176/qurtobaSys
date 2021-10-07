@@ -54,6 +54,7 @@ class CustomerInfo(models.Model):
 
     date = models.DateField(null=True,verbose_name = "Date",default=timezone.now)
     time = models.TimeField(null=True,verbose_name = "Time",default=timezone.now) #default=date.today
+    notes = models.TextField(max_length=150,verbose_name="الملاحظات",null=True,blank=True)
 
 
     def __str__(self):
