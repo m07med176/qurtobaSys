@@ -40,8 +40,8 @@ urlpatterns = [
         path('api/lastTrans/',api.getLastDateAndTime , name ='lastTrans' ),
         # endregion
         # region DATE FILTER
-        path('api/dateTrans/<str:dateSelect>/<str:type>/<str:seller>/',api.getTransactionsDate),
-        path('api/dateFromToTrans/<str:dateFrom>/<str:dateTo>/<str:type>/<str:seller>/',api.getTransactionsDateFromTo ),
+        path('api/dateTrans/<str:dateSelect>/<str:type>/<int:seller>/',api.getTransactionsDate),
+        path('api/dateFromToTrans/<str:dateFrom>/<str:dateTo>/<str:type>/<int:seller>/',api.getTransactionsDateFromTo ),
         # endregion
         # region DEVICE NO FILTER
         path('api/customerTrans/<str:deviceNo>/<str:type>/',api.getTransactionsCustomer),

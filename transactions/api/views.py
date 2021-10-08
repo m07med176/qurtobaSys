@@ -118,7 +118,6 @@ class RecordL(viewsets.ModelViewSet):
 @api_view(['GET',])
 def getTransactionsDateFromTo(request,dateFrom,dateTo,type= 'الكل',seller= 0):
     # request.dateFrom # dateTo deviceNo
-    print(request)
     start = datetime.datetime.fromisoformat(dateFrom) 
     end = datetime.datetime.fromisoformat(dateTo)   
     if seller == 0 and type == 'الكل':
