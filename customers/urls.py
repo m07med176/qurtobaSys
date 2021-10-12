@@ -39,6 +39,7 @@ urlpatterns = [
     path('api/customers_qname/<str:name>/',api.getCustomerByDeviceNoOrName),
     path('api/delete_customer/<str:id>/',api.deleteCustomer),
     path('api/all_customer/',api.getAllCustomer),
+    path('api/customers_email/<str:email>/',api.getCustomersByEmail),
     
 
     # seller

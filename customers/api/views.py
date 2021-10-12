@@ -179,3 +179,11 @@ def deleteCustomer(request,id):
     else:
             CustomerInfo.objects.get(id=id).delete()
             return Response({"results": "تم حذف العميل بنجاح","status":True})
+
+
+# get customer by email user
+@api_view(['GET',])
+def getCustomersByEmail(request,email):
+    customers = CustomerInfo.objects.filter(seller__email=email)
+    serializer = SCustomer(customers, many=True)
+    return Response({"results":serializer.data})
