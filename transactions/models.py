@@ -34,6 +34,8 @@ class Record(models.Model):
     date = models.DateField(null=False,verbose_name = "Date",default=timezone.now)
     time = models.TimeField(null=False,verbose_name = "Time",default=timezone.now)
     
+    notes = models.TextField(max_length=150,verbose_name="الملاحظات",null=True,blank=True)
+
     def __str__(self):
         return str(self.type)
 

@@ -31,6 +31,7 @@ class RestL(viewsets.ModelViewSet):
     queryset = Rest.objects.all()
     serializer_class = SRest
 
+# region MainRest
 def getRestByCustomSerializer(objectData):
     allData = []
     areaName = ''
@@ -66,7 +67,7 @@ def getRestByCustomSerializer(objectData):
 
 @api_view(['GET',])
 def getSellerRestId(request,id):
-    rest=Rest.objects.filter(customer__seller=id).select_related('customer').order_by('customer__area')
+    rest=Rest.objects.filter(customer__seller=id).select_related('customer').order_by('customer__area','date')
     if len(rest) == 0:return Response({"data": []})
     return Response({"data": getRestByCustomSerializer(rest)})
 
@@ -78,11 +79,9 @@ def getSellerRest(request,email):
     if len(seller) == 0 or len(latestDate) == 0: return Response({"data": [],"date":""})
     latestDate = latestDate.latest('date')
 
-    rest=Rest.objects.filter(customer__seller=seller[0].id).select_related('customer').order_by('customer__area')
+    rest=Rest.objects.filter(customer__seller=seller[0].id).select_related('customer').order_by('customer__area','date')
     if len(rest) == 0:return Response({"data": [],"date":""})
     return Response({"data": getRestByCustomSerializer(rest),"date":f"أخر تحويل: {latestDate.date} {latestDate.time}"})
-
-
 
 @api_view(['GET',])
 def getAllRest(request):
@@ -90,6 +89,13 @@ def getAllRest(request):
     if len(rest) == 0:return Response({"data": []})
     return Response({"data": getRestByCustomSerializer(rest)})
 
+@api_view(['GET',])
+def getAllRestGte(request,value):
+    rest=Rest.objects.filter(value__gte=value).select_related('customer').order_by('customer__area','date')
+    if len(rest) == 0:return Response({"data": []})
+    return Response({"data": getRestByCustomSerializer(rest)})
+    
+# endregion MainRest
 # GET REST OF SEPCIFIC SELLER
 class GetRest(APIView):
     permission_classes = (permissions.AllowAny,)

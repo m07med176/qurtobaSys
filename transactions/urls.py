@@ -32,6 +32,7 @@ urlpatterns = [
         path('restSeller/<str:email>/',api.getSellerRest),
         path('api/getAllRest/',api.getAllRest ),
         path('api/getAllRestId/<str:id>/',api.getSellerRestId),
+        path('api/rest_gte/<int:value>/',api.getAllRestGte),
 
         # region transactions
         # region TRANSACTIONS UTILS
