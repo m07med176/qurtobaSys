@@ -86,7 +86,7 @@ def getSellerRest(request,email):
 
 @api_view(['GET',])
 def getAllRest(request):
-    rest=Rest.objects.all().select_related('customer').order_by('customer__area')
+    rest=Rest.objects.all().select_related('customer').order_by('customer__area','date')
     if len(rest) == 0:return Response({"data": []})
     return Response({"data": getRestByCustomSerializer(rest)})
 
