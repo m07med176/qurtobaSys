@@ -28,9 +28,8 @@ DEBUG = True
 ALLOWED_HOSTS = ['qurtoba.herokuapp.com','127.0.0.1','192.168.1.109']
 
 
-# Application definition
-
 INSTALLED_APPS = [
+    # Third Party #
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,8 +42,8 @@ INSTALLED_APPS = [
     'search_admin_autocomplete',
     'rest_framework',
     'debug_toolbar',
-    # apps #
-    'accountApp',
+    # Apps #
+    'account',
     'homeApp',
     'customers',
     'dataEltogarApp',
@@ -96,8 +95,6 @@ TEMPLATES = [
     },
 ]
 
-AUTH_USER_MODEL = 'accountApp.Account'
-WSGI_APPLICATION = 'main.wsgi.application'
 
 
 # Database
@@ -121,10 +118,20 @@ DATABASES = {
     }
 }
 
+WSGI_APPLICATION = 'main.wsgi.application'
+AUTH_USER_MODEL = 'account.Account' 
+AUTHENTICATION_BACKENDS = ( 
+    'django.contrib.auth.backends.AllowAllUsersModelBackend', 
+    'account.backends.CaseInsensitiveModelBackend',
+    )
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760 # 10mb = 10 * 1024 *1024
+
+
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',

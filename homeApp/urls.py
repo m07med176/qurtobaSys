@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from homeApp.api import views as api
 urlpatterns = [ 
-                path('', web.login,name='login'), # root
+                path('', web.landline), # root
                 path('home/' , web.home ,name = 'home'),
                 #api
                 path('schema/',api.getSchema),

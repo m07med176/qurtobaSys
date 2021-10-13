@@ -1,3 +1,4 @@
+# region MODULE
 # ------------ API -----------#
 # UTILS
 from django.http import JsonResponse
@@ -25,13 +26,30 @@ import datetime
 # --------------- DATABASE MANAGER ------------------#
 from databaseManager import DatabaseManager
 db = DatabaseManager()
-
-# --------------- Office Rest ---------------------- #
-class RestL(viewsets.ModelViewSet):
-    queryset = Rest.objects.all()
-    serializer_class = SRest
+# endregion MODULE
 
 # region MainRest
+class RestL(viewsets.ModelViewSet):
+    pagination_class = None
+    queryset = Rest.objects.all().order_by('date','time')
+    serializer_class = SRest
+
+# GET REST OF SEPCIFIC SELLER
+class GetRest(APIView):
+    permission_classes = (permissions.AllowAny,)
+    def customSerializers(self,name):
+        if name.isdigit():
+            customer = CustomerInfo.objects.filter(Q(deviceNo=name)) 
+        else:
+            customer = CustomerInfo.objects.filter(Q(name=name))
+        if len(customer) == 0:return "0"
+        rest=Rest.objects.filter(customer__id=customer[0].id)
+        if len(rest) != 0: return str(rest[0].rest)
+        else: return "0"
+
+    def get(self,request,name):
+        return Response({"data":self.customSerializers(name)})
+
 def getRestByCustomSerializer(objectData):
     allData = []
     areaName = ''
@@ -94,31 +112,20 @@ def getAllRestGte(request,value):
     rest=Rest.objects.filter(value__gte=value).select_related('customer').order_by('customer__area','date')
     if len(rest) == 0:return Response({"data": []})
     return Response({"data": getRestByCustomSerializer(rest)})
-    
-# endregion MainRest
-# GET REST OF SEPCIFIC SELLER
-class GetRest(APIView):
-    permission_classes = (permissions.AllowAny,)
-    def customSerializers(self,name):
-        if name.isdigit():
-            customer = CustomerInfo.objects.filter(Q(deviceNo=name)) 
-        else:
-            customer = CustomerInfo.objects.filter(Q(name=name))
-        if len(customer) == 0:return "0"
-        rest=Rest.objects.filter(customer__id=customer[0].id)
-        if len(rest) != 0: return str(rest[0].rest)
-        else: return "0"
 
-    def get(self,request,name):
-        return Response({"data":self.customSerializers(name)})
+# endregion MainRest
+
 
 # region Transactions
 class RecordL(viewsets.ModelViewSet):
-    queryset = Record.objects.all()
+    queryset = Record.objects.all().order_by('date','time')
     serializer_class = SRecordSets
     def create(self, request, *args, **kwargs):
         super(RecordL, self).create(request, *args, **kwargs)
         return Response({"message": "تم إضافة التحويل بنجاح","status":  True})
+
+
+
 #   region ACCOUNT TRANSACTION FILTER
 #       region DATE FILTER
 @api_view(['GET',])
@@ -226,7 +233,7 @@ def getLastDateAndTime(request):
 #   endregion
 # endregion
 
-# --------------- ACCOUNTS ---------------------- #
+# region ACCOUNTS
 @api_view(['GET',])
 def getAccountsDateFromTo(request,dateFrom,dateTo):
     return Response({"data":db.accounts(id=5,dateFrom=dateFrom,dateTo=dateTo)})
@@ -250,4 +257,4 @@ def getAccountsCustomer(request,deviceNo):
 @api_view(['GET',])
 def getAccountsToday(request):
     return Response({"data":db.accounts(id=1)})
-
+# endregion ACCOUNTS

@@ -1,191 +1,37 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    
-    <title>{% block title %} قرطبة للإتصالات {% endblock %} </title>
-    <link rel="stylesheet" href="{% static 'bootstrap/favicon.ico' %}">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
-	  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <title>{% block title %} قرطبة للإتصالات {% endblock %} </title>
 
-    <!-- Local css files relative -->
-    <link rel="stylesheet" href="{% static 'bootstrap/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/font-awesome.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'main/style.css' %}">
-    <style>
-      body{font-family: 'Tajawal', sans-serif;}
-      #loading{text-align: center;
-      margin-top: 200px;}
-      svg{
-      width: 120px;
-      height: auto;
-      }
-      #box_message_success{ display: none;}
-      #box_message_danger{ display: none;}
-      #success{ display: none;}
-      </style>
-    {% block links %}{% endblock %}
-    
-</head>
-<body>
-<div class="wrapper d-flex align-items-stretch">
-			<nav id="sidebar">
-				<div class="p-4 pt-5">
-		  		<a href="#" class="img logo rounded-circle mb-5" style="background-image: url({% static 'images/logo.png' %});"></a>
-	        <ul class="list-unstyled components mb-5">
-	          <li class="active" >
-	              <a href="{% url 'create' %}">(تجريبى) إضافة عميل</a>
-            </li>
-            
-            <li >
-              <a href="#pageSubmenu2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">قائمة العملاء</a>
-              <ul class="collapse list-unstyled" id="pageSubmenu2">
-                <li>
-                  <a href="{% url 'showList' %}"> (تجريبى)قائمة العملاء</a>
-                </li>
-                <li>
-                    <a href="{% url 'customers_manadeep' %}">قائمة عملاء المناديب</a>
-                </li>
-              </ul>
-           </li>
-
-          <li>
-            <a href="{% url 'transactions' %}">تحويلات المناديب</a>
-        </li>
-          
-          
-            <li>
-              <a href="#pageSubmenu3" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">داتا التجار</a>
-              <ul class="collapse list-unstyled" id="pageSubmenu3">
-                <li>
-                    <a href="{% url 'table' %}">جدول داتا التجار</a>
-                </li>
-                <li>
-                    <a href="{% url 'analys' %}">تحليل داتا التجار</a>
-                </li>
-              </ul>
-	          </li>
-          
-	          
-<!-- 	          <li>
-              <a href="#">Print Prescription</a>
-	          </li>
-	          <li>
-              <a href="#">Medically compromised Patient</a>
-	          </li> -->
-	        </ul>
-
-	        <div class="footer">
-                <!-- <p>developed by mohamed arafa</p> -->
-              </div>
-
-	      </div>
-    	</nav>
-
-        <!-- Page Content  -->
-      <div id="content" class="p-4 p-md-5">
-
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-          <div class="container-fluid">
-
-            <button type="button" id="sidebarCollapse" class="btn btn-primary">
-              <i class="fa fa-bars"></i>
-              <span class="sr-only">Toggle Menu</span>
-            </button>
-            <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="fa fa-bars"></i>
-            </button>
-
-            <!-- <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="nav navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Add Patient</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Patient List</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Print Prescription</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Medically compromised Patient</a>
-                </li>
-              </ul>
-            </div>-->
-          </div>
-        </nav>
-        <!-- message of crud -->
-        <div class="alert alert-success" style="display: none;" role="alert" id="box_message_success"></div>
-        <div class="alert alert-danger" style="display: none;" role="alert" id="box_message_danger"></div>
-        
-        <div id="loading">
-          <svg version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="25 25 50 50">
-              <circle cx="50" cy="50" r="20" fill="none" stroke-width="5" stroke="#45d6b5" stroke-linecap="round" stroke-dashoffset="0" stroke-dasharray="100, 200">
-              <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 50 50" to="360 50 50" dur="2.5s" repeatCount="indefinite"/>
-              <animate attributeName="stroke-dashoffset" values="0;-30;-124" dur="1.25s" repeatCount="indefinite"/>
-              <animate attributeName="stroke-dasharray" values="0,200;110,200;110,200" dur="1.25s" repeatCount="indefinite"/>
-              </circle>
-          </svg>
-<h1 id="loood">  قرطبة للإتصالات  </h1>
-  </div>
-
-  <!-- Container for result -->
-  <div id="success">
-      <div class="container py-3">
-      <div class="row">
-      <div class="col-md-12">
-      {% block content %}
-      {% endblock %}
-      </div><!--/col-->
-      </div><!--/row-->
-  </div><!--/container-->
-  </div>
+        {% include 'snippets/base_css.html' %}
+        {% block links %}{% endblock %}
+    </head>
+    <body>
+        {% include 'snippets/header.html' %}
+        <div class="wrapper d-flex align-items-stretch">
+          {% include 'snippets/sidebar.html' %}
+            <!-- Page Content  -->
+          <div id="content" class="p-4 p-md-5">
+            <!-- Container for result -->
+            <div id="success">
+              <div class="container py-3">
+                <div class="row">
+                <div class="col-md-12">
+                {% block content %}
+                {% endblock %}
+                </div><!--/col-->
+              </div><!--/row-->
+              </div><!--/container-->
+            </div>
+        </div>
       </div>
-		</div>
-
-
-                                    <!-- LOCAL js relative -->
-        <script src="{% static 'jquery/jquery.min.js' %}"></script>
-        <script src="{% static 'main/popper-min.js' %}"></script>
-        <script src="{% static 'bootstrap/bootstrap.min.js' %}"></script>
-        <script src="{% static 'assets/fontawsome-all.min.js' %}"></script>
-        <script src="{% static 'main/myjs.js' %}"></script>
-        <script type="text/javascript">
-          // --------------- Start page loading ------------------\\
-  
-          // Function for adding User data and removing loading animation
-          var replace_data = function(){
-              $('#success').show();
-              $('#loading').hide();    }
-  
-          // AJAX call when page has loaded
-          $(document).ready(function(){
-           // datatable place here we was wotre
-              $.ajax({
-                  url: '',
-                  data: {
-                      'name': 'FOO'
-                  },
-                  data_type: 'html',
-                  success: function(data){
-                      replace_data(data);
-                  }
-                  });
-                  });
-  
-          // --------------- End page loading ------------------\\
-  
-          </script>
-        {% block script %}
-        {% endblock script %}
-
-</body>
+      {% include 'messages/crud_message.html' %}
+      {% include 'messages/loading_message.html' %}
+      {% include 'snippets/footer.html' %}
+      {% include 'snippets/base_js.html' %}
+    </body>
 </html>

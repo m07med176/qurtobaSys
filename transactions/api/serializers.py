@@ -5,6 +5,7 @@ from customers.api.serializers import SCustomerShort
 
 
 class SRest(serializers.ModelSerializer):
+    customer = SCustomerShort()
     class Meta:
         model = Rest
         fields = '__all__'
