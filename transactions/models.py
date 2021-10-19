@@ -1,7 +1,7 @@
 from django.db import models
 from customers.models import  CustomerInfo
 from django.utils import timezone
-
+from account.models import Account
 class Rest(models.Model):
     customer = models.OneToOneField(CustomerInfo,related_name="Rest.customer+",on_delete = models.CASCADE,verbose_name="العميل",null=False,blank=False)
     value= models.FloatField(blank=True,null=True,verbose_name="المتبقى")
@@ -17,6 +17,7 @@ class Rest(models.Model):
 
 class Record(models.Model):
     customerData = models.ForeignKey(CustomerInfo,related_name="customerData",on_delete = models.CASCADE,verbose_name="العميل",null=False,blank=False)
+    accountant = models.ForeignKey(Account,related_name="accountant",on_delete = models.PROTECT,verbose_name="المحاسب",null=True,blank=True)
     accounts=[
         ("فورى", "فورى"),
         ("كاش", "كاش"),

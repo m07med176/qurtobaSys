@@ -8,7 +8,8 @@ from rest_framework import  permissions
 from rest_framework import viewsets
 # APIVIEW
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 # ------------ MODELS -----------#
 # MODELS
 from transactions.models import Rest,Record
@@ -221,6 +222,7 @@ def getTransactionsCustomerById(request,id):
     return Response({"data":serializer.data,"sum":db.getCustomerRest(id)})
 
 @api_view(['GET',])
+# @permission_classes((IsAuthenticated, ))
 def getTransactionsToday(request):
     record=Record.objects.filter(date=datetime.datetime.now()).order_by(F('time').desc(nulls_last=True))
     serializer = SRecord(record,many=True)

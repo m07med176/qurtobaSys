@@ -14,28 +14,27 @@ from account.web.views import (
     account_search_view )
 urlpatterns = [
     path('admin/', admin.site.urls),
-
-    path('', include('homeApp.urls')),      # ROOT
+    # ROOT
+    path('', include('homeApp.urls')),     
     path('customers/',include('customers.urls')),
     path('dataEltogar/',include('dataEltogarApp.urls')),
     path('transactions/',include('transactions.urls')),
     path('fawryCodes/',include('fawryCodesApp.urls')),
 
-    path('storeApp/',include('storeApp.urls')),
-    path('productsSelesApp/',include('productsSelesApp.urls')),
-    path('fawrySelesApp/',include('fawrySelesApp.urls')),
-    path('sellersApp/',include('sellersApp.urls')),
+    path('store/',include('storeApp.urls')),
+    path('productsSeles/',include('productsSelesApp.urls')),
+    path('fawrySeles/',include('fawrySelesApp.urls')),
+    path('sellers/',include('sellersApp.urls')),
 
     # REST FRAMEWORK APIs
     path('api/fawryCodes/',include('fawryCodesApp.api.urls','fawry_api')),
     path('api/vono/',include('vonoApp.api.urls','vono_api')),
     
     # ACCOUNTS
-    path('account/', include('account.web.urls')),
+    path('account/', include('account.urls')),
     path('register/',register_view,name= "register"),
     path('logout/',logout_view,name= "logout"),
     path('login/',login_view,name= "login"),
-    path('account/',account_view,name= "account"),
 
     path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(template_name='password_reset/password_change_done.html'), 
     name='password_change_done'),

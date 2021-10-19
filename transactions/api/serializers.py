@@ -2,7 +2,7 @@ from transactions.models import Rest,Record
 from rest_framework import serializers
 
 from customers.api.serializers import SCustomerShort
-
+from account.api.serializers import SAccountantShort
 
 class SRest(serializers.ModelSerializer):
     customer = SCustomerShort()
@@ -12,6 +12,7 @@ class SRest(serializers.ModelSerializer):
 
 class SRecord(serializers.ModelSerializer):
     customerData = SCustomerShort()
+    accountant = SAccountantShort()
     class Meta:
         model = Record
         fields = '__all__'
@@ -62,3 +63,21 @@ class SMainRest(serializers.ModelSerializer):
         fields = ['value','customer','date','time','area','name','deviceNo',]
         #fields = '__all__'
         """
+
+
+"""
+class SRecord(serializers.ModelSerializer):
+    customerData = SCustomerShort()
+    username = serializers.SerializerMethodField('get_username_from_author')
+    class Meta:
+        model = Record
+        fields = ["id","customerData","username","type","value","isDone","isDown","date","time","notes"]
+
+    def get_username_from_author(self, record):
+        try:
+            username = record.accountant.username
+        except Record.DoesNotExist:
+            return None
+        return username
+
+"""

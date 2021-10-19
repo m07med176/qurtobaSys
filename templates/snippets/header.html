@@ -2,6 +2,7 @@
 
 <!-- Header navbar bg-light -->
 <div class="d-flex flex-column flex-lg-row p-3 px-md-4 bg-white border-bottom shadow-sm">
+	{% if request.user.is_authenticated %}
 	<button type="button" id="sidebarCollapse" class="btn btn-primary">
 		<i class="fa fa-bars"></i>
 		<span class="sr-only">Toggle Menu</span>
@@ -9,16 +10,18 @@
 	  <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		  <i class="fa fa-bars"></i>
 	  </button>
+	{% endif %}
 
 	  
 	<!-- MEDIUM+ SCREENS -->
 	<div class="d-none d-md-flex flex-row my-auto flex-grow-1 align-items-center">
 		<h5 class="mr-3 font-weight-normal justify-content-start">
-			<a class="p-2 text-dark" href="{% url 'home' %}">Home</a>
+			<a class="p-2 text-dark" href="{% url 'home' %}">قرطبة للإتصالات</a>
 		</h5>
 		<form class="search-bar justify-content-start">
 			<input type="text" class="form-control" name="q" id="id_q_large" placeholder="Search...">
 		</form>
+		{% if request.user.is_authenticated %}
 <!-- region NavBar -->
 <nav class="navbar-expand-lg navbar-light">
 	<div class="container-fluid">
@@ -43,6 +46,7 @@
 	  </div>
   </div>
 </nav>
+{% endif %}	
   <!-- endregion NavBar -->
 		<div class="d-flex flex-row-reverse flex-grow-1">
 			<nav class="">

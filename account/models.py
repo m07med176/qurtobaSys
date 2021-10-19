@@ -1,35 +1,41 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
+from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
+
 class MyAccountManager(BaseUserManager):
-	def create_user(self, phoneNo,email, username, password=None):
+	def create_user(self, phone,email, username, password=None):
 		if not email:
 			raise ValueError('Users must have an email address')
 		if not username:
 			raise ValueError('Users must have a username')
-		if not phoneNo:
+		if not phone:
 			raise ValueError('Users must have a phone number')
 		
 		user = self.model(
 			email=self.normalize_email(email),
 			username=username,
-			phoneNo=phoneNo,
+			phone=phone,
 		)
 
 		user.set_password(password)
 		user.save(using=self._db)
 		return user
 
-	def create_superuser(self, phoneNo,email, username, password):
+	def create_superuser(self, phone,email, username, password):
 		user = self.create_user(
 			email=self.normalize_email(email),
 			password=password,
 			username=username,
-			phoneNo=phoneNo,
+			phone=phone,
 		)
 		user.is_admin = True
 		user.is_staff = True
 		user.is_superuser = True
+		user.is_active = True
 		user.save(using=self._db)
 		return user
 
@@ -46,15 +52,19 @@ class Account(AbstractBaseUser):
 	is_superuser			= models.BooleanField(default=False,verbose_name = 'مسئول عام')
 	is_admin				= models.BooleanField(default=False,verbose_name = 'مدير')
 	is_staff				= models.BooleanField(default=False,verbose_name = 'محاسب')
-	is_active				= models.BooleanField(default=True,verbose_name = 'نشط')
-
-	is_customer				= models.BooleanField(default=False,verbose_name = 'عميل')
-	is_accepted				= models.BooleanField(default=False,verbose_name = 'مقبول')
-
-	hide_email				= models.BooleanField(default=True,verbose_name = 'إخفاء الايميل')
+	is_active				= models.BooleanField(default=False,verbose_name = 'نشط')
+	choices = [
+		(0, 'محاسب'),
+		(1, 'مندوب'),
+		(2, 'عميل'),
+		(3, 'محصل'),
+		(4, 'محول'),
+		(5, 'مدير'),
+	]
+	type				= models.IntegerField(choices=choices,default=0,verbose_name="نوع الحساب")
 
 	USERNAME_FIELD = 'phone'
-	REQUIRED_FIELDS = ['email']
+	REQUIRED_FIELDS = ['email','username']
 
 	objects = MyAccountManager()
 
@@ -68,3 +78,8 @@ class Account(AbstractBaseUser):
 	# Does this user have permission to view this app? (ALWAYS YES FOR SIMPLICITY)
 	def has_module_perms(self, app_label):
 		return True
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)

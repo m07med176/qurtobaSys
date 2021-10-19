@@ -88,7 +88,6 @@ def account_view(request, *args, **kwargs):
 		context['email'] = account.email
 		context['phone'] = account.phone
 		context['account_no'] = account.account_no
-		context['hide_email'] = account.hide_email
 
 		# Define template variables
 		is_self = True
@@ -142,7 +141,6 @@ def edit_account_view(request, *args, **kwargs):
 					"username": account.username,
 					"phone": account.phone,
 					"account_no": account.account_no,
-					"hide_email": account.hide_email,
 				}
 			)
 			context['form'] = form
@@ -154,7 +152,6 @@ def edit_account_view(request, *args, **kwargs):
 					"username": account.username,
 					"phone": account.phone,
 					"account_no": account.account_no,
-					"hide_email": account.hide_email,
 				}
 			)
 		context['form'] = form
