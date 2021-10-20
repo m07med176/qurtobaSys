@@ -24,7 +24,7 @@ class UsersMVS(viewsets.ModelViewSet):
 	pagination_class = LargeResultsSetPagination
 	serializer_class = SAccountAll
 	def delete(self, request, *args, **kwargs):
-		super(SAccountAll, self).update(request, *args, **kwargs)
+		super(SAccountAll, self).delete(request, *args, **kwargs)
 		return Response({"message": "تم حذف المستخدم بنجاح","status":  True})
 	# def create(self, request, *args, **kwargs):
 	# 	super(SAccountAll, self).create(request, *args, **kwargs)
