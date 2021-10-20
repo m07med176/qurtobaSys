@@ -23,12 +23,12 @@ class UsersMVS(viewsets.ModelViewSet):
 	queryset = Account.objects.get_queryset().order_by('id')
 	pagination_class = LargeResultsSetPagination
 	serializer_class = SAccountAll
-	def update(self, request, *args, **kwargs):
+	def delete(self, request, *args, **kwargs):
 		super(SAccountAll, self).update(request, *args, **kwargs)
-		return Response({"message": "تم تعديل المستخدم بنجاح","status":  True})
-	def create(self, request, *args, **kwargs):
-		super(SAccountAll, self).create(request, *args, **kwargs)
-		return Response({"message": "تم إضافة المستخدم بنجاح","status":  True})
+		return Response({"message": "تم حذف المستخدم بنجاح","status":  True})
+	# def create(self, request, *args, **kwargs):
+	# 	super(SAccountAll, self).create(request, *args, **kwargs)
+	# 	return Response({"message": "تم إضافة المستخدم بنجاح","status":  True})
 
 @api_view(['POST',])
 def register_account(request):
