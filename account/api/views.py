@@ -125,14 +125,11 @@ def deleteAccountManager(request,id):
 			account = Account.objects.get(pk=id)
 		except Account.DoesNotExist:
 			return Response(status=status.HTTP_404_NOT_FOUND)
-		serializers = SAccountManager(account,data=request.data)
-		if serializers.is_valid():
-			account = serializers.delete()
-			context['message'] = "تم الحذف بنجاح ."
-			context['status'] = True
-			return Response(context)
-		else:
-			return Response(serializers.errors)
+		account.delete()
+		context['message'] = "تم الحذف بنجاح ."
+		context['status'] = True
+		return Response(context)
+
 
 @api_view(['PUT',])
 def updateAccountManager(request,id):
