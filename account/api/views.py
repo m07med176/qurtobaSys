@@ -114,30 +114,6 @@ def updateAccountManager(request,id):
 			account = Account.objects.get(pk=id)
 		except Account.DoesNotExist:
 			return Response(status=status.HTTP_404_NOT_FOUND)
-		email = request.data.get('email', '0').lower()
-		if validate_email(email) != None:
-			context['message'] = 'هذا الإيميل مستخدم من قبل.'
-			context['status'] = False
-			return Response(context)
-
-		username = request.data.get('username', '0')
-		if validate_username(username) != None:
-			context['message'] = 'هذا الإسم مستخدم من قبل.'
-			context['status'] = False
-			return Response(context)
-
-		account_no = request.data.get('account_no', '0')
-		if validate_account_no(account_no) != None:
-			context['message'] = 'هذا الرقم مستخدم من قبل.'
-			context['status'] = False
-			return Response(context)
-
-		phone = request.data.get('phone', '0')
-		if validate_phone(phone) != None:
-			context['message'] = 'رقم المحمول هذا مستخدم من قبل.'
-			context['status'] = False
-			return Response(context)
-
 		serializers = SAccountManager(account,data=request.data)
 		if serializers.is_valid():
 			account = serializers.save()
