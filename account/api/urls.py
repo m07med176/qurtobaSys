@@ -9,6 +9,8 @@ urlpatterns = [
     # api
     path('router/', include(router.urls)),
     path('register/',api.register_account),
+    path('registerManager/',api.registerAccountManager),
+    path('updateManager/<int:id>/',api.updateAccountManager),
     path('login/', api.ObtainAuthTokenView.as_view(), name="login"), 
     path('properties', api.account_properties_view, name="properties"),
 	path('properties/update/', api.update_account_view, name="update"),

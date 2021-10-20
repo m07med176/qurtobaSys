@@ -14,7 +14,7 @@ from rest_framework.views import APIView
 from account.api.pagination import LargeResultsSetPagination
 from rest_framework.decorators import api_view, permission_classes
 # ------------ SERIALIZERS -----------#
-from account.api.serializers import AccountS,SAccountShow,SAccountResponse,SAccountantState,SAccountAll
+from account.api.serializers import AccountS,SAccountShow,SAccountResponse,SAccountantState,SAccountAll,SAccountManager
 from account.models import Account
 from rest_framework.authtoken.models import Token
 
@@ -33,34 +33,33 @@ class UsersMVS(viewsets.ModelViewSet):
 @api_view(['POST',])
 def register_account(request):
 	if request.method == 'POST':
-
+		context = {}
 		email = request.data.get('email', '0').lower()
 		if validate_email(email) != None:
-			data['response'] = 'هذا الإيميل مستخدم من قبل.'
+			context['response'] = 'هذا الإيميل مستخدم من قبل.'
 			context['status'] = False
-			return Response(data)
+			return Response(context)
 
 		username = request.data.get('username', '0')
 		if validate_username(username) != None:
-			data['response'] = 'هذا الإسم مستخدم من قبل.'
+			context['response'] = 'هذا الإسم مستخدم من قبل.'
 			context['status'] = False
-			return Response(data)
+			return Response(context)
 
 		account_no = request.data.get('account_no', '0')
 		if validate_account_no(account_no) != None:
-			data['response'] = 'هذا الرقم مستخدم من قبل.'
+			context['response'] = 'هذا الرقم مستخدم من قبل.'
 			context['status'] = False
-			return Response(data)
+			return Response(context)
 
 		phone = request.data.get('phone', '0')
 		if validate_phone(phone) != None:
-			data['response'] = 'رقم المحمول هذا مستخدم من قبل.'
+			context['response'] = 'رقم المحمول هذا مستخدم من قبل.'
 			context['status'] = False
-			return Response(data)
+			return Response(context)
 
 		serializers = AccountS(data=request.data)
 		if serializers.is_valid():
-			print("*"*150)
 			account = serializers.save()
 			context = SAccountResponse(account).data
 			context['response'] = "تم التسجيل بنجاح."
@@ -68,6 +67,87 @@ def register_account(request):
 			return Response(context)
 		else:
 			return Response(serializers.errors)
+
+@api_view(['POST',])
+def registerAccountManager(request):
+	if request.method == 'POST':
+		context = {}
+		email = request.data.get('email', '0').lower()
+		if validate_email(email) != None:
+			context['message'] = 'هذا الإيميل مستخدم من قبل.'
+			context['status'] = False
+			return Response(context)
+
+		username = request.data.get('username', '0')
+		if validate_username(username) != None:
+			context['message'] = 'هذا الإسم مستخدم من قبل.'
+			context['status'] = False
+			return Response(context)
+
+		account_no = request.data.get('account_no', '0')
+		if validate_account_no(account_no) != None:
+			context['message'] = 'هذا الرقم مستخدم من قبل.'
+			context['status'] = False
+			return Response(context)
+
+		phone = request.data.get('phone', '0')
+		if validate_phone(phone) != None:
+			context['response'] = 'رقم المحمول هذا مستخدم من قبل.'
+			context['status'] = False
+			return Response(context)
+
+		serializers = SAccountManager(data=request.data)
+		if serializers.is_valid():
+			account = serializers.save()
+			context = SAccountResponse(account).data
+			context['message'] = "تم التسجيل بنجاح."
+			context['status'] = True
+			return Response(context)
+		else:
+			return Response(serializers.errors)
+
+@api_view(['PUT',])
+def updateAccountManager(request,id):
+	if request.method == 'PUT':
+		context = {}
+		try:
+			account = Account.objects.get(pk=id)
+		except Account.DoesNotExist:
+			return Response(status=status.HTTP_404_NOT_FOUND)
+		email = request.data.get('email', '0').lower()
+		if validate_email(email) != None:
+			context['message'] = 'هذا الإيميل مستخدم من قبل.'
+			context['status'] = False
+			return Response(context)
+
+		username = request.data.get('username', '0')
+		if validate_username(username) != None:
+			context['message'] = 'هذا الإسم مستخدم من قبل.'
+			context['status'] = False
+			return Response(context)
+
+		account_no = request.data.get('account_no', '0')
+		if validate_account_no(account_no) != None:
+			context['message'] = 'هذا الرقم مستخدم من قبل.'
+			context['status'] = False
+			return Response(context)
+
+		phone = request.data.get('phone', '0')
+		if validate_phone(phone) != None:
+			context['message'] = 'رقم المحمول هذا مستخدم من قبل.'
+			context['status'] = False
+			return Response(context)
+
+		serializers = SAccountManager(account,data=request.data)
+		if serializers.is_valid():
+			account = serializers.save()
+			context = SAccountResponse(account).data
+			context['message'] = "تم التعديل بنجاح."
+			context['status'] = True
+			return Response(context)
+		else:
+			return Response(serializers.errors)
+
 
 @api_view(['GET', ])
 def getUserState(request,id):
@@ -102,7 +182,6 @@ def account_properties_view(request):
 @api_view(['PUT',])
 @permission_classes((IsAuthenticated, ))
 def update_account_view(request):
-
 	try:
 		account = request.user
 	except Account.DoesNotExist:
@@ -113,7 +192,7 @@ def update_account_view(request):
 		data = {}
 		if serializer.is_valid():
 			serializer.save()
-			data['response'] = 'Account update success'
+			data['response'] = 'تم تحديث الحساب.'
 			return Response(data=data)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

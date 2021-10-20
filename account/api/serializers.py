@@ -33,6 +33,14 @@ class SAccountantShort(serializers.ModelSerializer):
         model = Account
         fields = ('username')
 
+# to save and get data
+class SAccountManager(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = ["password","email","username","phone","account_no","is_superuser","is_admin","is_staff","is_active","type"]
+        extra_kwargs = { 'password':{'write_only':True} }
+
+# to save from user
 class AccountS(serializers.ModelSerializer):
     password2 = serializers.CharField(style={'input_type':'password'},write_only=True)
     class Meta:
