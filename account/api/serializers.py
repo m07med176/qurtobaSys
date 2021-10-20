@@ -1,17 +1,38 @@
 from rest_framework import serializers
 from account.models import Account
+from rest_framework.authtoken.models import Token
 
 
 class SAccountShow(serializers.ModelSerializer):
-    
-	class Meta:
-		model = Account
-		fields = ['pk', 'email', 'username','phone','account_no' ]
+    class Meta:
+        model = Account
+        fields = ['pk', 'email', 'username','phone','account_no' ]
 
+class SAccountAll(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = '__all__'
+class SAccountResponse(serializers.ModelSerializer):
+    token = serializers.SerializerMethodField('get_username_token')
+    class Meta:
+        model = Account
+        fields = ['pk', 'email', 'username','phone','account_no' ,'is_admin','is_active','token']
+    def get_username_token(self, account):
+        try:
+            token = Token.objects.get(user=account).key
+        except Token.DoesNotExist:
+            token = Token.objects.create(user=account)
+        return token
+
+class SAccountantState(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = ['is_admin','is_active','is_staff','is_superuser']
 class SAccountantShort(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = ('username')
+
 class AccountS(serializers.ModelSerializer):
     password2 = serializers.CharField(style={'input_type':'password'},write_only=True)
     class Meta:

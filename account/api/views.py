@@ -11,33 +11,72 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework import viewsets
 # APIVIEW
 from rest_framework.views import APIView
-from rest_framework.pagination import PageNumberPagination
+from account.api.pagination import LargeResultsSetPagination
 from rest_framework.decorators import api_view, permission_classes
 # ------------ SERIALIZERS -----------#
-from account.api.serializers import AccountS,SAccountShow
+from account.api.serializers import AccountS,SAccountShow,SAccountResponse,SAccountantState,SAccountAll
 from account.models import Account
 from rest_framework.authtoken.models import Token
+
+
+class UsersMVS(viewsets.ModelViewSet):
+	queryset = Account.objects.get_queryset().order_by('id')
+	pagination_class = LargeResultsSetPagination
+	serializer_class = SAccountAll
+	def update(self, request, *args, **kwargs):
+		super(SAccountAll, self).update(request, *args, **kwargs)
+		return Response({"message": "تم تعديل المستخدم بنجاح","status":  True})
+	def create(self, request, *args, **kwargs):
+		super(SAccountAll, self).create(request, *args, **kwargs)
+		return Response({"message": "تم إضافة المستخدم بنجاح","status":  True})
+
 @api_view(['POST',])
 def register_account(request):
-    if request.method == 'POST':
-        serializers = AccountS(data=request.data)
-        data = {}
-        if serializers.is_valid():
-            print("*"*150)
-            account = serializers.save()
-            data['response'] = 'successfully registered new user.'
-            data['email'] = account.email
-            data['username'] = account.username
-            data['phone'] = account.phone
-            data['account_no'] = account.account_no
-            data['pk'] = account.pk
-            token = Token.objects.get(user=account).key
-            data['token'] = token
-        else:
-            data = serializers.errors
-        return Response(data)
+	if request.method == 'POST':
 
+		email = request.data.get('email', '0').lower()
+		if validate_email(email) != None:
+			data['response'] = 'هذا الإيميل مستخدم من قبل.'
+			context['status'] = False
+			return Response(data)
 
+		username = request.data.get('username', '0')
+		if validate_username(username) != None:
+			data['response'] = 'هذا الإسم مستخدم من قبل.'
+			context['status'] = False
+			return Response(data)
+
+		account_no = request.data.get('account_no', '0')
+		if validate_account_no(account_no) != None:
+			data['response'] = 'هذا الرقم مستخدم من قبل.'
+			context['status'] = False
+			return Response(data)
+
+		phone = request.data.get('phone', '0')
+		if validate_phone(phone) != None:
+			data['response'] = 'رقم المحمول هذا مستخدم من قبل.'
+			context['status'] = False
+			return Response(data)
+
+		serializers = AccountS(data=request.data)
+		if serializers.is_valid():
+			print("*"*150)
+			account = serializers.save()
+			context = SAccountResponse(account).data
+			context['response'] = "تم التسجيل بنجاح."
+			context['status'] = True
+			return Response(context)
+		else:
+			return Response(serializers.errors)
+
+@api_view(['GET', ])
+def getUserState(request,id):
+	try:
+		account = Account.objects.get(pk=id)
+		return Response(SAccountantState(account).data)
+	except Account.DoesNotExist:
+		return Response(status=status.HTTP_404_NOT_FOUND)
+	
 # Account properties
 # Response: https://gist.github.com/mitchtabian/4adaaaabc767df73c5001a44b4828ca5
 # Url: https://<your-domain>/api/account/
@@ -90,24 +129,50 @@ class ObtainAuthTokenView(APIView):
 
 	def post(self, request):
 		context = {}
-
 		phone = request.POST.get('phone')
 		password = request.POST.get('password')
 		account = authenticate(phone=phone, password=password)
 		if account:
-			try:
-				token = Token.objects.get(user=account)
-			except Token.DoesNotExist:
-				token = Token.objects.create(user=account)
-			context['response'] = 'تم الدخول بنجاج.'
-			context['pk'] = account.pk
-			context['phone'] = account.phone
-			context['account_no'] = account.account_no
-			context['username'] = account.username
-			context['email'] = account.email.lower()
-			context['token'] = token.key
+			context = SAccountResponse(account).data
+			context['response'] = "تم الدخول بنجاح."
+			return Response(context)
 		else:
 			context['response'] = 'خطأ'
 			context['error_message'] = 'يوجد مشكلة حدثت'
+			return Response(context)
 
-		return Response(context)
+def validate_email(email):
+	account = None
+	try:
+		account = Account.objects.get(email=email)
+	except Account.DoesNotExist:
+		return None
+	if account != None:
+		return email
+
+def validate_username(username):
+	account = None
+	try:
+		account = Account.objects.get(username=username)
+	except Account.DoesNotExist:
+		return None
+	if account != None:
+		return username
+
+def validate_phone(phone):
+	account = None
+	try:
+		account = Account.objects.get(phone=phone)
+	except Account.DoesNotExist:
+		return None
+	if account != None:
+		return phone
+
+def validate_account_no(account_no):
+	account = None
+	try:
+		account = Account.objects.get(account_no=account_no)
+	except Account.DoesNotExist:
+		return None
+	if account != None:
+		return account_no
