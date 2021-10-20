@@ -128,7 +128,7 @@ def deleteAccountManager(request,id):
 		serializers = SAccountManager(account,data=request.data)
 		if serializers.is_valid():
 			account = serializers.delete()
-			context['message'] = "تم الحذف بنجاح بنجاح."
+			context['message'] = "تم الحذف بنجاح ."
 			context['status'] = True
 			return Response(context)
 		else:
