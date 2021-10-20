@@ -28,6 +28,7 @@ class SAccountantState(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = ['is_admin','is_active','is_staff','is_superuser']
+
 class SAccountantShort(serializers.ModelSerializer):
     class Meta:
         model = Account

@@ -11,6 +11,8 @@ urlpatterns = [
     path('register/',api.register_account),
     path('registerManager/',api.registerAccountManager),
     path('updateManager/<int:id>/',api.updateAccountManager),
+    path('deleteManager/<int:id>/',api.deleteAccountManager),
+    path('getManager/',api.getAccountManager),
     path('login/', api.ObtainAuthTokenView.as_view(), name="login"), 
     path('properties', api.account_properties_view, name="properties"),
 	path('properties/update/', api.update_account_view, name="update"),

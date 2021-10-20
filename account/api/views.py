@@ -23,12 +23,15 @@ class UsersMVS(viewsets.ModelViewSet):
 	queryset = Account.objects.get_queryset().order_by('id')
 	pagination_class = LargeResultsSetPagination
 	serializer_class = SAccountAll
-	def delete(self, request, *args, **kwargs):
-		super(SAccountAll, self).delete(request, *args, **kwargs)
-		return Response({"message": "تم حذف المستخدم بنجاح","status":  True})
+	# def destroy(self, request, *args, **kwargs):
+	# 	super(SAccountManager, self).destroy(request, *args, **kwargs)
+	# 	return Response({"message": "تم حذف المستخدم بنجاح","status":  True})
 	# def create(self, request, *args, **kwargs):
-	# 	super(SAccountAll, self).create(request, *args, **kwargs)
+	# 	super(SAccountManager, self).create(request, *args, **kwargs)
 	# 	return Response({"message": "تم إضافة المستخدم بنجاح","status":  True})
+	# def update(self, request, *args, **kwargs):
+	# 	super(SAccountManager, self).update(request, *args, **kwargs)
+	# 	return Response({"message": "تم تعديل المستخدم بنجاح","status":  True})
 
 @api_view(['POST',])
 def register_account(request):
@@ -101,6 +104,31 @@ def registerAccountManager(request):
 			account = serializers.save()
 			context = SAccountResponse(account).data
 			context['message'] = "تم التسجيل بنجاح."
+			context['status'] = True
+			return Response(context)
+		else:
+			return Response(serializers.errors)
+
+
+@api_view(['GET',])
+def getAccountManager(request):
+	if request.method == 'GET':
+		account = Account.objects.get_queryset().order_by('id')
+		serializers = SAccountAll(account,many=True)
+		return Response({"results":serializers.data})
+
+@api_view(['DELETE',])
+def deleteAccountManager(request,id):
+	if request.method == 'DELETE':
+		context = {}
+		try:
+			account = Account.objects.get(pk=id)
+		except Account.DoesNotExist:
+			return Response(status=status.HTTP_404_NOT_FOUND)
+		serializers = SAccountManager(account,data=request.data)
+		if serializers.is_valid():
+			account = serializers.delete()
+			context['message'] = "تم الحذف بنجاح بنجاح."
 			context['status'] = True
 			return Response(context)
 		else:
