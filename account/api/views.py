@@ -11,7 +11,6 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework import viewsets
 # APIVIEW
 from rest_framework.views import APIView
-from account.api.pagination import LargeResultsSetPagination
 from rest_framework.decorators import api_view, permission_classes
 # ------------ SERIALIZERS -----------#
 from account.api.serializers import AccountS,SAccountShow,SAccountResponse,SAccountantState,SAccountAll,SAccountManager
@@ -19,19 +18,6 @@ from account.models import Account
 from rest_framework.authtoken.models import Token
 
 
-class UsersMVS(viewsets.ModelViewSet):
-	queryset = Account.objects.get_queryset().order_by('id')
-	pagination_class = LargeResultsSetPagination
-	serializer_class = SAccountAll
-	# def destroy(self, request, *args, **kwargs):
-	# 	super(SAccountManager, self).destroy(request, *args, **kwargs)
-	# 	return Response({"message": "تم حذف المستخدم بنجاح","status":  True})
-	# def create(self, request, *args, **kwargs):
-	# 	super(SAccountManager, self).create(request, *args, **kwargs)
-	# 	return Response({"message": "تم إضافة المستخدم بنجاح","status":  True})
-	# def update(self, request, *args, **kwargs):
-	# 	super(SAccountManager, self).update(request, *args, **kwargs)
-	# 	return Response({"message": "تم تعديل المستخدم بنجاح","status":  True})
 
 @api_view(['POST',])
 def register_account(request):
@@ -256,3 +242,19 @@ def validate_account_no(account_no):
 		return None
 	if account != None:
 		return account_no
+
+
+# from account.api.pagination import LargeResultsSetPagination
+# class UsersMVS(viewsets.ModelViewSet):
+# 	queryset = Account.objects.get_queryset().order_by('id')
+# 	pagination_class = LargeResultsSetPagination
+# 	serializer_class = SAccountAll
+	# def destroy(self, request, *args, **kwargs):
+	# 	super(SAccountManager, self).destroy(request, *args, **kwargs)
+	# 	return Response({"message": "تم حذف المستخدم بنجاح","status":  True})
+	# def create(self, request, *args, **kwargs):
+	# 	super(SAccountManager, self).create(request, *args, **kwargs)
+	# 	return Response({"message": "تم إضافة المستخدم بنجاح","status":  True})
+	# def update(self, request, *args, **kwargs):
+	# 	super(SAccountManager, self).update(request, *args, **kwargs)
+	# 	return Response({"message": "تم تعديل المستخدم بنجاح","status":  True})
