@@ -52,8 +52,9 @@ class SAccountManager(serializers.ModelSerializer):
             is_staff        = self.validated_data['is_staff'],
             is_active       = self.validated_data['is_active'],
             type            = self.validated_data['type'],
-            password        = self.validated_data['password']
         )
+        password = self.validated_data['password']
+        account.set_password(password)
         account.save()
         return account
 
