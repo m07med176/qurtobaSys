@@ -61,8 +61,6 @@ class Migration(migrations.Migration):
                 ('isDown', models.BooleanField(blank=True, null=True, verbose_name='تحويل أم تنزبل')),
                 ('date', models.DateField(default=django.utils.timezone.now, verbose_name='Date')),
                 ('time', models.TimeField(default=django.utils.timezone.now, verbose_name='Time')),
-                ('notes', models.TextField(blank=True, max_length=150, null=True, verbose_name='الملاحظات')),
-                ('accountant', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='accountant', to=settings.AUTH_USER_MODEL, verbose_name='المحاسب')),
                 ('customerData', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='customerData', to='customers.customerinfo', verbose_name='العميل')),
             ],
             options={
