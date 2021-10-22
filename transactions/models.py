@@ -38,7 +38,7 @@ class Record(models.Model):
     notes           = models.TextField(max_length=150,verbose_name="الملاحظات",null=True,blank=True)
 
     def __str__(self):
-        return self.type+" ("+str(self.value)+") "+self.date+"|"+self.time
+        return self.type+" ("+str(self.value)+") "+str(self.date)+"|"+str(self.time)
 
     class Meta:
         verbose_name = "تحويل"

@@ -29,10 +29,10 @@ class CustomerInfo(models.Model):
     """
     name,shopName,shopKind,phoneNo,address,seller,accounts,time,date
     """
-    name = models.CharField(blank=False,max_length=100,verbose_name="الإســم",null=False,unique=True)
-    surName = models.CharField(blank=True,max_length=50,verbose_name=" إسم الشهره",null=True)
-    shopName = models.CharField(max_length=45,verbose_name="إسم المحل",null=True,blank=True)
-    deviceNo = models.IntegerField(blank=True,verbose_name="الرقم الكودى",null=True,unique=True)
+    name        = models.CharField(blank=False,max_length=100,verbose_name="الإســم",null=False,unique=True)
+    surName     = models.CharField(blank=True,max_length=50,verbose_name=" إسم الشهره",null=True)
+    shopName    = models.CharField(max_length=45,verbose_name="إسم المحل",null=True,blank=True)
+    deviceNo    = models.IntegerField(blank=True,verbose_name="الرقم الكودى",null=True,unique=True)
     shops=[
         ("بقالة", "بقالة"),
         ("منظفات", "منظفات"),
@@ -43,20 +43,20 @@ class CustomerInfo(models.Model):
         ("مكتبة", "مكتبة"),
         ("شخصى", "شخصى"), ]
 
-    shopKind = models.CharField(max_length=50,choices=shops,null=True,verbose_name = "نوع المحل",default=1)
-    phoneNo = models.CharField(max_length=11,blank=True, help_text='قم بكتابة رقم التليفون ',verbose_name = "رقم التليفون")
-    address = models.TextField(max_length=150,verbose_name="العنوان",null=True,blank=True)
-    area = models.CharField(max_length=50,verbose_name="المنطقة",null=True)
-    seller = models.ForeignKey('MandopInfo',related_name="seller",on_delete = models.PROTECT,verbose_name="المندوب المسئول",null=False,blank=False)
-    accountant = models.ForeignKey(Account,related_name="CustomerInfo.accountant+",on_delete = models.PROTECT,verbose_name="تابع لحساب",null=True,blank=True)
+    shopKind    = models.CharField(max_length=50,choices=shops,null=True,verbose_name = "نوع المحل",default=1)
+    phoneNo     = models.CharField(max_length=11,blank=True, help_text='قم بكتابة رقم التليفون ',verbose_name = "رقم التليفون")
+    address     = models.TextField(max_length=150,verbose_name="العنوان",null=True,blank=True)
+    area        = models.CharField(max_length=50,verbose_name="المنطقة",null=True)
+    seller      = models.ForeignKey('MandopInfo',related_name="seller",on_delete = models.PROTECT,verbose_name="المندوب المسئول",null=False,blank=False)
+    user  = models.ForeignKey(Account,related_name="CustomerInfo.user+",on_delete = models.PROTECT,verbose_name="تابع لحساب",null=True,blank=True)
 
     # jasonData = { "accountsKind": "فورى", "value": deviceNo}
     # accounts = models.JSONField(default=dict ,null=True,blank=True,verbose_name="حسابات العميل")
-    accounts = models.TextField(default="" ,null=True,blank=True,verbose_name="حسابات العميل")
+    accounts    = models.TextField(default="" ,null=True,blank=True,verbose_name="حسابات العميل")
 
-    date = models.DateField(null=True,verbose_name = "Date",default=timezone.now)
-    time = models.TimeField(null=True,verbose_name = "Time",default=timezone.now) #default=date.today
-    notes = models.TextField(max_length=150,verbose_name="الملاحظات",null=True,blank=True)
+    date        = models.DateField(null=True,verbose_name = "Date",default=timezone.now)
+    time        = models.TimeField(null=True,verbose_name = "Time",default=timezone.now) #default=date.today
+    notes       = models.TextField(max_length=150,verbose_name="الملاحظات",null=True,blank=True)
 
 
     def __str__(self):
@@ -66,12 +66,6 @@ class CustomerInfo(models.Model):
         verbose_name_plural = "العملاء"
         managed = True
         
-class Customer(CustomerInfo):
-    class Meta:
-        proxy = True
-        verbose_name = "إضافة عميل"
-        verbose_name_plural = "قائمة العملاء"
-
 
 # class CustomerAccount(models.Model):
 #     accounts=[

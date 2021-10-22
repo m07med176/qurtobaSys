@@ -130,9 +130,9 @@ class RecordL(viewsets.ModelViewSet):
 @api_view(['GET',])
 def getTransactionsDateUser(request,deviceNo,type='الكل',dateSelect=''):
     if type == 'الكل':
-        record = Record.objects.filter(accountant__id=deviceNo,date=datetime.datetime.fromisoformat(dateSelect)).order_by(F('time').desc(nulls_last=True))
+        record = Record.objects.filter(accountant__pk=deviceNo,date=datetime.datetime.fromisoformat(dateSelect)).order_by(F('time').desc(nulls_last=True))
     elif type != 'الكل':
-        record = Record.objects.filter(accountant__id=deviceNo,type=type,date=datetime.datetime.fromisoformat(dateSelect)).order_by(F('time').desc(nulls_last=True))
+        record = Record.objects.filter(accountant__pk=deviceNo,type=type,date=datetime.datetime.fromisoformat(dateSelect)).order_by(F('time').desc(nulls_last=True))
     serializer = SRecord(record,many=True)
     return Response({"data":serializer.data})
 
