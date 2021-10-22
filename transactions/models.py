@@ -4,11 +4,11 @@ from django.utils import timezone
 from account.models import Account
 class Rest(models.Model):
     customer    = models.OneToOneField(CustomerInfo,related_name="Rest.customer+",on_delete = models.CASCADE,verbose_name="العميل",null=False,blank=False)
-    rest       = models.FloatField(blank=True,null=True,verbose_name="المتبقى")
+    value       = models.FloatField(blank=True,null=True,verbose_name="المتبقى")
     date        = models.DateField(null=True,verbose_name = "Date",default=timezone.now)
     time        = models.TimeField(null=True,verbose_name = "Time",default=timezone.now)
     def __str__(self):
-        return str(self.rest)
+        return str(self.value)
 
     class Meta:
         verbose_name = "المتبقى"

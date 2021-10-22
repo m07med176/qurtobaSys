@@ -67,7 +67,7 @@ class GetRest(APIView):
             customer = CustomerInfo.objects.filter(Q(name=name))
         if len(customer) == 0:return "0"
         rest=Rest.objects.filter(customer__id=customer[0].id)
-        if len(rest) != 0: return str(rest[0].rest)
+        if len(rest) != 0: return str(rest[0].value)
         else: return "0"
 
     def get(self,request,name):
