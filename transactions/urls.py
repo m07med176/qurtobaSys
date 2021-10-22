@@ -35,6 +35,10 @@ urlpatterns = [
         path('api/rest_gte/<int:value>/',api.getAllRestGte),
 
         # region transactions
+        # region TRANSACTIONS USER
+        path('api/dateTransUser/<str:deviceNo>/<str:type>/<str:dateSelect>/',api.getTransactionsDateUser ),
+        path('api/dateFromToTransUser/<str:deviceNo>/<str:type>/<str:dateFrom>/<str:dateTo>/',api.getTransactionsDateFromToUser ),
+        # endregion TRANSACTIONS USER
         # region TRANSACTIONS UTILS
         path('api/todayTrans/',api.getTransactionsToday),
         path('api/trans_rest_customer/<int:id>/',api.getTransactionsCustomerById), 

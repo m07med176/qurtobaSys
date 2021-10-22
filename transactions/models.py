@@ -3,10 +3,10 @@ from customers.models import  CustomerInfo
 from django.utils import timezone
 from account.models import Account
 class Rest(models.Model):
-    customer = models.OneToOneField(CustomerInfo,related_name="Rest.customer+",on_delete = models.CASCADE,verbose_name="العميل",null=False,blank=False)
-    value= models.FloatField(blank=True,null=True,verbose_name="المتبقى")
-    date = models.DateField(null=True,verbose_name = "Date",default=timezone.now)
-    time = models.TimeField(null=True,verbose_name = "Time",default=timezone.now)
+    customer    = models.OneToOneField(CustomerInfo,related_name="Rest.customer+",on_delete = models.CASCADE,verbose_name="العميل",null=False,blank=False)
+    value       = models.FloatField(blank=True,null=True,verbose_name="المتبقى")
+    date        = models.DateField(null=True,verbose_name = "Date",default=timezone.now)
+    time        = models.TimeField(null=True,verbose_name = "Time",default=timezone.now)
     def __str__(self):
         return str(self.value)
 
@@ -16,8 +16,8 @@ class Rest(models.Model):
         managed = True
 
 class Record(models.Model):
-    customerData = models.ForeignKey(CustomerInfo,related_name="customerData",on_delete = models.CASCADE,verbose_name="العميل",null=False,blank=False)
-    accountant = models.ForeignKey(Account,related_name="accountant",on_delete = models.PROTECT,verbose_name="المحاسب",null=True,blank=True)
+    customerData    = models.ForeignKey(CustomerInfo,related_name="customerData",on_delete = models.CASCADE,verbose_name="العميل",null=False,blank=False)
+    accountant      = models.ForeignKey(Account,related_name="accountant",on_delete = models.PROTECT,verbose_name="المحاسب",null=True,blank=True)
     accounts=[
         ("فورى", "فورى"),
         ("كاش", "كاش"),
@@ -26,16 +26,16 @@ class Record(models.Model):
         ("أمان", "أمان"),
         ("أخرى", "أخرى"), 
         ("تنزيل", "تنزيل"),]
-    type = models.CharField(max_length=50,choices=accounts,null=False,verbose_name = "نوع الحساب",default=1)
+    type            = models.CharField(max_length=50,choices=accounts,null=False,verbose_name = "نوع الحساب",default=1)
     
-    value= models.FloatField(blank=False,null=False,verbose_name="المبلغ")
-    isDone= models.BooleanField(blank=True,null=True,verbose_name="انتهاء السداد")
-    isDown= models.BooleanField(blank=True,null=True,verbose_name="تحويل أم تنزبل")
+    value           = models.FloatField(blank=False,null=False,verbose_name="المبلغ")
+    isDone          = models.BooleanField(blank=True,null=True,verbose_name="انتهاء السداد")
+    isDown          = models.BooleanField(blank=True,null=True,verbose_name="تحويل أم تنزبل")
 
-    date = models.DateField(null=False,verbose_name = "Date",default=timezone.now)
-    time = models.TimeField(null=False,verbose_name = "Time",default=timezone.now)
+    date            = models.DateField(null=False,verbose_name = "Date",default=timezone.now)
+    time            = models.TimeField(null=False,verbose_name = "Time",default=timezone.now)
     
-    notes = models.TextField(max_length=150,verbose_name="الملاحظات",null=True,blank=True)
+    notes           = models.TextField(max_length=150,verbose_name="الملاحظات",null=True,blank=True)
 
     def __str__(self):
         return self.type+" ("+str(self.value)+") "+self.date+"|"+self.time
@@ -46,13 +46,13 @@ class Record(models.Model):
         managed = True
 
 class Talabat(models.Model):
-    customer = models.ForeignKey(CustomerInfo,related_name="Talabat.customer+",on_delete = models.PROTECT,verbose_name="العميل",null=True,blank=True)
+    customer    = models.ForeignKey(CustomerInfo,related_name="Talabat.customer+",on_delete = models.PROTECT,verbose_name="العميل",null=True,blank=True)
     senderTypes=[
         ("عميل", "عميل"),
         ("مندوب", "مندوب"),
         ("محصل", "محصل"),
         ]
-    sender = models.CharField(max_length=50,choices=senderTypes,null=False,verbose_name = "المرسل",default=1)
+    sender      = models.CharField(max_length=50,choices=senderTypes,null=False,verbose_name = "المرسل",default=1)
     
     accounts=[
         ("فورى", "فورى"),
@@ -62,16 +62,16 @@ class Talabat(models.Model):
         ("أمان", "أمان"),
         ("أخرى", "أخرى"), 
         ("تنزيل", "تنزيل"),]
-    type = models.CharField(max_length=50,choices=accounts,null=False,verbose_name = "نوع الحساب",default=1)
-    value= models.FloatField(blank=False,null=False,verbose_name="المبلغ")
-    isDown= models.BooleanField(blank=True,null=True,verbose_name="تحويل أم تنزبل")
+    type       = models.CharField(max_length=50,choices=accounts,null=False,verbose_name = "نوع الحساب",default=1)
+    value      = models.FloatField(blank=False,null=False,verbose_name="المبلغ")
+    isDown     = models.BooleanField(blank=True,null=True,verbose_name="تحويل أم تنزبل")
     perioritesType=[
         (1, "عادى"),
         (2, "مستعجل"),
         (3, "مستعجل جداً"),
         (4, "مستعجل للغاية"),
     ]
-    periority = models.IntegerField(verbose_name="الاولوية",choices=perioritesType,default=1,null=True,blank=True)
+    periority  = models.IntegerField(verbose_name="الاولوية",choices=perioritesType,default=1,null=True,blank=True)
     transType=[
         (1, "تم الطلب"),
         (2, "جارى تنفيذ الطلب"),
@@ -82,9 +82,9 @@ class Talabat(models.Model):
     ]
     stateTrans = models.IntegerField(verbose_name="حالة الطلب",choices=transType,default=1,null=True,blank=True)
 
-    date = models.DateField(null=False,verbose_name = "Date",default=timezone.now)
-    time = models.TimeField(null=False,verbose_name = "Time",default=timezone.now)
-    dateTime = models.DateTimeField(null=False,verbose_name = "Date Time",default=timezone.now)
+    date       = models.DateField(null=False,verbose_name = "Date",default=timezone.now)
+    time       = models.TimeField(null=False,verbose_name = "Time",default=timezone.now)
+    dateTime   = models.DateTimeField(null=False,verbose_name = "Date Time",default=timezone.now)
 
     def __str__(self):
         return str(self.type)

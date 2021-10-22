@@ -125,9 +125,28 @@ class RecordL(viewsets.ModelViewSet):
         super(RecordL, self).create(request, *args, **kwargs)
         return Response({"message": "تم إضافة التحويل بنجاح","status":  True})
 
-
-
 #   region ACCOUNT TRANSACTION FILTER
+#       region TRANSACTION USER
+@api_view(['GET',])
+def getTransactionsDateUser(request,deviceNo,type='الكل',dateSelect=''):
+    if type == 'الكل':
+        record = Record.objects.filter(accountant__id=deviceNo,date=datetime.datetime.fromisoformat(dateSelect)).order_by(F('time').desc(nulls_last=True))
+    elif type != 'الكل':
+        record = Record.objects.filter(accountant__id=deviceNo,type=type,date=datetime.datetime.fromisoformat(dateSelect)).order_by(F('time').desc(nulls_last=True))
+    serializer = SRecord(record,many=True)
+    return Response({"data":serializer.data})
+
+@api_view(['GET',])
+def getTransactionsDateFromToUser(request,deviceNo,type= 'الكل',dateFrom='',dateTo=''):
+    start = datetime.datetime.fromisoformat(dateFrom) 
+    end = datetime.datetime.fromisoformat(dateTo) 
+    if type == 'الكل':
+        record = Record.objects.filter(accountant__id=deviceNo,date__range = (start,end)).order_by(F('time').desc(nulls_last=True))
+    elif type != 'الكل':
+        record = Record.objects.filter(accountant__id=deviceNo,type=type,date__range = (start,end)).order_by(F('time').desc(nulls_last=True))
+    serializer = SRecord(record,many=True)
+    return Response({"data":serializer.data})
+#       endregion TRANSACTION USER
 #       region DATE FILTER
 @api_view(['GET',])
 def getTransactionsDateFromTo(request,dateFrom,dateTo,type= 'الكل',seller= 0):

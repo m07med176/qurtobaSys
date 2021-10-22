@@ -13,10 +13,54 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes
 # ------------ SERIALIZERS -----------#
-from account.api.serializers import AccountS,SAccountShow,SAccountResponse,SAccountantState,SAccountAll,SAccountManager
+from account.api.serializers import (
+	AccountS,
+	SAccountShow,
+	SAccountResponse,
+	SAccountantState,
+	SAccountAll,
+	SAccountManager,
+	SAccountManagerForCustomer)
 from account.models import Account
 from rest_framework.authtoken.models import Token
 
+@api_view(['POST',])
+def registerAccountManagerCustomer(request):
+	if request.method == 'POST':
+		context = {}
+		email = request.data.get('email', '0').lower()
+		if validate_email(email) != None:
+			context['message'] = 'هذا الإيميل مستخدم من قبل.'
+			context['status'] = False
+			return Response(context)
+
+		username = request.data.get('username', '0')
+		if validate_username(username) != None:
+			context['message'] = 'هذا الإسم مستخدم من قبل.'
+			context['status'] = False
+			return Response(context)
+
+		account_no = request.data.get('account_no', '0')
+		if validate_account_no(account_no) != None:
+			context['message'] = 'هذا الرقم مستخدم من قبل.'
+			context['status'] = False
+			return Response(context)
+
+		phone = request.data.get('phone', '0')
+		if validate_phone(phone) != None:
+			context['response'] = 'رقم المحمول هذا مستخدم من قبل.'
+			context['status'] = False
+			return Response(context)
+
+		serializers = SAccountManagerForCustomer(data=request.data)
+		if serializers.is_valid():
+			account = serializers.save()
+			context = SAccountResponse(account).data
+			context['message'] = "تم التسجيل بنجاح."
+			context['status'] = True
+			return Response(context)
+		else:
+			return Response(serializers.errors)
 
 
 @api_view(['POST',])

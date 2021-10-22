@@ -3,18 +3,18 @@ from django.utils import timezone
 # from datetime import date
 # from phone_field import PhoneField
 
-
+from account.models import Account
 
 class MandopInfo(models.Model):
     """id,name,email"""
-    code= models.IntegerField(blank=True,verbose_name="الرقم الكودى",null=True,unique=True)
-    email= models.CharField(blank=True,max_length=100,verbose_name="الإيميل",null=True,unique=True)
-    name= models.CharField(blank=False,max_length=100,verbose_name="إسم المندوب",null=False,unique=True)
-    phone= models.CharField(blank=True,max_length=11,verbose_name="رقم التليفون",null=True)
-    region = models.CharField(blank=True,max_length=50,verbose_name="المنطقة",null=True)
+    code    = models.IntegerField(blank=True,verbose_name="الرقم الكودى",null=True,unique=True)
+    email   = models.CharField(blank=True,max_length=100,verbose_name="الإيميل",null=True,unique=True)
+    name    = models.CharField(blank=False,max_length=100,verbose_name="إسم المندوب",null=False,unique=True)
+    phone   = models.CharField(blank=True,max_length=11,verbose_name="رقم التليفون",null=True)
+    region  = models.CharField(blank=True,max_length=50,verbose_name="المنطقة",null=True)
 
-    date = models.DateField(null=True,verbose_name = "Date",default=timezone.now)
-    time = models.TimeField(null=True,verbose_name = "Time",default=timezone.now) #default=date.today
+    date    = models.DateField(null=True,verbose_name = "Date",default=timezone.now)
+    time    = models.TimeField(null=True,verbose_name = "Time",default=timezone.now) #default=date.today
     
     def __str__(self):
         return str(self.name)
@@ -48,6 +48,8 @@ class CustomerInfo(models.Model):
     address = models.TextField(max_length=150,verbose_name="العنوان",null=True,blank=True)
     area = models.CharField(max_length=50,verbose_name="المنطقة",null=True)
     seller = models.ForeignKey('MandopInfo',related_name="seller",on_delete = models.PROTECT,verbose_name="المندوب المسئول",null=False,blank=False)
+    accountant = models.ForeignKey(Account,related_name="CustomerInfo.accountant+",on_delete = models.PROTECT,verbose_name="تابع لحساب",null=True,blank=True)
+
     # jasonData = { "accountsKind": "فورى", "value": deviceNo}
     # accounts = models.JSONField(default=dict ,null=True,blank=True,verbose_name="حسابات العميل")
     accounts = models.TextField(default="" ,null=True,blank=True,verbose_name="حسابات العميل")

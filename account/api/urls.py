@@ -11,6 +11,7 @@ urlpatterns = [
     path('state/<int:id>/',api.getUserState),
     # manager crud
     path('registerManager/',api.registerAccountManager),
+    path('registerManagerCustomer/',api.registerAccountManagerCustomer),
     path('updateManager/<int:id>/',api.updateAccountManager),
     path('deleteManager/<int:id>/',api.deleteAccountManager),
     path('getManager/',api.getAccountManager),

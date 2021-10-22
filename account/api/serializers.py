@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from account.models import Account
+from customers.models import CustomerInfo
 from rest_framework.authtoken.models import Token
 
 
@@ -51,11 +52,39 @@ class SAccountManager(serializers.ModelSerializer):
             is_admin        = self.validated_data['is_admin'],
             is_staff        = self.validated_data['is_staff'],
             is_active       = self.validated_data['is_active'],
-            type            = self.validated_data['type'],
+            type            = self.validated_data['type']
         )
         password = self.validated_data['password']
         account.set_password(password)
         account.save()
+        return account
+
+# to save and get data
+class SAccountManagerForCustomer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = ["password","email","username","phone","account_no","is_superuser","is_admin","is_staff","is_active","type"]
+        extra_kwargs = { 'password':{'write_only':True} }
+    
+    def save(self):
+        account_no      = self.validated_data['account_no']
+        account= Account(
+            email           = self.validated_data['email'],
+            username        = self.validated_data['username'],
+            account_no      = account_no,
+            phone           = self.validated_data['phone'],
+            is_superuser    = self.validated_data['is_superuser'],
+            is_admin        = self.validated_data['is_admin'],
+            is_staff        = self.validated_data['is_staff'],
+            is_active       = self.validated_data['is_active'],
+            type            = self.validated_data['type']
+        )
+        password = self.validated_data['password']
+        account.set_password(password)
+        account.save()
+        customer = CustomerInfo.objects.get(deviceNo=account_no)
+        customer.accountant = account
+        customer.save()
         return account
 
 # to save from user
