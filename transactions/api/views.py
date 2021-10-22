@@ -10,24 +10,46 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.filters import SearchFilter,OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
+
 # ------------ MODELS -----------#
 # MODELS
-from transactions.models import Rest,Record
+from transactions.models import Rest,Record,Talabat
 from customers.models import CustomerInfo, MandopInfo 
 # UTILS
-from django.db.models import Q
-from django.db.models import F
+from django.db.models import Q,F
 # from django.db.models import Prefetch
 # ------------ SERIALIZERS -----------#
 #from customers.api.serializers import SCustomer_info
-from transactions.api.serializers import SRecord,SRest ,SMainRest,SRecordSets
+from transactions.api.serializers import SRecord,SRest ,SMainRest,SRecordSets,STalabat
 from customers.api.serializers import SCustomer_info,SMandop_Info 
+from account.api.pagination import LargeResultsSetPagination
+
 # --------------- PYTHON UTILS ------------------#
 import datetime
 # --------------- DATABASE MANAGER ------------------#
 from databaseManager import DatabaseManager
 db = DatabaseManager()
 # endregion MODULE
+
+class TalabatMVS(viewsets.ModelViewSet):
+    pagination_class = LargeResultsSetPagination
+    queryset = Talabat.objects.all()
+    serializer_class = STalabat
+    filter_backends = [SearchFilter,OrderingFilter,DjangoFilterBackend]
+    filterset_fields = ['type','periority','stateTrans','date']
+    search_fields = ["user__username"]
+    ordering_fields = ['date', 'dateTime']
+    def update(self, request, *args, **kwargs):
+        super(TalabatMVS, self).update(request, *args, **kwargs)
+        return Response({"message": "تم تعديل الطلب بنجاح","status":  True})
+    def create(self, request, *args, **kwargs):
+        super(TalabatMVS, self).create(request, *args, **kwargs)
+        return Response({"message": "تم إضافه الطلب بنجاح","status":  True})
+    def destroy(self, request, *args, **kwargs):
+        super(TalabatMVS, self).destroy(request, *args, **kwargs)
+        return Response({"message": "تم حذف الطلب بنجاح","status":  True})
 
 # region MainRest
 class RestL(viewsets.ModelViewSet):
@@ -116,7 +138,6 @@ def getAllRestGte(request,value):
 
 # endregion MainRest
 
-
 # region Transactions
 class RecordL(viewsets.ModelViewSet):
     queryset = Record.objects.all().order_by('date','time')
@@ -125,14 +146,23 @@ class RecordL(viewsets.ModelViewSet):
         super(RecordL, self).create(request, *args, **kwargs)
         return Response({"message": "تم إضافة التحويل بنجاح","status":  True})
 
+@api_view(['POST',])
+def createRecord(request):
+    if request.method == "POST":
+        ser = SRecordSets(data=request.data)
+        if ser.is_valid():
+            ser.accountant = request.user
+            ser.save()
+            return Response({"message": "تم إضافة التحويل بنجاح","status":  True})
+        return Response({"message": "فشل فى التحويل","status":  False})
 #   region ACCOUNT TRANSACTION FILTER
 #       region TRANSACTION USER
 @api_view(['GET',])
 def getTransactionsDateUser(request,deviceNo,type='الكل',dateSelect=''):
     if type == 'الكل':
-        record = Record.objects.filter(accountant__pk=deviceNo,date=datetime.datetime.fromisoformat(dateSelect)).order_by(F('time').desc(nulls_last=True))
+        record = Record.objects.filter(customerData__user_id=deviceNo,date=datetime.datetime.fromisoformat(dateSelect)).order_by(F('time').desc(nulls_last=True))
     elif type != 'الكل':
-        record = Record.objects.filter(accountant__pk=deviceNo,type=type,date=datetime.datetime.fromisoformat(dateSelect)).order_by(F('time').desc(nulls_last=True))
+        record = Record.objects.filter(customerData__user_id=deviceNo,type=type,date=datetime.datetime.fromisoformat(dateSelect)).order_by(F('time').desc(nulls_last=True))
     serializer = SRecord(record,many=True)
     return Response({"data":serializer.data})
 
@@ -141,9 +171,9 @@ def getTransactionsDateFromToUser(request,deviceNo,type= 'الكل',dateFrom='',
     start = datetime.datetime.fromisoformat(dateFrom) 
     end = datetime.datetime.fromisoformat(dateTo) 
     if type == 'الكل':
-        record = Record.objects.filter(accountant__id=deviceNo,date__range = (start,end)).order_by(F('time').desc(nulls_last=True))
+        record = Record.objects.filter(customerData__user_id=deviceNo,date__range = (start,end)).order_by(F('time').desc(nulls_last=True))
     elif type != 'الكل':
-        record = Record.objects.filter(accountant__id=deviceNo,type=type,date__range = (start,end)).order_by(F('time').desc(nulls_last=True))
+        record = Record.objects.filter(customerData__user_id=deviceNo,type=type,date__range = (start,end)).order_by(F('time').desc(nulls_last=True))
     serializer = SRecord(record,many=True)
     return Response({"data":serializer.data})
 #       endregion TRANSACTION USER

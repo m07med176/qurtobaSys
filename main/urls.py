@@ -27,7 +27,7 @@ urlpatterns = [
     path('sellers/',include('sellersApp.urls')),
 
     # REST FRAMEWORK APIs
-    path('api/fawryCodes/',include('fawryCodesApp.api.urls','fawry_api')),
+    path('code/',include('fawryCodesApp.api.urls','fawry_api')),
     path('api/vono/',include('vonoApp.api.urls','vono_api')),
     
     # ACCOUNTS

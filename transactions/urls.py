@@ -9,6 +9,7 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 router.register('record',api.RecordL)
 router.register('rest',api.RestL)
+router.register('talabat',api.TalabatMVS)
 #-----------------------------
 
 

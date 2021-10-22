@@ -3,9 +3,32 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
 from fawryCodesApp.models import FawryCodes
-from fawryCodesApp.api.serializers import FawryCodesSer
-
+from fawryCodesApp.api.serializers import SFawryCodes
 from rest_framework import viewsets
+# APIVIEW
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.filters import SearchFilter,OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
+from account.api.pagination import LargeResultsSetPagination
+
+class FawryCodesMVS(viewsets.ModelViewSet):
+    pagination_class = LargeResultsSetPagination
+    queryset = FawryCodes.objects.all()
+    serializer_class = SFawryCodes
+    filter_backends = [SearchFilter,OrderingFilter,DjangoFilterBackend]
+    filterset_fields = ['serviceKind']
+    search_fields = ["serviceName","serviceName"]
+    ordering_fields = ['date', 'dateTime']
+    def update(self, request, *args, **kwargs):
+        super(FawryCodesMVS, self).update(request, *args, **kwargs)
+        return Response({"message": "تم تعديل الكود بنجاح","status":  True})
+    def create(self, request, *args, **kwargs):
+        super(FawryCodesMVS, self).create(request, *args, **kwargs)
+        return Response({"message": "تم إضافه الكود بنجاح","status":  True})
+    def destroy(self, request, *args, **kwargs):
+        super(FawryCodesMVS, self).destroy(request, *args, **kwargs)
+        return Response({"message": "تم حذف الكود بنجاح","status":  True})
 
 @api_view(['GET',])
 def getOnItem(request):
@@ -59,8 +82,3 @@ def createItem(request):
             ser.save()
             return Response(ser.data,status = status.HTTP_201_CREATED)
         return Response(ser.data,status = status.HTTP_400_BAD_REQUEST)
-
-
-class FawryCodesL(viewsets.ModelViewSet):
-    queryset = FawryCodes.objects.all()
-    serializer_class = FawryCodesSer

@@ -2,11 +2,11 @@ from django.urls import path,include
 from fawryCodesApp.api import views
 
 #-----------------------------
-from fawryCodesApp.api.views import FawryCodesL
+from fawryCodesApp.api.views import FawryCodesMVS
 from rest_framework import routers
 # like admin register 
 router = routers.DefaultRouter()
-router.register('data',FawryCodesL)
+router.register('data',FawryCodesMVS)
 #-----------------------------
 
 app_name = "fawryCodes"
@@ -16,5 +16,5 @@ urlpatterns = [
     path('update',views.updateItem),
     path('create',views.createItem),
     path('delete',views.deleteItem),
-    path('', include(router.urls)),
+    path('api/', include(router.urls)),
 ]

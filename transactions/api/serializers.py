@@ -1,7 +1,25 @@
-from transactions.models import Rest,Record
+from transactions.models import Rest,Record,Talabat
 from rest_framework import serializers
-
+from account.api.serializers import SAccountantShort
 from customers.api.serializers import SCustomerShort
+
+class STalabat(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField('get_username_from_author')
+
+    class Meta:
+        model = Talabat
+        fields = '__all__'
+    def get_username_from_author(self, talabat):
+            try:
+                username = talabat.user.username
+            except Exception: # Record.DoesNotExist
+                return ""
+            return username
+class STalabatGet(serializers.ModelSerializer):
+    user = SAccountantShort()
+    class Meta:
+        model = Talabat
+        fields = ['user','type','periority','stateTrans','date', 'dateTime']
 
 class SRest(serializers.ModelSerializer):
     customer = SCustomerShort()
@@ -21,6 +39,21 @@ class SRecord(serializers.ModelSerializer):
         except Exception: # Record.DoesNotExist
             return ""
         return username
+
+    def save(self):
+        account= Record(
+            customerData      = self.validated_data['customerData'],
+            accountant           = self.validated_data['accountant'],
+            type    = self.validated_data['type'],
+            value        = self.validated_data['value'],
+            isDone        = self.validated_data['isDone'],
+            isDown       = self.validated_data['isDown'],
+            notes            = self.validated_data['notes']
+        )
+        password = self.validated_data['password']
+        account.set_password(password)
+        account.save()
+        return account
 
 class SRecordSets(serializers.ModelSerializer):
     class Meta:
