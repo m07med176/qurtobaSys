@@ -49,7 +49,7 @@ class Record(models.Model):
 
 class Talabat(models.Model):
     "sender,type,periority,stateTrans,date"
-    user    = models.ForeignKey(Account,related_name="Talabat.account+",on_delete = models.PROTECT,verbose_name="العميل",null=True,blank=True)
+    user    = models.ForeignKey(Account,related_name="Talabat.account+",on_delete = models.CASCADE,verbose_name="العميل",null=True,blank=True)
     senderTypes=[
         (1,"عميل"),
         (2, "مندوب"),

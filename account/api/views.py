@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.generics import UpdateAPIView
 from django.contrib.auth import authenticate
 # API UTILS
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
@@ -64,6 +64,7 @@ def registerAccountManagerCustomer(request):
 
 
 @api_view(['POST',])
+@permission_classes((AllowAny, ))
 def register_account(request):
 	if request.method == 'POST':
 		context = {}
@@ -169,9 +170,9 @@ def updateAccountManager(request,id):
 			account = Account.objects.get(pk=id)
 		except Account.DoesNotExist:
 			return Response(status=status.HTTP_404_NOT_FOUND)
-		serializers = SAccountManager(account,data=request.data)
+		serializers = SAccountManager(instance=account,data=request.data)  
 		if serializers.is_valid():
-			account = serializers.save()
+			serializers.update(account)
 			context = SAccountResponse(account).data
 			context['message'] = "تم التعديل بنجاح."
 			context['status'] = True
