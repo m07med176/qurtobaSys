@@ -1,17 +1,21 @@
 # ------------ API AND  APIVIEW AND VIEWSETS-----------#
-from rest_framework import status
+
 from rest_framework.generics import UpdateAPIView
 from django.contrib.auth import authenticate
 # API UTILS
+from rest_framework import status
 from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.filters import SearchFilter,OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
+from account.api.pagination import LargeResultsSetPagination
+
 # VIEWSETS
 from rest_framework import viewsets
 # APIVIEW
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view, permission_classes
 # ------------ SERIALIZERS -----------#
 from account.api.serializers import (
 	AccountS,
@@ -21,8 +25,28 @@ from account.api.serializers import (
 	SAccountAll,
 	SAccountManager,
 	SAccountManagerForCustomer)
-from account.models import Account
 from rest_framework.authtoken.models import Token
+# ------------ MODELS -----------#
+from account.models import Account
+
+
+class UsersMVS(viewsets.ModelViewSet):
+    pagination_class = LargeResultsSetPagination
+    queryset = Account.objects.all()
+    serializer_class = SAccountAll
+    filter_backends = [SearchFilter,OrderingFilter,DjangoFilterBackend]
+    filterset_fields = ["is_superuser","is_admin","is_staff","is_active","type"]
+    search_fields = ["email","username","phone","account_no"]
+    ordering_fields = ['type','username','date_joined', 'last_login']
+    def update(self, request, *args, **kwargs):
+        super(UsersMVS, self).update(request, *args, **kwargs)
+        return Response({"message": "تم تعديل المستخدم بنجاح","status":  True})
+    def create(self, request, *args, **kwargs):
+        super(UsersMVS, self).create(request, *args, **kwargs)
+        return Response({"message": "تم إضافه المستخدم بنجاح","status":  True})
+    def destroy(self, request, *args, **kwargs):
+        super(UsersMVS, self).destroy(request, *args, **kwargs)
+        return Response({"message": "تم حذف المستخدم بنجاح","status":  True})
 
 @api_view(['POST',])
 def registerAccountManagerCustomer(request):

@@ -12,7 +12,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import SearchFilter,OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
-
+from rest_framework import status
 # ------------ MODELS -----------#
 # MODELS
 from transactions.models import Rest,Record,Talabat
@@ -143,17 +143,19 @@ class RecordL(viewsets.ModelViewSet):
     queryset = Record.objects.all().order_by('date','time')
     serializer_class = SRecordSets
     def create(self, request, *args, **kwargs):
-        super(RecordL, self).create(request, *args, **kwargs)
-        return Response({"message": "تم إضافة التحويل بنجاح","status":  True})
+        #super(RecordL, self).create(request, *args, **kwargs)
+        return self.createRecord(request)
 
-@api_view(['POST',])
-def createRecord(request):
-    if request.method == "POST":
+    def createRecord(self,request):
         ser = SRecordSets(data=request.data)
         if ser.is_valid():
-            ser.accountant = request.user
-            ser.save()
-            return Response({"message": "تم إضافة التحويل بنجاح","status":  True})
+            try:
+                Record.objects.get(date=ser.validated_data.get('date'),time=ser.validated_data.get('time'))
+            except Record.DoesNotExist:
+                ser.save()
+                return Response({"message": "تم إضافة التحويل بنجاح","status":  True})
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
         return Response({"message": "فشل فى التحويل","status":  False})
 #   region ACCOUNT TRANSACTION FILTER
 #       region TRANSACTION USER
