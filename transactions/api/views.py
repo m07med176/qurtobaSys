@@ -18,12 +18,9 @@ from rest_framework import status
 from transactions.models import Rest,Record,Talabat
 from customers.models import CustomerInfo, MandopInfo 
 # UTILS
-from django.db.models import Q,F
-# from django.db.models import Prefetch
+from django.db.models import Q,F,Prefetch
 # ------------ SERIALIZERS -----------#
-#from customers.api.serializers import SCustomer_info
-from transactions.api.serializers import SRecord,SRest ,SMainRest,SRecordSets,STalabat
-from customers.api.serializers import SCustomer_info,SMandop_Info 
+from transactions.api.serializers import SRecord,SRest ,SRecordSets,STalabat
 from account.api.pagination import LargeResultsSetPagination
 
 # --------------- PYTHON UTILS ------------------#
@@ -32,6 +29,7 @@ import datetime
 from databaseManager import DatabaseManager
 db = DatabaseManager()
 # endregion MODULE
+
 
 class TalabatMVS(viewsets.ModelViewSet):
     pagination_class = LargeResultsSetPagination
@@ -56,6 +54,10 @@ class RestL(viewsets.ModelViewSet):
     pagination_class = None
     queryset = Rest.objects.all().order_by('date','time')
     serializer_class = SRest
+    filter_backends = [SearchFilter,OrderingFilter,DjangoFilterBackend]
+    filterset_fields = ['date']
+    search_fields = ["=customer__seller__name"]
+    ordering_fields = ['date', 'time']
 
 # GET REST OF SEPCIFIC SELLER
 class GetRest(APIView):
