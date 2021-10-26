@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='record',
             name='rest',
-            field=models.FloatField(default='exit', verbose_name='المتبقى'),
+            field=models.FloatField(default=0, verbose_name='المتبقى'),
             preserve_default=False,
         ),
         migrations.AddField(
