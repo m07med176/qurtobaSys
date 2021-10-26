@@ -162,22 +162,25 @@ class RecordL(viewsets.ModelViewSet):
 #   region ACCOUNT TRANSACTION FILTER
 #       region TRANSACTION USER
 @api_view(['GET',])
-def getTransactionsDateUser(request,deviceNo,type='الكل',dateSelect=''):
+def getTransactionsDateUser(request,type='الكل',dateSelect=''):
+    id = request.user.id
+    print(id)
     if type == 'الكل':
-        record = Record.objects.filter(customerData__user_id=deviceNo,date=datetime.datetime.fromisoformat(dateSelect)).order_by(F('time').desc(nulls_last=True))
+        record = Record.objects.filter(customerData__user_id=id,date=datetime.datetime.fromisoformat(dateSelect)).order_by(F('time').desc(nulls_last=True))
     elif type != 'الكل':
-        record = Record.objects.filter(customerData__user_id=deviceNo,type=type,date=datetime.datetime.fromisoformat(dateSelect)).order_by(F('time').desc(nulls_last=True))
+        record = Record.objects.filter(customerData__user_id=id,type=type,date=datetime.datetime.fromisoformat(dateSelect)).order_by(F('time').desc(nulls_last=True))
     serializer = SRecord(record,many=True)
     return Response({"data":serializer.data})
 
 @api_view(['GET',])
-def getTransactionsDateFromToUser(request,deviceNo,type= 'الكل',dateFrom='',dateTo=''):
+def getTransactionsDateFromToUser(request,type= 'الكل',dateFrom='',dateTo=''):
     start = datetime.datetime.fromisoformat(dateFrom) 
     end = datetime.datetime.fromisoformat(dateTo) 
+    id = request.user.id
     if type == 'الكل':
-        record = Record.objects.filter(customerData__user_id=deviceNo,date__range = (start,end)).order_by(F('time').desc(nulls_last=True))
+        record = Record.objects.filter(customerData__user_id=id,date__range = (start,end)).order_by(F('time').desc(nulls_last=True))
     elif type != 'الكل':
-        record = Record.objects.filter(customerData__user_id=deviceNo,type=type,date__range = (start,end)).order_by(F('time').desc(nulls_last=True))
+        record = Record.objects.filter(customerData__user_id=id,type=type,date__range = (start,end)).order_by(F('time').desc(nulls_last=True))
     serializer = SRecord(record,many=True)
     return Response({"data":serializer.data})
 #       endregion TRANSACTION USER
