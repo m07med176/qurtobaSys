@@ -37,8 +37,8 @@ urlpatterns = [
 
         # region transactions
         # region TRANSACTIONS USER
-        path('api/dateTransUser/<str:deviceNo>/<str:type>/<str:dateSelect>/',api.getTransactionsDateUser ),
-        path('api/dateFromToTransUser/<str:deviceNo>/<str:type>/<str:dateFrom>/<str:dateTo>/',api.getTransactionsDateFromToUser ),
+        path('api/dateTransUser/<str:type>/<str:dateSelect>/',api.getTransactionsDateUser ),
+        path('api/dateFromToTransUser/<str:type>/<str:dateFrom>/<str:dateTo>/',api.getTransactionsDateFromToUser ),
         # endregion TRANSACTIONS USER
         # region TRANSACTIONS UTILS
         path('api/todayTrans/',api.getTransactionsToday),
