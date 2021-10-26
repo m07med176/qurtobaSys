@@ -7,6 +7,10 @@ class Rest(models.Model):
     value       = models.FloatField(blank=True,null=True,verbose_name="المتبقى")
     date        = models.DateField(null=True,verbose_name = "Date",default=timezone.now)
     time        = models.TimeField(null=True,verbose_name = "Time",default=timezone.now)
+    types = [
+        (0,"متبقيات"),(1,"مدفوعات")
+    ]
+    type        = models.IntegerField(default=0,choices=types,verbose_name = " النوع ")
     def __str__(self):
         return str(self.value)
 
@@ -29,7 +33,7 @@ class Record(models.Model):
         ("تحصيل", "تحصيل"),
         ]
     type            = models.CharField(max_length=50,choices=accounts,null=False,verbose_name = "نوع الحساب",default=1)
-    
+    rest           = models.FloatField(blank=False,null=False,verbose_name="المتبقى")
     value           = models.FloatField(blank=False,null=False,verbose_name="المبلغ")
     isDone          = models.BooleanField(blank=True,null=True,verbose_name="انتهاء السداد")
     isDown          = models.BooleanField(blank=True,null=True,verbose_name="تحويل أم تنزبل")
