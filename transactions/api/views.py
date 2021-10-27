@@ -56,7 +56,7 @@ class RestL(viewsets.ModelViewSet):
     serializer_class = SRest
     filter_backends = [SearchFilter,OrderingFilter,DjangoFilterBackend]
     filterset_fields = ['date']
-    search_fields = ["=customer__seller__name"]
+    search_fields = ["customer__seller__name"]
     ordering_fields = ['date', 'time']
 
 # GET REST OF SEPCIFIC SELLER
