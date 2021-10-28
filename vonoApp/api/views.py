@@ -4,8 +4,11 @@ from rest_framework.decorators import api_view
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.generics import ListAPIView
 
-from vonoApp.models import VodafoneNumber
-from .serializers import VodafoneNumberSer
+# --------------MODELS-----------------#
+from vonoApp.models import VodafoneNumber,Area,District,Branch,VodafoneNumberShow
+# --------------SERIALIZERS-----------------#
+from .serializers import SArea, VodafoneNumberSer,SVodafoneNumber,SBranch,SDistrict
+
 class GetNumbersAPI(ListAPIView):
     # def __init__(self,branch):
     #     self.branch = branch
@@ -16,4 +19,4 @@ class GetNumbersAPI(ListAPIView):
     def get_queryset(self):
         # branch = self.request.branch
         branch = self.kwargs['branch']
-        return VodafoneNumber.objects.filter(branch=branch)
+        return VodafoneNumberShow.objects.filter(area=branch)
