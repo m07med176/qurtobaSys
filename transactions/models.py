@@ -2,6 +2,7 @@ from django.db import models
 from customers.models import  CustomerInfo
 from django.utils import timezone
 from account.models import Account
+
 class Rest(models.Model):
     customer    = models.OneToOneField(CustomerInfo,related_name="Rest.customer+",on_delete = models.CASCADE,verbose_name="العميل",null=False,blank=False)
     value       = models.FloatField(blank=True,null=True,verbose_name="المتبقى")
@@ -34,7 +35,7 @@ class Record(models.Model):
         ("تحصيل", "تحصيل"),
         ]
     type            = models.CharField(max_length=50,choices=accounts,null=False,verbose_name = "نوع الحساب",default=1)
-    rest           = models.FloatField(default=0,blank=True,null=True,verbose_name="المتبقى")
+    rest            = models.FloatField(default=0,blank=True,null=True,verbose_name="المتبقى")
     value           = models.FloatField(blank=False,null=False,verbose_name="المبلغ")
     isDone          = models.BooleanField(blank=True,null=True,verbose_name="انتهاء السداد")
     isDown          = models.BooleanField(blank=True,null=True,verbose_name="تحويل أم تنزبل")

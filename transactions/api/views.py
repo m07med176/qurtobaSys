@@ -25,7 +25,9 @@ from account.api.pagination import LargeResultsSetPagination
 
 # --------------- PYTHON UTILS ------------------#
 import datetime
+from django.db.models import Sum
 # --------------- DATABASE MANAGER ------------------#
+import datetime
 from databaseManager import DatabaseManager
 db = DatabaseManager()
 # endregion MODULE
@@ -150,11 +152,27 @@ class RecordL(viewsets.ModelViewSet):
 
     def createRecord(self,request):
         ser = SRecordSets(data=request.data)
+
         if ser.is_valid():
             try:
                 Record.objects.get(date=ser.validated_data.get('date'),time=ser.validated_data.get('time'))
             except Record.DoesNotExist:
                 ser.save()
+                customer_id = ser.validated_data.get('customerData').id
+
+                value1 = Record.objects.filter(customerData_id=customer_id,isDown=False,isDone=False).aggregate(Sum('value'))['value__sum'] if Record.objects.filter(customerData_id=customer_id,isDown=False,isDone=False).aggregate(Sum('value'))['value__sum'] != None else 0
+                value2 = Record.objects.filter(customerData_id=customer_id,isDown=True,isDone=False).aggregate(Sum('value'))['value__sum'] if Record.objects.filter(customerData_id=customer_id,isDown=True,isDone=False).aggregate(Sum('value'))['value__sum'] != None else 0
+                sum  = value1 - value2
+                
+                date = str(datetime.datetime.now().date())
+                time = str(datetime.datetime.now().time()).split(".")[0]
+
+                Rest.objects.update_or_create(
+                customer_id=customer_id, 
+                defaults={ 'value' :sum, 'date'  :date, 'time'  :time } )
+
+                if sum == 0:
+                    record = Record.objects.filter(customerData_id=customer_id).update(isDone=True)
                 return Response({"message": "تم إضافة التحويل بنجاح","status":  True})
             else:
                 return Response(status=status.HTTP_404_NOT_FOUND)
@@ -270,12 +288,29 @@ def getTransactionsCustomer(request,deviceNo,type= 'الكل'):
 #       endregion
 #   endregion
 #   region TRANSACTION UTILS
+
+def getRestValueForCustomer(customer_id):
+    value1 = Record.objects.filter(customerData_id=customer_id,isDown=False,isDone=False).aggregate(Sum('value'))['value__sum'] if Record.objects.filter(customerData_id=customer_id,isDown=False,isDone=False).aggregate(Sum('value'))['value__sum'] != None else 0
+    value2 = Record.objects.filter(customerData_id=customer_id,isDown=True,isDone=False).aggregate(Sum('value'))['value__sum'] if Record.objects.filter(customerData_id=customer_id,isDown=True,isDone=False).aggregate(Sum('value'))['value__sum'] != None else 0
+    sum  = value1 - value2
+
+    date = str(datetime.datetime.now().date())
+    time = str(datetime.datetime.now().time()).split(".")[0]
+
+    Rest.objects.update_or_create(
+    customer_id=customer_id, 
+    defaults={ 'value' :sum, 'date'  :date, 'time'  :time } )
+
+    if sum == 0:
+        record = Record.objects.filter(customerData_id=customer_id).update(isDone=True)
+    return sum
 @api_view(['GET',])
 def getTransactionsCustomerById(request,id):
 
     record=Record.objects.filter(customerData_id=id).select_related('customerData').order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
     serializer = SRecord(record,many=True)
-    return Response({"data":serializer.data,"sum":db.getCustomerRest(id)})
+    # db.getCustomerRest(id)
+    return Response({"data":serializer.data,"sum": getRestValueForCustomer(id)   })
 
 @api_view(['GET',])
 # @permission_classes((IsAuthenticated, ))
