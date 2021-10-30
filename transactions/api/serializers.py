@@ -2,7 +2,7 @@ from transactions.models import Rest,Record,Talabat
 from rest_framework import serializers
 from account.api.serializers import SAccountantShort
 from customers.api.serializers import SCustomerShort
-
+from django.db.models import Sum
 
 class STalabat(serializers.ModelSerializer):
     user = serializers.SerializerMethodField('get_username_from_author')
@@ -35,13 +35,37 @@ class SRecord(serializers.ModelSerializer):
     class Meta:
         model = Record
         fields = '__all__'
+        
     def get_username_from_author(self, record):
         try:
             username = record.accountant.username
         except Exception: # Record.DoesNotExist
             return ""
         return username
-        
+
+class SRecordCustomer(serializers.ModelSerializer):
+    customerData = SCustomerShort()
+    accountant = serializers.SerializerMethodField('get_username_from_author')
+    rest = serializers.SerializerMethodField('get_rest')
+    class Meta:
+        model = Record
+        fields = '__all__'
+    def get_rest(self,record):
+        start = "2021-09-06"
+        end = record.date
+        customer_id = record.customerData.id
+
+        value1 = Record.objects.filter(customerData_id=customer_id,isDown=False,date__range = (start,end)).aggregate(Sum('value'))['value__sum'] if Record.objects.filter(customerData_id=customer_id,isDown=False,isDone=False).aggregate(Sum('value'))['value__sum'] != None else 0
+        value2 = Record.objects.filter(customerData_id=customer_id,isDown=True,date__range = (start,end)).aggregate(Sum('value'))['value__sum'] if Record.objects.filter(customerData_id=customer_id,isDown=True,isDone=False).aggregate(Sum('value'))['value__sum'] != None else 0
+        sum  = value1 - value2
+        return sum
+    def get_username_from_author(self, record):
+        try:
+            username = record.accountant.username
+        except Exception: # Record.DoesNotExist
+            return ""
+        return username
+  
 class SRecordSets(serializers.ModelSerializer):
     class Meta:
         model = Record

@@ -20,7 +20,7 @@ from customers.models import CustomerInfo, MandopInfo
 # UTILS
 from django.db.models import Q,F,Prefetch
 # ------------ SERIALIZERS -----------#
-from transactions.api.serializers import SRecord,SRest ,SRecordSets,STalabat
+from transactions.api.serializers import SRecord,SRest ,SRecordSets,STalabat,SRecordCustomer
 from account.api.pagination import LargeResultsSetPagination
 
 # --------------- PYTHON UTILS ------------------#
@@ -182,12 +182,11 @@ class RecordL(viewsets.ModelViewSet):
 @api_view(['GET',])
 def getTransactionsDateUser(request,type='الكل',dateSelect=''):
     id = request.user.id
-    print(id)
     if type == 'الكل':
         record = Record.objects.filter(customerData__user_id=id,date=datetime.datetime.fromisoformat(dateSelect)).order_by(F('time').desc(nulls_last=True))
     elif type != 'الكل':
         record = Record.objects.filter(customerData__user_id=id,type=type,date=datetime.datetime.fromisoformat(dateSelect)).order_by(F('time').desc(nulls_last=True))
-    serializer = SRecord(record,many=True)
+    serializer = SRecordCustomer(record,many=True)
     return Response({"data":serializer.data})
 
 @api_view(['GET',])
@@ -199,7 +198,7 @@ def getTransactionsDateFromToUser(request,type= 'الكل',dateFrom='',dateTo=''
         record = Record.objects.filter(customerData__user_id=id,date__range = (start,end)).order_by(F('time').desc(nulls_last=True))
     elif type != 'الكل':
         record = Record.objects.filter(customerData__user_id=id,type=type,date__range = (start,end)).order_by(F('time').desc(nulls_last=True))
-    serializer = SRecord(record,many=True)
+    serializer = SRecordCustomer(record,many=True)
     return Response({"data":serializer.data})
 #       endregion TRANSACTION USER
 #       region DATE FILTER
@@ -251,7 +250,7 @@ def getTransactionsCustomerAndDateFromTo(request,deviceNo,dateFrom,dateTo,type= 
         else:
             record=Record.objects.filter(type=type,date__range = (start,end),customerData__name=deviceNo).order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
     
-    serializer = SRecord(record,many=True)
+    serializer = SRecordCustomer(record,many=True)
     return Response({"data":serializer.data})
 
 @api_view(['GET',])
@@ -267,7 +266,7 @@ def getTransactionsCustomerAndDate(request,deviceNo,dateSelect,type= 'الكل')
         else:
             record=Record.objects.filter(type=type,date=datetime.datetime.fromisoformat(dateSelect),customerData__name=deviceNo).order_by(F('time').desc(nulls_last=True))
     
-    serializer = SRecord(record,many=True)
+    serializer = SRecordCustomer(record,many=True)
     return Response({"data":serializer.data})
 
 @api_view(['GET',])
@@ -283,7 +282,7 @@ def getTransactionsCustomer(request,deviceNo,type= 'الكل'):
         else:
             record=Record.objects.filter(type=type,customerData__name=deviceNo).select_related('customerData').order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
     
-    serializer = SRecord(record,many=True)
+    serializer = SRecordCustomer(record,many=True)
     return Response({"data":serializer.data})
 #       endregion
 #   endregion
@@ -308,7 +307,7 @@ def getRestValueForCustomer(customer_id):
 def getTransactionsCustomerById(request,id):
 
     record=Record.objects.filter(customerData_id=id).select_related('customerData').order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
-    serializer = SRecord(record,many=True)
+    serializer = SRecordCustomer(record,many=True)
     # db.getCustomerRest(id)
     return Response({"data":serializer.data,"sum": getRestValueForCustomer(id)   })
 
@@ -316,7 +315,7 @@ def getTransactionsCustomerById(request,id):
 # @permission_classes((IsAuthenticated, ))
 def getTransactionsToday(request):
     record=Record.objects.filter(date=datetime.datetime.now()).order_by(F('time').desc(nulls_last=True))
-    serializer = SRecord(record,many=True)
+    serializer = SRecordCustomer(record,many=True)
     return Response({"data":serializer.data})
 
 @api_view(['GET',])
