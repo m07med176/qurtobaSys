@@ -55,8 +55,8 @@ class SRecordCustomer(serializers.ModelSerializer):
         end = record.date
         customer_id = record.customerData.id
 
-        value1 = Record.objects.filter(customerData_id=customer_id,isDown=False,date__range = (start,end)).aggregate(Sum('value'))['value__sum'] if Record.objects.filter(customerData_id=customer_id,isDown=False,isDone=False).aggregate(Sum('value'))['value__sum'] != None else 0
-        value2 = Record.objects.filter(customerData_id=customer_id,isDown=True,date__range = (start,end)).aggregate(Sum('value'))['value__sum'] if Record.objects.filter(customerData_id=customer_id,isDown=True,isDone=False).aggregate(Sum('value'))['value__sum'] != None else 0
+        value1 = Record.objects.filter(customerData_id=customer_id,isDown=False,date__range = (start,end)).aggregate(Sum('value'))['value__sum'] if Record.objects.filter(customerData_id=customer_id,isDown=False,date__range = (start,end)).aggregate(Sum('value'))['value__sum'] != None else 0
+        value2 = Record.objects.filter(customerData_id=customer_id,isDown=True,date__range = (start,end)).aggregate(Sum('value'))['value__sum'] if Record.objects.filter(customerData_id=customer_id,isDown=True,date__range = (start,end)).aggregate(Sum('value'))['value__sum'] != None else 0
         sum  = value1 - value2
         return sum
     def get_username_from_author(self, record):
