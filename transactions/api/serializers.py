@@ -32,20 +32,6 @@ class SRest(serializers.ModelSerializer):
 class SRecord(serializers.ModelSerializer):
     customerData = SCustomerShort()
     accountant = serializers.SerializerMethodField('get_username_from_author')
-    class Meta:
-        model = Record
-        fields = '__all__'
-        
-    def get_username_from_author(self, record):
-        try:
-            username = record.accountant.username
-        except Exception: # Record.DoesNotExist
-            return ""
-        return username
-
-class SRecordCustomer(serializers.ModelSerializer):
-    customerData = SCustomerShort()
-    accountant = serializers.SerializerMethodField('get_username_from_author')
     rest = serializers.SerializerMethodField('get_rest')
     class Meta:
         model = Record
