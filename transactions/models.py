@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 from customers.models import  CustomerInfo
 from django.utils import timezone
@@ -42,6 +43,7 @@ class Record(models.Model):
 
     date            = models.DateField(null=False,verbose_name = "Date",default=timezone.now)
     time            = models.TimeField(null=False,verbose_name = "Time",default=timezone.now)
+    datetime        = models.DateTimeField(null=True,verbose_name = "DateTime",default=timezone.datetime.now)
     
     notes           = models.TextField(max_length=150,verbose_name="الملاحظات",null=True,blank=True)
 

@@ -135,127 +135,160 @@ class DatabaseManager:
                 cursor.close()
                 connection.close()
 
+
     def accounts(self,id=0,deviceNo='',dateFrom='',dateTo=''):
-        sumData =""" SELECT ''::character varying AS seller,
-        'المجموع'::character varying AS customer,
-        0 AS accountno,
-        '2222-11-11'::date AS date,
-        sum(accounts_data.fawry) AS fawry,
-        sum(accounts_data.aman) AS aman,
-        sum(accounts_data.bee) AS bee,
-        sum(accounts_data.tayer) AS tayer,
-        sum(accounts_data.cash) AS cash,
-        sum(accounts_data.another) AS another,
-        sum(accounts_data.down) AS down,
-        sum(accounts_data.summition) AS summition,
-        sum(accounts_data.rest) AS rest
-        FROM accounts_data """
+            sumData =""" SELECT ''::character varying AS seller,
+            'المجموع'::character varying AS customer,
+            0 AS accountno,
+            '2222-11-11'::date AS date,
+            sum(accounts_data.fawry) AS fawry,
+            sum(accounts_data.aman) AS aman,
+            sum(accounts_data.bee) AS bee,
+            sum(accounts_data.tayer) AS tayer,
+            sum(accounts_data.cash) AS cash,
+            sum(accounts_data.another) AS another,
+            sum(accounts_data.down) AS down,
+            sum(accounts_data.summition) AS summition,
+            sum(accounts_data.rest) AS rest
+            FROM accounts_data """
 
-        order = " ORDER BY date DESC "
-        customer = ''
-        if deviceNo != '' and deviceNo.isdigit():
-            customer = f" accounts_data.accountno = {deviceNo} "
-        else: 
-            customer = f" accounts_data.customer = '{deviceNo}' "
-        filter = "";
-        if id == 0:
+            order = " ORDER BY date DESC "
+            customer = ''
+            if deviceNo != '' and deviceNo.isdigit():
+                customer = f" accounts_data.accountno = {deviceNo} "
+            else: 
+                customer = f" accounts_data.customer = '{deviceNo}' "
             filter = "";
-        elif id == 1:
-            filter = " WHERE accounts_data.date = CURRENT_DATE "
-        elif id == 2:
-            filter = f" WHERE {customer} "
-        elif id == 3:
-            filter = f" WHERE accounts_data.date = '{dateFrom}' "
-        elif id == 4:
-            filter = f" WHERE ( {customer} )  AND accounts_data.date = '{dateFrom}' "
-        elif id == 5:
-            filter =f" WHERE accounts_data.date >= '{dateTo}' AND accounts_data.date <= '{dateFrom}' "
-        elif id == 6:
-            filter0 = f" WHERE ( {customer} ) "
-            filter = filter0+f" AND (accounts_data.date >= '{dateTo}' AND accounts_data.date <= '{dateFrom}') "
-        try:
-            connection = psycopg2.connect(
-                host="ec2-34-254-69-72.eu-west-1.compute.amazonaws.com",
-                database="d84lv9hqj4cvad",
-                user="pkekjaplofajah",
-                password="5f23b729fd13ec1e966727ead1da9717e48c44bd830a6753ee23f54e14d3b099")
-            cursor = connection.cursor()
-            sql = sumData+filter+" UNION SELECT * FROM accounts_data "+filter+order
-            cursor.execute(sql)
-            data =  cursor.fetchall()
-            allData = []
-            for i in data:
-                row = {
-                    "seller":i[0],
-                    "customer":i[1],
-                    "accountno":i[2],
-                    "date":i[3],
-                    "fawry":i[4],
-                    "aman":i[5],
-                    "bee":i[6],
-                    "tayer":i[7],
-                    "cash":i[8],
-                    "another":i[9],
-                    "down":i[10],
-                    "summition":i[11],
-                    "rest":i[12]
-                    
-                }
-                allData.append(row)
-            return allData
+            if id == 0:
+                filter = "";
+            elif id == 1:
+                filter = " WHERE accounts_data.date = CURRENT_DATE "
+            elif id == 2:
+                filter = f" WHERE {customer} "
+            elif id == 3:
+                filter = f" WHERE accounts_data.date = '{dateFrom}' "
+            elif id == 4:
+                filter = f" WHERE ( {customer} )  AND accounts_data.date = '{dateFrom}' "
+            elif id == 5:
+                filter =f" WHERE accounts_data.date >= '{dateTo}' AND accounts_data.date <= '{dateFrom}' "
+            elif id == 6:
+                filter0 = f" WHERE ( {customer} ) "
+                filter = filter0+f" AND (accounts_data.date >= '{dateTo}' AND accounts_data.date <= '{dateFrom}') "
+            try:
+                connection = psycopg2.connect(
+                    host="ec2-34-254-69-72.eu-west-1.compute.amazonaws.com",
+                    database="d84lv9hqj4cvad",
+                    user="pkekjaplofajah",
+                    password="5f23b729fd13ec1e966727ead1da9717e48c44bd830a6753ee23f54e14d3b099")
+                cursor = connection.cursor()
+                sql = sumData+filter+" UNION SELECT * FROM accounts_data "+filter+order
+                cursor.execute(sql)
+                data =  cursor.fetchall()
+                allData = []
+                for i in data:
+                    row = {
+                        "seller":i[0],
+                        "customer":i[1],
+                        "accountno":i[2],
+                        "date":i[3],
+                        "fawry":i[4],
+                        "aman":i[5],
+                        "bee":i[6],
+                        "tayer":i[7],
+                        "cash":i[8],
+                        "another":i[9],
+                        "down":i[10],
+                        "summition":i[11],
+                        "rest":i[12]
+                        
+                    }
+                    allData.append(row)
+                return allData
 
-        except (Exception, psycopg2.Error) as error:
-            print(sql)
-            print( "Error while fetching data from PostgreSQL"+ str(error))
-            return []
+            except (Exception, psycopg2.Error) as error:
+                print(sql)
+                print( "Error while fetching data from PostgreSQL"+ str(error))
+                return []
 
-        finally:
-            # closing database connection.
-            if connection:
-                cursor.close()
-                connection.close()
+            finally:
+                # closing database connection.
+                if connection:
+                    cursor.close()
+                    connection.close()
 
     def getCustomerRest(self,id):
-        try:
-            connection = psycopg2.connect(
-                host="ec2-34-254-69-72.eu-west-1.compute.amazonaws.com",
-                database="d84lv9hqj4cvad",
-                user="pkekjaplofajah",
-                password="5f23b729fd13ec1e966727ead1da9717e48c44bd830a6753ee23f54e14d3b099")
-            cursor = connection.cursor()
-            
-            
-            sql = f"""SELECT COALESCE(
-                (SELECT COALESCE(SUM(transactions_record.value),0) FROM transactions_record WHERE transactions_record."isDown" = false AND transactions_record."isDone" = false AND transactions_record."customerData_id" = {id} )
-                -
-                (SELECT COALESCE(SUM(transactions_record.value),0) FROM transactions_record WHERE transactions_record."isDown" = true AND transactions_record."isDone" = false AND transactions_record."customerData_id" = {id} )
-                ,0) AS rest """
-            
-            cursor.execute(sql)
-            date = str(datetime.datetime.now().date())
-            time = str(datetime.datetime.now().time()).split(".")[0]
-            value =cursor.fetchone()[0]
-            
-            sql = f"""
-            INSERT INTO transactions_rest (value,customer_id,date,time) VALUES(
-            {value},{id},'{date}','{time}') 
-            ON CONFLICT (customer_id) 
-            DO UPDATE SET VALUE = {value},date = '{date}',time ='{time}';
-            """
-            cursor.execute(sql)
-            connection.commit()
-            return value
+            try:
+                connection = psycopg2.connect(
+                    host="ec2-34-254-69-72.eu-west-1.compute.amazonaws.com",
+                    database="d84lv9hqj4cvad",
+                    user="pkekjaplofajah",
+                    password="5f23b729fd13ec1e966727ead1da9717e48c44bd830a6753ee23f54e14d3b099")
+                cursor = connection.cursor()
+                
+                
+                sql = f"""SELECT COALESCE(
+                    (SELECT COALESCE(SUM(transactions_record.value),0) FROM transactions_record WHERE transactions_record."isDown" = false AND transactions_record."isDone" = false AND transactions_record."customerData_id" = {id} )
+                    -
+                    (SELECT COALESCE(SUM(transactions_record.value),0) FROM transactions_record WHERE transactions_record."isDown" = true AND transactions_record."isDone" = false AND transactions_record."customerData_id" = {id} )
+                    ,0) AS rest """
+                
+                cursor.execute(sql)
+                date = str(datetime.datetime.now().date())
+                time = str(datetime.datetime.now().time()).split(".")[0]
+                value =cursor.fetchone()[0]
+                
+                sql = f"""
+                INSERT INTO transactions_rest (value,customer_id,date,time) VALUES(
+                {value},{id},'{date}','{time}') 
+                ON CONFLICT (customer_id) 
+                DO UPDATE SET VALUE = {value},date = '{date}',time ='{time}';
+                """
+                cursor.execute(sql)
+                connection.commit()
+                return value
 
-        except (Exception, psycopg2.Error) as error:
-            print( "Error while fetching data from PostgreSQL", error)
+            except (Exception, psycopg2.Error) as error:
+                print( "Error while fetching data from PostgreSQL", error)
 
-        finally:
-            # closing database connection.
-            if connection:
-                cursor.close()
-                connection.close()
+            finally:
+                # closing database connection.
+                if connection:
+                    cursor.close()
+                    connection.close()
+
+    def migrateData(self):
+            try:
+                connection = psycopg2.connect(
+                    host="ec2-34-254-69-72.eu-west-1.compute.amazonaws.com",
+                    database="d84lv9hqj4cvad",
+                    user="pkekjaplofajah",
+                    password="5f23b729fd13ec1e966727ead1da9717e48c44bd830a6753ee23f54e14d3b099")
+                cursor = connection.cursor()
+                
+                sql = "SELECT *  FROM PUBLIC.transactions_record"
+                cursor.execute(sql)
+
+                for i in cursor.fetchall():
+                    id = i[0]
+                    date = i[5]
+                    time = i[6]
+                    datetime = str(date)+" "+str(time)
+                    update = f"UPDATE PUBLIC.transactions_record SET datetime = '{datetime}'  WHERE  id = {id}"
+                    cursor.execute(update)
+                    connection.commit()
+
+                print(" done ")
+                return 
+
+            except (Exception, psycopg2.Error) as error:
+                return "Error while fetching data from PostgreSQL"+ error
+
+            finally:
+                # closing database connection.
+                if connection:
+                    cursor.close()
+                    connection.close()
 
 if __name__ == '__main__':
     db = DatabaseManager()
-    value = db.accounts(id=1)
-    print(value)
+    db.migrateData()

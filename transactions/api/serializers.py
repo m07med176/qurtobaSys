@@ -51,12 +51,12 @@ class SRecordCustomer(serializers.ModelSerializer):
         model = Record
         fields = '__all__'
     def get_rest(self,record):
-        start = "2021-09-06"
-        end = record.date
+        start = "2021-09-06 19:00:59+00"
+        end = record.datetime
         customer_id = record.customerData.id
 
-        value1 = Record.objects.filter(customerData_id=customer_id,isDown=False,date__range = (start,end)).aggregate(Sum('value'))['value__sum'] if Record.objects.filter(customerData_id=customer_id,isDown=False,date__range = (start,end)).aggregate(Sum('value'))['value__sum'] != None else 0
-        value2 = Record.objects.filter(customerData_id=customer_id,isDown=True,date__range = (start,end)).aggregate(Sum('value'))['value__sum'] if Record.objects.filter(customerData_id=customer_id,isDown=True,date__range = (start,end)).aggregate(Sum('value'))['value__sum'] != None else 0
+        value1 = Record.objects.filter(customerData_id=customer_id,isDown=False,datetime__range = (start,end)).aggregate(Sum('value'))['value__sum'] if Record.objects.filter(customerData_id=customer_id,isDown=False,datetime__range = (start,end)).aggregate(Sum('value'))['value__sum'] != None else 0
+        value2 = Record.objects.filter(customerData_id=customer_id,isDown=True,datetime__range = (start,end)).aggregate(Sum('value'))['value__sum'] if Record.objects.filter(customerData_id=customer_id,isDown=True,datetime__range = (start,end)).aggregate(Sum('value'))['value__sum'] != None else 0
         sum  = value1 - value2
         return sum
     def get_username_from_author(self, record):
