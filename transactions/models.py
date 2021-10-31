@@ -38,8 +38,8 @@ class Record(models.Model):
     type            = models.CharField(max_length=50,choices=accounts,null=False,verbose_name = "نوع الحساب",default=1)
     rest            = models.FloatField(default=0,blank=True,null=True,verbose_name="المتبقى")
     value           = models.FloatField(blank=False,null=False,verbose_name="المبلغ")
-    isDone          = models.BooleanField(blank=True,null=True,verbose_name="انتهاء السداد")
-    isDown          = models.BooleanField(blank=True,null=True,verbose_name="تحويل أم تنزبل")
+    isDone          = models.BooleanField(default=False,blank=True,null=True,verbose_name="انتهاء السداد")
+    isDown          = models.BooleanField(default=False,blank=True,null=True,verbose_name="تحويل أم تنزبل")
 
     date            = models.DateField(null=False,verbose_name = "Date",default=timezone.now)
     time            = models.TimeField(null=False,verbose_name = "Time",default=timezone.now)

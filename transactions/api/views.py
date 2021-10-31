@@ -171,8 +171,6 @@ class RecordL(viewsets.ModelViewSet):
                 customer_id=customer_id, 
                 defaults={ 'value' :sum, 'date'  :date, 'time'  :time } )
 
-                if sum == 0:
-                    record = Record.objects.filter(customerData_id=customer_id).update(isDone=True)
                 return Response({"message": "تم إضافة التحويل بنجاح","status":  True})
             else:
                 return Response(status=status.HTTP_404_NOT_FOUND)
@@ -296,12 +294,12 @@ def getRestValueForCustomer(customer_id):
     date = str(datetime.datetime.now().date())
     time = str(datetime.datetime.now().time()).split(".")[0]
 
-    Rest.objects.update_or_create(
-    customer_id=customer_id, 
-    defaults={ 'value' :sum, 'date'  :date, 'time'  :time } )
+    # Rest.objects.update_or_create(
+    # customer_id=customer_id, 
+    # defaults={ 'value' :sum, 'date'  :date, 'time'  :time } )
 
     if sum == 0:
-        record = Record.objects.filter(customerData_id=customer_id).update(isDone=True)
+        Record.objects.filter(customerData_id=customer_id).update(isDone=True)
     return sum
 @api_view(['GET',])
 def getTransactionsCustomerById(request,id):
