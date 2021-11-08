@@ -19,4 +19,4 @@ class GetNumbersAPI(ListAPIView):
     def get_queryset(self):
         # branch = self.request.branch
         branch = self.kwargs['branch']
-        return VodafoneNumberShow.objects.filter(area=branch)
+        return VodafoneNumberShow.objects.filter(branch=branch)
