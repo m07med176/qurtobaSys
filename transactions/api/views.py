@@ -304,7 +304,7 @@ def getRestValueForCustomer(customer_id):
 @api_view(['GET',])
 def getTransactionsCustomerById(request,id):
 
-    record=Record.objects.filter(customerData_id=id).select_related('customerData').order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))
+    record=Record.objects.filter(customerData_id=id).select_related('customerData').order_by(F('date').desc(nulls_last=True),F('time').desc(nulls_last=True))[:30]
     serializer = SRecord(record,many=True)
     # db.getCustomerRest(id)
     return Response({"data":serializer.data,"sum": getRestValueForCustomer(id)   })
