@@ -188,6 +188,14 @@ def getTransactionsDateUser(request,type='الكل',dateSelect=''):
     return Response({"data":serializer.data})
 
 @api_view(['GET',])
+def getTransactionsUserToday(request):
+    id = request.user.id
+    record = Record.objects.filter(customerData__user_id=id,date=datetime.datetime.now()).order_by(F('time').desc(nulls_last=True))[:30]
+    rest = Rest.objects.get(customer__user_id=id).value
+    name = CustomerInfo.objects.get(user_id=id).name
+    serializer = SRecord(record,many=True)
+    return Response({"data":serializer.data,"rest":rest,"name":name})
+@api_view(['GET',])
 def getTransactionsDateFromToUser(request,type= 'الكل',dateFrom='',dateTo=''):
     start = datetime.datetime.fromisoformat(dateFrom) 
     end = datetime.datetime.fromisoformat(dateTo) 
