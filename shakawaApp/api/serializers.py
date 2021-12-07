@@ -10,3 +10,9 @@ class ShakawaSer(serializers.ModelSerializer):
 
     def get_username(self, shakawa):
         return shakawa.user.username
+class ShakawaSerAll(serializers.ModelSerializer):
+    #dateTime = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+
+    class Meta:
+        model = Shakawa
+        fields =  '__all__'
