@@ -188,9 +188,13 @@ def getTransactionsDateUser(request,type='الكل',dateSelect=''):
     return Response({"data":serializer.data})
 
 @api_view(['GET',])
+@permission_classes([IsAuthenticated,])
 def getTransactionsUserToday(request):
     id = request.user.id
-    customer = CustomerInfo.objects.get(user_id=id)
+    try:
+        customer = CustomerInfo.objects.get(user_id=id)
+    except CustomerInfo.DoesNotExist:
+        return Response({"data":"","rest":0,"name":""})
 
     record = Record.objects.filter(customerData__user_id=id,date=datetime.datetime.now()).order_by(F('time').desc(nulls_last=True))[:30]
     try:
