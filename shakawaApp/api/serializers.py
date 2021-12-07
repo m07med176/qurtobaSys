@@ -9,7 +9,10 @@ class ShakawaSer(serializers.ModelSerializer):
         fields =  '__all__'
 
     def get_username(self, shakawa):
-        return shakawa.user.username
+        try:
+            return shakawa.user.username
+        except AttributeError:
+            return ""
 class ShakawaSerAll(serializers.ModelSerializer):
     #dateTime = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
 

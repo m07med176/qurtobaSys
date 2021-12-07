@@ -25,7 +25,7 @@ from shakawaApp.models import Shakawa
 
 "link: http://127.0.0.1:8000/shakawa/api/router/"
 class ShakawaMVS(viewsets.ModelViewSet):
-	permission_classes =[AllowAny,]
+	permission_classes =[IsAuthenticated,]
 	queryset = 			Shakawa.objects.all()
 	serializer_class =  ShakawaSerAll
 	filter_backends  =  [SearchFilter,OrderingFilter,DjangoFilterBackend]

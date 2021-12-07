@@ -8,6 +8,6 @@ router = routers.DefaultRouter()
 router.register('',api.ShakawaMVS)
 urlpatterns = [
     path('router/', include(router.urls)),
-    path('getShakawa/',api.getShakawa),
+    path('getShakawa/',api.getShakawa ),
 
 ]
