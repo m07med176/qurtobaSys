@@ -46,7 +46,7 @@ class ShakawaMVS(viewsets.ModelViewSet):
 
 "link: http://127.0.0.1:8000/shakawa/api/getShakawa/"
 @api_view(['GET',])
-@permission_classes([IsAdmin,])
+@permission_classes([IsAuthenticated,])
 def getShakawa(request):
 	if request.method == 'GET':
 		data = Shakawa.objects.all()
