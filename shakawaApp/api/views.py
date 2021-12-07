@@ -17,7 +17,7 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 # ------------ SERIALIZERS -----------#
 from shakawaApp.api.serializers import (
-	ShakawaSer,ShakawaSerAll)
+	ShakawaSer)
 # ------------ MODELS -----------#
 from shakawaApp.models import Shakawa
 
@@ -27,7 +27,7 @@ from shakawaApp.models import Shakawa
 class ShakawaMVS(viewsets.ModelViewSet):
 	permission_classes =[AllowAny,]
 	queryset = 			Shakawa.objects.all()
-	serializer_class =  ShakawaSerAll
+	serializer_class =  ShakawaSer
 	filter_backends  =  [SearchFilter,OrderingFilter,DjangoFilterBackend]
 	filterset_fields =  ["user","kind","date"]
 	search_fields    =  ["^user_name"]
