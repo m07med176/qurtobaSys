@@ -30,6 +30,7 @@ urlpatterns = [
     path('code/',include('fawryCodesApp.api.urls','fawry_api')),
     path('api/vono/',include('vonoApp.api.urls','vono_api')),
     
+    path('shakawa/', include('shakawaApp.urls')),
     # ACCOUNTS
     path('account/', include('account.urls')),
     path('register/',register_view,name= "register"),

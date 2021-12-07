@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'productsSelesApp',
     'fawrySelesApp',
     'sellersApp',
+    'shakawaApp',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -161,6 +162,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ar'
 TIME_ZONE = 'Africa/Cairo'
+DATETIME_FORMAT = '%Y-%m-%d %H:%m'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
