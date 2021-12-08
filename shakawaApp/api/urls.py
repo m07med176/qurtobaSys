@@ -6,8 +6,9 @@ from  shakawaApp.api import views as api
 from rest_framework import routers
 router = routers.DefaultRouter()
 router.register('',api.ShakawaMVS)
+
 urlpatterns = [
     path('router/', include(router.urls)),
-    path('getShakawa/',api.getShakawa ),
+    path('getShakawa/',api.GetShakawa.as_view() ),
 
 ]
