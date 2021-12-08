@@ -68,7 +68,7 @@ class GetShakawa(ListAPIView):
 	model = Shakawa
 	filter_backends  =  [SearchFilter,OrderingFilter,DjangoFilterBackend]
 	filterset_fields =  ["user","kind","date","is_deleted"]
-	search_fields    =  ["^user__username"]
+	search_fields    =  ["=user__username"]
 	ordering_fields  =  ['datetime']
 
 
