@@ -33,7 +33,7 @@ class SAccountantState(serializers.ModelSerializer):
 class SAccountantShort(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = ('username')
+        fields = ('pk','username')
 
 # to save and get data
 class SAccountManager(serializers.ModelSerializer):
