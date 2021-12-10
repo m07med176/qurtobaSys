@@ -5,6 +5,18 @@ from django.utils import timezone
 
 from account.models import Account
 
+
+class Areas(models.Model):
+    name    = models.CharField(blank=False,max_length=100,verbose_name="إسم المنطقة",null=False,unique=True)
+
+    def __str__(self):
+        return str(self.name)
+
+    class Meta:
+        verbose_name = "المنطقة"
+        verbose_name_plural = "المناطق"
+        managed = True
+
 class MandopInfo(models.Model):
     """id,name,email"""
     code    = models.IntegerField(blank=True,verbose_name="الرقم الكودى",null=True,unique=True)
@@ -12,6 +24,8 @@ class MandopInfo(models.Model):
     name    = models.CharField(blank=False,max_length=100,verbose_name="إسم المندوب",null=False,unique=True)
     phone   = models.CharField(blank=True,max_length=11,verbose_name="رقم التليفون",null=True)
     region  = models.CharField(blank=True,max_length=50,verbose_name="المنطقة",null=True)
+    
+    areas   = models.ForeignKey(Areas,related_name="MandopInfo.areas+",on_delete = models.PROTECT,verbose_name="إسم المنطقة",null=True,blank=True)
 
     date    = models.DateField(null=True,verbose_name = "Date",default=timezone.now)
     time    = models.TimeField(null=True,verbose_name = "Time",default=timezone.now) #default=date.today
@@ -47,6 +61,8 @@ class CustomerInfo(models.Model):
     phoneNo     = models.CharField(max_length=11,blank=True, help_text='قم بكتابة رقم التليفون ',verbose_name = "رقم التليفون")
     address     = models.TextField(max_length=150,verbose_name="العنوان",null=True,blank=True)
     area        = models.CharField(max_length=50,verbose_name="المنطقة",null=True)
+    areas   = models.ForeignKey(Areas,related_name="CustomerInfo.areas+",on_delete = models.PROTECT,verbose_name="إسم المنطقة",null=True,blank=True)
+
     seller      = models.ForeignKey('MandopInfo',related_name="seller",on_delete = models.PROTECT,verbose_name="المندوب المسئول",null=False,blank=False)
     user  = models.ForeignKey(Account,related_name="CustomerInfo.user+",on_delete = models.PROTECT,verbose_name="تابع لحساب",null=True,blank=True)
 
@@ -57,7 +73,6 @@ class CustomerInfo(models.Model):
     date        = models.DateField(null=True,verbose_name = "Date",default=timezone.now)
     time        = models.TimeField(null=True,verbose_name = "Time",default=timezone.now) #default=date.today
     notes       = models.TextField(max_length=150,verbose_name="الملاحظات",null=True,blank=True)
-
 
     def __str__(self):
         return str(self.name)

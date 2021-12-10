@@ -19,36 +19,39 @@ router.register(r'getCustomersBySeller/(?P<seller>\d+?)',api.GetCustomersDataByS
 #-----------------------------
 
 urlpatterns = [
-    # web
+    # region WEB
     path('', web.showList,name='showList'),
     path('create/',web.createCustomer,name="create" ),
     path('update/<str:id>/',web.updateCustomer,name="updateCustomer" ),
     url(r'^read$', web.customerTable),
     url(r'^deleteCustomer/(?P<id>\d+)$', web.deleteCustomer, name='deleteCustomer'),
+    # endregion WEB
 
-    # firebase
+    # region Firebase
     path('customers_manadeep',firebase.manadeepCustomers,name="customers_manadeep" ),
     path('customers_migrate/<str:email>',firebase.migrateCustomers,name="customers_migrate" ),
+    # endregion Firebase
     
+    # region customer
+    path('api/customers_names/',api.getCustomersNamesAndAccountsNo ),
+    path('api/customers_email/<str:email>/',api.getCustomersByEmail),
+    path('api/customers_qname/<str:name>/',api.getCustomerByDeviceNoOrName),   
+    path('api/all_customer/',api.getAllCustomer),
+    path('api/delete_customer/<str:id>/',api.deleteCustomer),
+    # endregion customer
+
+    # region seller
+    path('api/sellers_names/',api.getSellersNamesAndAccountsNo),
+    path('api/sellers_qname/<str:name>/',api.getSellerByAccountNoOrName),
+    path('api/all_seller/',api.getAllSellers),
+    path('api/delete_seller/<str:id>/',api.deleteSeller),
+    path('api/areas/',api.getCustomersAreas),                   # http://127.0.0.1:8000/customers/api/areas/
+    path('api/editAreas/',api.editCustomersAreas),              # http://127.0.0.1:8000/customers/api/editAreas/
+    # endregion seller
+
     # api
     path('api/', include(router.urls)),
-
-    # customer
-    path('api/customers_names/',api.getCustomersNamesAndAccountsNo ),
-    path('api/customers_areas/',api.getCustomersAreas),
-    path('api/customers_qname/<str:name>/',api.getCustomerByDeviceNoOrName),
-    path('api/delete_customer/<str:id>/',api.deleteCustomer),
-    path('api/all_customer/',api.getAllCustomer),
-    path('api/customers_email/<str:email>/',api.getCustomersByEmail),
-    
-
-    # seller
-    path('api/sellers_names/',api.getSellersNamesAndAccountsNo),
-    path('api/sellers_areas/',api.getSellersAreas),
-    path('api/sellers_qname/<str:name>/',api.getSellerByAccountNoOrName),
-    path('api/delete_seller/<str:id>/',api.deleteSeller),
-    path('api/all_seller/',api.getAllSellers),
-
+    # autoComplete
     path('api/autoComplete/',api.getAllAutocompleteData),
 ]
 
