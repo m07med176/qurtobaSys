@@ -81,12 +81,15 @@ def registerAccountManagerCustomer(request):
 		serializers = SAccountManagerForCustomer(data=request.data)
 		if serializers.is_valid():
 			account = serializers.save()
-			context = SAccountResponse(account).data
-			context['message'] = "تم التسجيل بنجاح."
-			context['status'] = True
-			return Response(context)
+			if account != None:
+				context = SAccountResponse(account).data
+				context['message'] = "تم التسجيل بنجاح."
+				context['status'] = True
+				return Response(context)
+			else:
+				Response({"message": "هذا العميل غير متواجد فى سجل العملاء أو رقم حسابه غير متوافقه","status":  False})
 		else:
-			return Response(serializers.errors)
+				Response({"message": "عفواً حدث خطأ أثناء التسجيل","status":  False})
 
 
 @api_view(['POST',])

@@ -98,11 +98,15 @@ class SAccountManagerForCustomer(serializers.ModelSerializer):
         )
         password = self.validated_data['password']
         account.set_password(password)
-        account.save()
-        customer = CustomerInfo.objects.get(deviceNo=account_no)
-        customer.accountant = account
-        customer.save()
-        return account
+        try:
+            customer = CustomerInfo.objects.get(deviceNo=account_no)
+            account.save()
+            customer.accountant = account
+            customer.save()
+            return account
+        except CustomerInfo.DoesNotExist:
+            return None
+        
 
     def update(self, instance):
         instance.email = self.validated_data.get('email', instance.email)
