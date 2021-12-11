@@ -16,7 +16,7 @@ urlpatterns = [
     path('state/<int:id>/',api.getUserState),
     # manager crud
     path('registerManager/',api.registerAccountManager),
-    path('registerManagerCustomer/',api.registerAccountManagerCustomer),
+    path('registerManagerCustomer/',api.registerAccountManagerCustomer),    # http://127.0.0.1:8000/account/api/registerManagerCustomer/
     path('updateManager/<int:id>/',api.updateAccountManager),
     path('deleteManager/<int:id>/',api.deleteAccountManager),
     path('getManager/',api.GetAccountManage.as_view()),  # http://127.0.0.1:8000/account/api/getManager/

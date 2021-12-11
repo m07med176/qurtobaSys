@@ -50,15 +50,12 @@ class UsersMVS(viewsets.ModelViewSet):
         super(UsersMVS, self).destroy(request, *args, **kwargs)
         return Response({"message": "تم حذف المستخدم بنجاح","status":  True})
 
+
+# url: http://127.0.0.1:8000/account/api/registerManagerCustomer/
 @api_view(['POST',])
 def registerAccountManagerCustomer(request):
 	if request.method == 'POST':
 		context = {}
-		email = request.data.get('email', '0').lower()
-		if validate_email(email) != None:
-			context['message'] = 'هذا الإيميل مستخدم من قبل.'
-			context['status'] = False
-			return Response(context)
 
 		username = request.data.get('username', '0')
 		if validate_username(username) != None:
@@ -78,15 +75,17 @@ def registerAccountManagerCustomer(request):
 			context['status'] = False
 			return Response(context)
 
+		email = request.data.get('email', '0').lower()
+		if validate_email(email) != None:
+			context['message'] = 'هذا الإيميل مستخدم من قبل.'
+			context['status'] = False
+			return Response(context)
+			
 		serializers = SAccountManagerForCustomer(data=request.data)
 		if serializers.is_valid():
-			account = serializers.save()
-			if account != None:
-				Response({"message": "تم التسجيل بنجاح","status":  True})
-			else:
-				Response({"message": "هذا العميل غير متواجد فى سجل العملاء أو رقم حسابه غير متوافقه","status":  False})
+			return serializers.save()
 		else:
-				Response({"message": "عفواً حدث خطأ أثناء التسجيل","status":  False})
+			return Response({"message": "عفواً حدث خطأ أثناء التسجيل","status":  False})
 
 
 @api_view(['POST',])
@@ -185,9 +184,11 @@ def deleteAccountManager(request,id):
 	if request.method == 'DELETE':
 		context = {}
 		try:
+			token = Token.objects.get(user_id=id)
 			account = Account.objects.get(pk=id)
 		except Account.DoesNotExist:
 			return Response(status=status.HTTP_404_NOT_FOUND)
+		token.delete()
 		account.delete()
 		context['message'] = "تم الحذف بنجاح ."
 		context['status'] = True

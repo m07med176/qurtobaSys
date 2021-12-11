@@ -2,6 +2,7 @@ from rest_framework import serializers
 from account.models import Account
 from customers.models import CustomerInfo
 from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
 
 
 class SAccountShow(serializers.ModelSerializer):
@@ -103,9 +104,9 @@ class SAccountManagerForCustomer(serializers.ModelSerializer):
             account.save()
             customer.accountant = account
             customer.save()
-            return account
+            return Response({"message": "تم التسجيل بنجاح","status":  True})
         except CustomerInfo.DoesNotExist:
-            return None
+            return Response({"message": "هذا العميل غير متواجد فى سجل العملاء أو رقم حسابه غير متوافقه","status":  False})
         
 
     def update(self, instance):
