@@ -82,10 +82,7 @@ def registerAccountManagerCustomer(request):
 		if serializers.is_valid():
 			account = serializers.save()
 			if account != None:
-				context = SAccountResponse(account).data
-				context['message'] = "تم التسجيل بنجاح."
-				context['status'] = True
-				return Response(context)
+				Response({"message": "تم التسجيل بنجاح","status":  True})
 			else:
 				Response({"message": "هذا العميل غير متواجد فى سجل العملاء أو رقم حسابه غير متوافقه","status":  False})
 		else:
