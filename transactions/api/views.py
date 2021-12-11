@@ -201,6 +201,22 @@ def getTransactionsUserToday(request):
         rest = 0
     serializer = SRecord(record,many=True)
     return Response({"data":serializer.data,"rest":rest,"name":customer.name})
+
+@api_view(['GET',])
+@permission_classes([IsAuthenticated,])
+def getTransactionsUserLimit(request):
+    id = request.user.id
+    try: customer = CustomerInfo.objects.get(user_id=id)
+    except CustomerInfo.DoesNotExist: return Response({"data":"","rest":0,"name":""})
+
+    record = Record.objects.filter(customerData__user_id=id).order_by(F('time').desc(nulls_last=True))[:30]
+    try:
+        rest = Rest.objects.get(customer_id=customer.id).value
+    except Exception as e:
+        rest = 0
+    serializer = SRecord(record,many=True)
+    return Response({"data":serializer.data,"rest":rest,"name":customer.name})
+
 @api_view(['GET',])
 def getTransactionsDateFromToUser(request,type= 'الكل',dateFrom='',dateTo=''):
     start = datetime.datetime.fromisoformat(dateFrom) 
