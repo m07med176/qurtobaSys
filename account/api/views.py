@@ -1,6 +1,8 @@
 # ------------ API AND  APIVIEW AND VIEWSETS-----------#
 
-from rest_framework.generics import UpdateAPIView
+from rest_framework.generics import ListAPIView
+from rest_framework.pagination import PageNumberPagination
+
 from django.contrib.auth import authenticate
 # API UTILS
 from rest_framework import status
@@ -165,12 +167,18 @@ def registerAccountManager(request):
 			return Response(serializers.errors)
 
 
-@api_view(['GET',])
-def getAccountManager(request):
-	if request.method == 'GET':
-		account = Account.objects.get_queryset().order_by('id')
-		serializers = SAccountAll(account,many=True)
-		return Response({"results":serializers.data})
+# url: http://127.0.0.1:8000/account/api/getManager/
+# methods: GET
+class GetAccountManage(ListAPIView):
+	pagination_class = PageNumberPagination
+	PageNumberPagination.page_size = 200
+	queryset = Account.objects.get_queryset().order_by('id')
+	serializer_class = SAccountAll
+	permission_classes = [IsAuthenticated,]
+	filter_backends  =  [SearchFilter,OrderingFilter,DjangoFilterBackend]
+	filterset_fields =  ["is_superuser","is_admin","is_staff","is_active","type"]
+	search_fields    =  ["email","username","phone","account_no"]
+	ordering_fields  =  ['date_joined','last_login','id']
 
 @api_view(['DELETE',])
 def deleteAccountManager(request,id):

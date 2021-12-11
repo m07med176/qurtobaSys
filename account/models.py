@@ -41,6 +41,7 @@ class MyAccountManager(BaseUserManager):
 
 
 class Account(AbstractBaseUser):
+	""" email,username,phone,account_no,is_superuser,is_admin,is_staff,is_active,type"""
 	email = models.EmailField(verbose_name="الإيميل", max_length=60, unique=True,help_text='مطلوب إضافة الايميل')
 	username = models.CharField(verbose_name="إسم المستخدم",max_length=30, unique=True,help_text='مطلوب إضافة الإســم')
 	phone = models.CharField(max_length=11,unique=True,blank=False,verbose_name = "رقم التليفون",help_text='مطلوب إضافة رقم التليفون')

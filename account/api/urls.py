@@ -19,5 +19,5 @@ urlpatterns = [
     path('registerManagerCustomer/',api.registerAccountManagerCustomer),
     path('updateManager/<int:id>/',api.updateAccountManager),
     path('deleteManager/<int:id>/',api.deleteAccountManager),
-    path('getManager/',api.getAccountManager),
+    path('getManager/',api.GetAccountManage.as_view()),  # http://127.0.0.1:8000/account/api/getManager/
 ]
