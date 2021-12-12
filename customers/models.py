@@ -55,7 +55,8 @@ class CustomerInfo(models.Model):
         ("إكسسوارات محمول", "إكسسوارات محمول"),
         ("أدوات صحية", "أدوات صحية"),
         ("مكتبة", "مكتبة"),
-        ("شخصى", "شخصى"), ]
+        ("شخصى", "شخصى"), 
+        ]
 
     shopKind    = models.CharField(max_length=50,choices=shops,null=True,verbose_name = "نوع المحل",default=1)
     phoneNo     = models.CharField(max_length=11,blank=True, help_text='قم بكتابة رقم التليفون ',verbose_name = "رقم التليفون")

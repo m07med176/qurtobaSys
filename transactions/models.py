@@ -35,6 +35,7 @@ class Record(models.Model):
         ("تنزيل", "تنزيل"),
         ("تحصيل", "تحصيل"),
         ("شراء", "شراء"),
+        ("الدفع", "الدفع"),
         ]
     type            = models.CharField(max_length=50,choices=accounts,null=False,verbose_name = "نوع الحساب",default=1)
     rest            = models.FloatField(default=0,blank=True,null=True,verbose_name="المتبقى")
