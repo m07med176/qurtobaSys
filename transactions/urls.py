@@ -15,7 +15,7 @@ router.register('talabat',api.TalabatMVS)
 
 # root : transactions
 urlpatterns = [
-        # firebase
+        # region firebase
         path('' , firebase.getDataList),
         path('transactions' , firebase.getDataListEmbed , name= "transactions"),
         path('trans/<str:seller>',firebase.getMandopTrans , name ='trans' ),
@@ -25,15 +25,20 @@ urlpatterns = [
         #path('table',views.dataTable),      
         #path('table/<str:mandoop>',views.dataTableMandoop),        
         #path('getData',views.getDataList ,name = "getData"), 
+        # endregion
     
         #---| api |---#
         path('api/', include(router.urls)),
+
+        # region Main Rest
         path('api/getRest/<str:name>/',api.GetRest.as_view()),
         # seller should pay
         path('restSeller/<str:email>/',api.getSellerRest),
+        path('restAssistance/<str:email>/',api.getAssistanceRest),
         path('api/getAllRest/',api.getAllRest ),
         path('api/getAllRestId/<str:id>/',api.getSellerRestId),
         path('api/rest_gte/<int:value>/',api.getAllRestGte),
+        # endregion Main Rest
 
         # region transactions
 
@@ -61,12 +66,14 @@ urlpatterns = [
         # endregion
         
         # endregion
-        # accounts
+
+        # region accounts
         path('api/customerAccounts/<str:deviceNo>/',api.getAccountsCustomer),
         path('api/todayAccounts/',api.getAccountsToday),
         path('api/dateAccounts/<str:dateSelect>/',api.getAccountsDate),
         path('api/dateAndcustomerAccounts/<str:deviceNo>/<str:dateSelect>/',api.getAccountsCustomerAndDate ),
         path('api/dateFromToAccounts/<str:dateFrom>/<str:dateTo>/',api.getAccountsDateFromTo ),
         path('api/dateFromToAndcustomerAccounts/<str:deviceNo>/<str:dateFrom>/<str:dateTo>/',api.getAccountsCustomerAndDateFromTo )
+        # endregion
     ]
 urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_URL)

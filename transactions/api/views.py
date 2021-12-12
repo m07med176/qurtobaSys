@@ -116,6 +116,19 @@ def getSellerRestId(request,id):
     if len(rest) == 0:return Response({"data": []})
     return Response({"data": getRestByCustomSerializer(rest)})
 
+# region Collector , Assistance , Seller
+@api_view(['GET',])
+def getAssistanceRest(request,email):
+    assistant = MandopInfo.objects.filter(Q(email=email))
+    latestDate = Record.objects.filter(customerData__assistant=assistant[0].id)
+    
+    if len(assistant) == 0 or len(latestDate) == 0: return Response({"data": [],"date":""})
+    latestDate = latestDate.latest('date')
+
+    rest=Rest.objects.filter(customer__assistant=assistant[0].id).select_related('customer').order_by('customer__area','date')
+    if len(rest) == 0:return Response({"data": [],"date":""})
+    return Response({"data": getRestByCustomSerializer(rest),"date":f"أخر تحويل: {latestDate.date} {latestDate.time}"})
+    
 @api_view(['GET',])
 def getSellerRest(request,email):
     seller = MandopInfo.objects.filter(Q(email=email))
@@ -127,7 +140,7 @@ def getSellerRest(request,email):
     rest=Rest.objects.filter(customer__seller=seller[0].id).select_related('customer').order_by('customer__area','date')
     if len(rest) == 0:return Response({"data": [],"date":""})
     return Response({"data": getRestByCustomSerializer(rest),"date":f"أخر تحويل: {latestDate.date} {latestDate.time}"})
-
+    # region All Customers Main Rest
 @api_view(['GET',])
 def getAllRest(request):
     rest=Rest.objects.all().select_related('customer').order_by('customer__area','date')
@@ -139,7 +152,8 @@ def getAllRestGte(request,value):
     rest=Rest.objects.filter(value__gte=value).select_related('customer').order_by('customer__area','date')
     if len(rest) == 0:return Response({"data": []})
     return Response({"data": getRestByCustomSerializer(rest)})
-
+    # endregion
+# endregion
 # endregion MainRest
 
 # region Transactions
