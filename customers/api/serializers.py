@@ -27,6 +27,7 @@ class SCustomerShort(serializers.ModelSerializer):
 # region Read Serializers
 class SCustomer_info(serializers.ModelSerializer):
     seller = SMandopShort()
+    assistant = SMandopShort()
     class Meta:
         model = CustomerInfo
         fields = '__all__'
@@ -35,7 +36,8 @@ class SCustomer_info(serializers.ModelSerializer):
 class SCustomer(serializers.ModelSerializer):
     #seller = serializers.PrimaryKeyRelatedField( read_only=True)
     seller = SMandopShort()
+    assistant = SMandopShort()
     class Meta:
         model = CustomerInfo
-        fields = ('id','name','surName','area','deviceNo','seller','shopName','shopKind','phoneNo','address','accounts','time','date','notes')
+        fields = ('id','name','surName','area','deviceNo','seller','assistant','shopName','shopKind','phoneNo','address','accounts','time','date','notes')
 # endregion Read Serializers

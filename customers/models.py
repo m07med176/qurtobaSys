@@ -61,8 +61,8 @@ class CustomerInfo(models.Model):
     phoneNo     = models.CharField(max_length=11,blank=True, help_text='قم بكتابة رقم التليفون ',verbose_name = "رقم التليفون")
     address     = models.TextField(max_length=150,verbose_name="العنوان",null=True,blank=True)
     area        = models.CharField(max_length=50,verbose_name="المنطقة",null=True)
-    areas   = models.ForeignKey(Areas,related_name="CustomerInfo.areas+",on_delete = models.PROTECT,verbose_name="إسم المنطقة",null=True,blank=True)
-
+    areas       = models.ForeignKey(Areas,related_name="CustomerInfo.areas+",on_delete = models.PROTECT,verbose_name="إسم المنطقة",null=True,blank=True)
+    assistant   = models.ForeignKey('MandopInfo',related_name="assistant",on_delete = models.PROTECT,verbose_name="المندوب الإحطياطى",null=True,blank=True)
     seller      = models.ForeignKey('MandopInfo',related_name="seller",on_delete = models.PROTECT,verbose_name="المندوب المسئول",null=False,blank=False)
     user  = models.ForeignKey(Account,related_name="CustomerInfo.user+",on_delete = models.PROTECT,verbose_name="تابع لحساب",null=True,blank=True)
 
