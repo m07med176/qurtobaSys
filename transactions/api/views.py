@@ -223,7 +223,7 @@ def getTransactionsUserLimit(request):
     try: customer = CustomerInfo.objects.get(user_id=id)
     except CustomerInfo.DoesNotExist: return Response({"data":"","rest":0,"name":""})
 
-    record = Record.objects.filter(customerData__user_id=id).order_by(F('time').desc(nulls_last=True))[:30]
+    record = Record.objects.filter(customerData__user_id=id).order_by(F('datetime').desc(nulls_last=True))[:30]
     try:
         rest = Rest.objects.get(customer_id=customer.id).value
     except Exception as e:
