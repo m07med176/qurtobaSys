@@ -111,7 +111,11 @@ def getCustomersNamesAndAccountsNo(request):
 # region AutoComplete And Areas
 @api_view(['GET',])
 def getCustomersAreas(request):
-    customerAreas = CustomerInfo.objects.values('area').order_by('area').distinct('area')
+    seller = request.query_params.get('seller')
+    if seller != None and seller.isdigit():
+        customerAreas = CustomerInfo.objects.filter(seller=seller).values('area').order_by('area').distinct('area')
+    else:
+        customerAreas = CustomerInfo.objects.values('area').order_by('area').distinct('area')
     return Response({"data":list(customerAreas)  })
 
 # http://127.0.0.1:8000/customers/api/editAreas/

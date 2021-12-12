@@ -185,10 +185,10 @@ class RecordL(viewsets.ModelViewSet):
                 customer_id=customer_id, 
                 defaults={ 'value' :sum, 'date'  :date, 'time'  :time } )
 
-                return Response({"message": "تم إضافة التحويل بنجاح","status":  True})
+                return Response({"message": "تم التسجيل بنجاح","status":  True})
             else:
                 return Response(status=status.HTTP_404_NOT_FOUND)
-        return Response({"message": "فشل فى التحويل","status":  False})
+        return Response({"message": "فشل فى التسجيل","status":  False})
 #   region ACCOUNT TRANSACTION FILTER
 #       region TRANSACTION USER
 @api_view(['GET',])
