@@ -1,8 +1,13 @@
-from transactions.models import Rest,Record,Talabat
+from transactions.models import Rest,Record,Talabat,LogDate
 from rest_framework import serializers
 from account.api.serializers import SAccountantShort
 from customers.api.serializers import SCustomerShort
 from django.db.models import Sum
+
+class SLogDate(serializers.ModelSerializer):
+    class Meta:
+        model = LogDate
+        fields = '__all__'
 
 class STalabat(serializers.ModelSerializer):
     user = serializers.SerializerMethodField('get_username_from_author')

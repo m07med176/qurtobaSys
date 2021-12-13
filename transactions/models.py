@@ -1,8 +1,22 @@
-from datetime import datetime
 from django.db import models
 from customers.models import  CustomerInfo
 from django.utils import timezone
 from account.models import Account
+import datetime
+class LogDate(models.Model):
+    date            = models.DateField(auto_now_add=True)
+    time            = models.TimeField(auto_now_add=True)
+    datetime = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)    
+    def __str__(self):
+        return str(self.datetime)
+        
+    class Meta:
+        verbose_name = "سجل التاريخ"
+        verbose_name_plural = "سجلات التواريخ"
+        managed = True
+        ordering = ['-datetime']
+    
 
 class Rest(models.Model):
     customer    = models.OneToOneField(CustomerInfo,related_name="Rest.customer+",on_delete = models.CASCADE,verbose_name="العميل",null=False,blank=False)
