@@ -48,8 +48,8 @@ def getReports(request):
     id = request.query_params.get('id')
     df = request.query_params.get('df')
     dt = request.query_params.get('dt')
-    dtf = request.query_params.get('dtf')
-    dtt = request.query_params.get('dtt')
+    dtf = request.query_params.get('dtf').replace(" ","+")
+    dtt = request.query_params.get('dtt').replace(" ","+")
 
     if id != None and id.isdigit():
         d = LogDate.objects.get(pk=int(id)).datetime.astimezone(tz)
@@ -62,9 +62,15 @@ def getReports(request):
         date2 = dt
         record = list(Record.objects.filter(date__range = (df,dt)).values('type').annotate(Sum('value')))
     elif dtf != None and dtt != None:
-        date1 = dtf
-        date2 = dtt
-        record = list(Record.objects.filter(datetime__range = (df,dt)).values('type').annotate(Sum('value')))
+
+        #date_from_obj = datetime.datetime.strptime(dtf, '%Y-%m-%d %H:%M:%S.%f+%H:%H').astimezone(tz)
+        #date_to_obj = datetime.datetime.strptime(dtt, '%Y-%m-%d %H:%M:%S.%f+%H:%H').astimezone(tz)
+        print(dtf)
+        date_from_obj = datetime.datetime.fromisoformat(dtf)
+        date_to_obj = datetime.datetime.fromisoformat(dtt)
+        date1 = date_from_obj.strftime("%m/%d/%Y %I:%M:%p")
+        date2 = date_to_obj.strftime("%m/%d/%Y %I:%M:%p")
+        record = list(Record.objects.filter(datetime__range = (str(date_from_obj),str(date_to_obj))).values('type').annotate(Sum('value')))
     else:
         ld = LogDate.objects.order_by('id').last().datetime.astimezone(tz)
         cd = datetime.datetime.now().astimezone(tz)
