@@ -48,7 +48,9 @@ def getReports(request):
     id = request.query_params.get('id')
     df = request.query_params.get('df')
     dt = request.query_params.get('dt')
-    date ={}
+    dtf = request.query_params.get('dtf')
+    dtt = request.query_params.get('dtt')
+
     if id != None and id.isdigit():
         d = LogDate.objects.get(pk=int(id)).datetime.astimezone(tz)
         pd = LogDate.objects.get(pk=int(id)-1).datetime.astimezone(tz)
@@ -59,6 +61,10 @@ def getReports(request):
         date1 = df
         date2 = dt
         record = list(Record.objects.filter(date__range = (df,dt)).values('type').annotate(Sum('value')))
+    elif dtf != None and dtt != None:
+        date1 = dtf
+        date2 = dtt
+        record = list(Record.objects.filter(datetime__range = (df,dt)).values('type').annotate(Sum('value')))
     else:
         ld = LogDate.objects.order_by('id').last().datetime.astimezone(tz)
         cd = datetime.datetime.now().astimezone(tz)
