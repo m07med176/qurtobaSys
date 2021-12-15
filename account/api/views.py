@@ -196,6 +196,22 @@ def deleteAccountManager(request,id):
 
 
 @api_view(['PUT',])
+def updateUserActivationAccountManager(request,id):
+	if request.method == 'PUT':
+		context = {}
+		try:
+			account = Account.objects.get(pk=id)
+		except Account.DoesNotExist:
+			return Response(status=status.HTTP_404_NOT_FOUND)
+		
+		is_active = request.data.get('is_active')
+		account.is_active = is_active
+		account.save()
+		context['message'] = "تم التعديل بنجاح."
+		context['status'] = True
+		return Response(context)
+
+@api_view(['PUT',])
 def updateAccountManager(request,id):
 	if request.method == 'PUT':
 		context = {}

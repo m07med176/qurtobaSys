@@ -24,8 +24,6 @@ from transactions.api.serializers import SLogDate
 # --------------- PYTHON UTILS ------------------#
 import datetime
 
-
-
 class DateLogL(viewsets.ModelViewSet):
     queryset = LogDate.objects.all()
     serializer_class = SLogDate
@@ -38,7 +36,6 @@ class DateLogL(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         super(DateLogL, self).destroy(request, *args, **kwargs)
         return Response({"message": "تم الحذف بنجاح","status":  True})
-
 
 @api_view(['GET',])
 def getReports(request):
