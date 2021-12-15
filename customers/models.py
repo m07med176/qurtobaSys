@@ -65,7 +65,7 @@ class CustomerInfo(models.Model):
     areas       = models.ForeignKey(Areas,related_name="CustomerInfo.areas+",on_delete = models.PROTECT,verbose_name="إسم المنطقة",null=True,blank=True)
     assistant   = models.ForeignKey('MandopInfo',related_name="assistant",on_delete = models.PROTECT,verbose_name="المندوب الإحطياطى",null=True,blank=True)
     seller      = models.ForeignKey('MandopInfo',related_name="seller",on_delete = models.PROTECT,verbose_name="المندوب المسئول",null=False,blank=False)
-    user  = models.ForeignKey(Account,related_name="CustomerInfo.user+",on_delete = models.PROTECT,verbose_name="تابع لحساب",null=True,blank=True)
+    user  = models.ForeignKey(Account,related_name="CustomerInfo.user+",on_delete=models.SET_NULL,verbose_name="تابع لحساب",null=True,blank=True)
 
     # jasonData = { "accountsKind": "فورى", "value": deviceNo}
     # accounts = models.JSONField(default=dict ,null=True,blank=True,verbose_name="حسابات العميل")
