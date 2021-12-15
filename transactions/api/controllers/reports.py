@@ -45,8 +45,9 @@ def getReports(request):
     id = request.query_params.get('id')
     df = request.query_params.get('df')
     dt = request.query_params.get('dt')
-    dtf = request.query_params.get('dtf').replace(" ","+")
-    dtt = request.query_params.get('dtt').replace(" ","+")
+    
+    dtf = request.query_params.get('dtf')
+    dtt = request.query_params.get('dtt')
 
     if id != None and id.isdigit():
         d = LogDate.objects.get(pk=int(id)).datetime.astimezone(tz)
@@ -59,7 +60,8 @@ def getReports(request):
         date2 = dt
         record = list(Record.objects.filter(date__range = (df,dt)).values('type').annotate(Sum('value')))
     elif dtf != None and dtt != None:
-
+        dtf = dtf.replace(" ","+")
+        dtt = dtt.replace(" ","+")
         #date_from_obj = datetime.datetime.strptime(dtf, '%Y-%m-%d %H:%M:%S.%f+%H:%H').astimezone(tz)
         #date_to_obj = datetime.datetime.strptime(dtt, '%Y-%m-%d %H:%M:%S.%f+%H:%H').astimezone(tz)
         print(dtf)
