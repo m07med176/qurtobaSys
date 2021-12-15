@@ -23,11 +23,18 @@ class Customer_infoL(viewsets.ModelViewSet):
     queryset = CustomerInfo.objects.all()
     serializer_class = SCustomerInfo
     def update(self, request, *args, **kwargs):
-        super(Customer_infoL, self).update(request, *args, **kwargs)
-        return Response({"message": "تم تعديل العميل بنجاح","status":  True})
+        if request.user.is_admin:
+            super(Customer_infoL, self).update(request, *args, **kwargs)
+            return Response({"message": "تم تعديل العميل بنجاح","status":  True})
+        else:
+            return Response({"message": "غير مسموح لك بالتعديل","status":  False})
+
     def create(self, request, *args, **kwargs):
-        super(Customer_infoL, self).create(request, *args, **kwargs)
-        return Response({"message": "تم إضافة العميل بنجاح","status":  True})
+            if request.user.is_admin:
+                super(Customer_infoL, self).create(request, *args, **kwargs)
+                return Response({"message": "تم إضافة العميل بنجاح","status":  True})
+            else:
+                return Response({"message": "غير مسموح لك بالإضافة","status":  False})
 
 class Mandop_InfoL(viewsets.ModelViewSet):
     queryset = MandopInfo.objects.all()
