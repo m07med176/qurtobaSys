@@ -18,7 +18,10 @@ class SAccountResponse(serializers.ModelSerializer):
     token = serializers.SerializerMethodField('get_username_token')
     class Meta:
         model = Account
-        fields = ['pk', 'email', 'username','phone','account_no' ,'is_admin','is_active','token']
+        fields = ['pk', 'email', 
+        'username','phone','account_no' ,
+        'is_admin','is_active','is_staff',
+        'is_superuser','token','password','type','date_joined','last_login']
     def get_username_token(self, account):
         try:
             token = Token.objects.get(user=account).key
@@ -27,9 +30,10 @@ class SAccountResponse(serializers.ModelSerializer):
         return token
 
 class SAccountantState(serializers.ModelSerializer):
+    token = serializers.SerializerMethodField('get_username_token')
     class Meta:
         model = Account
-        fields = ['is_admin','is_active','is_staff','is_superuser']
+        fields = ['is_admin','is_active','is_staff','is_superuser','token','password','type']
 
 class SAccountantShort(serializers.ModelSerializer):
     class Meta:

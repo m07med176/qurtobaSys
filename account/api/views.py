@@ -234,7 +234,7 @@ def updateAccountManager(request,id):
 def getUserState(request,id):
 	try:
 		account = Account.objects.get(pk=id)
-		return Response(SAccountantState(account).data)
+		return Response(SAccountResponse(account).data)
 	except Account.DoesNotExist:
 		return Response(status=status.HTTP_404_NOT_FOUND)
 	

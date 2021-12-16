@@ -39,6 +39,8 @@ class DateLogL(viewsets.ModelViewSet):
 
 @api_view(['GET',])
 def getReports(request):
+    if not request.user.is_admin or not request.user.is_superuser:
+        return Response({"message": "غير مصرح لك بالدخول","status":  False})
     tz = pytz.timezone('Africa/Cairo')
     listData = ['فورى','كاش','تحصيل','أمان','طاير','شراء','الدفع','بى','أخرى']
 
