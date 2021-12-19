@@ -6,9 +6,9 @@ from django.http import JsonResponse
 # VIEWSETS
 from rest_framework import viewsets
 # APIVIEW
-from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from rest_framework.pagination import PageNumberPagination
-
+from main.utils.pagination import LargeResultsSetPagination
 from rest_framework.decorators import api_view
 # ------------ SERIALIZERS -----------#
 from  customers.api.serializers import SCustomer_info,SCustomerInfo,SMandopInfo_Normal,SCustomer,SMandopShort
@@ -36,9 +36,6 @@ class Customer_infoL(viewsets.ModelViewSet):
             else:
                 return Response({"message": "غير مسموح لك بالإضافة","status":  False})
 
-class GetCustomersData(viewsets.ModelViewSet):
-    queryset = CustomerInfo.objects.all().order_by('area','name')
-    serializer_class = SCustomer
 
 class GetCustomersDataBySeller(viewsets.ReadOnlyModelViewSet):
     serializer_class = SCustomer
@@ -77,6 +74,12 @@ def getAllCustomer(request):
 # endregion All DATA
 
 # region get List
+
+class GetCustomersData(ListAPIView):
+    queryset = CustomerInfo.objects.all().order_by('area','name')
+    serializer_class = SCustomer
+    pagination_class = LargeResultsSetPagination
+
 
 # get customer names and account no list
 @api_view(['GET',])

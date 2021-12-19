@@ -16,7 +16,6 @@ from customers.api.controllers import customers,sellers
 from rest_framework import routers
 router = routers.DefaultRouter()
 router.register('customers',customers.Customer_infoL)
-router.register('getCustomers',customers.GetCustomersData)
 router.register(r'getCustomersBySeller/(?P<seller>\d+?)',customers.GetCustomersDataBySeller, basename='GetCustomersDataBySeller')
 
 router.register('sellers',sellers.Mandop_InfoL)
