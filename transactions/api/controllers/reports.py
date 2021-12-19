@@ -12,6 +12,8 @@ from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.filters import SearchFilter,OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
+
+from main.utils.permissions import IS_ACTIVATE,IS_ADMIN,IS_STAFF,IS_SUPERUSER,IS_HEADER
 # ------------ MODELS -----------#
 # MODELS
 from transactions.models import LogDate,Record,Rest
@@ -38,9 +40,8 @@ class DateLogL(viewsets.ModelViewSet):
         return Response({"message": "تم الحذف بنجاح","status":  True})
 
 @api_view(['GET',])
+@permission_classes([IS_HEADER,])
 def getReports(request):
-    if not request.user.is_admin or not request.user.is_superuser:
-        return Response({"message": "غير مصرح لك بالدخول","status":  False})
     tz = pytz.timezone('Africa/Cairo')
     listData = ['فورى','كاش','تحصيل','أمان','طاير','شراء','الدفع','بى','أخرى']
 

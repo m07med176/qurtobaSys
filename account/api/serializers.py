@@ -117,20 +117,33 @@ class SAccountManagerForCustomer(serializers.ModelSerializer):
         
 
     def update(self, instance):
-        instance.username = self.validated_data.get('username', instance.username)
-        instance.account_no = self.validated_data.get('account_no', instance.account_no)
-        instance.phone = self.validated_data.get('phone', instance.phone)
+        try:
+            customer = CustomerInfo.objects.get(user=instance)
 
-        instance.is_superuser = self.validated_data.get('is_superuser', instance.is_superuser)
-        instance.is_admin = self.validated_data.get('is_admin', instance.is_admin)
-        instance.is_staff = self.validated_data.get('is_staff', instance.is_staff)
-        instance.is_active = self.validated_data.get('is_active', instance.is_active)
-        instance.type = self.validated_data.get('type', instance.type)
+            instance.is_superuser = self.validated_data.get('is_superuser', instance.is_superuser)
+            instance.is_admin = self.validated_data.get('is_admin', instance.is_admin)
+            instance.is_staff = self.validated_data.get('is_staff', instance.is_staff)
+            instance.is_active = self.validated_data.get('is_active', instance.is_active)
+            instance.type = self.validated_data.get('type', instance.type)
 
-        password = self.validated_data['password']
-        instance.set_password(password)
-        instance.save()
-        return instance
+            password = self.validated_data['password']
+            instance.set_password(password)
+
+            instance.username = self.validated_data.get('username', instance.username)
+            instance.account_no = self.validated_data.get('account_no', instance.account_no)
+            instance.phone = self.validated_data.get('phone', instance.phone)
+
+            customer.name = self.validated_data.get('username', instance.username)
+            customer.deviceNo = self.validated_data.get('account_no', instance.account_no)
+            customer.phoneNo = self.validated_data.get('phone', instance.phone)
+
+            customer.save()
+            instance.save()
+            return instance
+        except CustomerInfo.DoesNotExist:
+            return None
+        
+        
 
 # User
 class AccountS(serializers.ModelSerializer):

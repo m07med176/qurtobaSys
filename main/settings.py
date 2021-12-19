@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'dataEltogarApp',
     'transactions',
     'fawryCodesApp',
-    'vonoApp',
 
     'storeApp',
     'productsSelesApp',

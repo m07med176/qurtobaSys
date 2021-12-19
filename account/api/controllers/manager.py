@@ -89,7 +89,7 @@ def registerAccountManagerCustomer(request):
 		else:
 			return Response({"message": "عفواً حدث خطأ أثناء التسجيل","status":  False})
 
-# url: http://127.0.0.1:8000/account/api/updateManager/<int:id>/
+# url: http://127.0.0.1:8000/account/api/updateManagerCustomer/<int:id>/
 @api_view(['PUT',])
 def updateAccountManagerCustomer(request,id):
 	if request.method == 'PUT':
@@ -97,32 +97,47 @@ def updateAccountManagerCustomer(request,id):
 		try:
 			account = Account.objects.get(pk=id)
 		except Account.DoesNotExist:
-			return Response(status=status.HTTP_404_NOT_FOUND)
-		serializers = SAccountManager(instance=account,data=request.data)  
+			return Response({"message": "لا يوجد هذا العميل فى السجلات","status":  False})
+		serializers = SAccountManagerForCustomer(instance=account,data=request.data)  
 		if serializers.is_valid():
-			serializers.update(account)
+			ser = serializers.update(account)
+			if ser is None:
+				return Response({"message": "هذا العميل غير متواجد فى سجل العملاء أو رقم حسابه غير متوافقه","status":  False})
+			
 			context = SAccountResponse(account).data
 			context['message'] = "تم التعديل بنجاح."
 			context['status'] = True
 			return Response(context)
 		else:
-			return Response(serializers.errors)
+			return Response({"message": "الحقول التى قمت بإدخالها غير سليمة","status":  False})
 
-# url: http://127.0.0.1:8000/account/api/deleteManager/<int:id>/
+# url: http://127.0.0.1:8000/account/api/deleteManagerCustomer/<int:id>/
 @api_view(['DELETE',])
 def deleteAccountManagerCustomer(request,id):
 	if request.method == 'DELETE':
-		context = {}
 		try:
 			token = Token.objects.get(user_id=id)
 			account = Account.objects.get(pk=id)
+			token.delete()
+			account.delete()
+			return Response({"message": "تم الحذف بنجاح","status":  True})
+
 		except Account.DoesNotExist:
-			return Response(status=status.HTTP_404_NOT_FOUND)
-		token.delete()
-		account.delete()
-		context['message'] = "تم الحذف بنجاح ."
-		context['status'] = True
-		return Response(context)
+			try:
+				token = Token.objects.get(user_id=id)
+				token.delete()
+				return Response({"message": "تم الحذف بنجاح","status":  True})
+			except Token.DoesNotExist:
+				return Response({"message": "عفواً حدث خطأ أثناء الحذف","status":  False})
+
+		except Token.DoesNotExist:
+			try:
+				account = Account.objects.get(pk=id)
+				account.delete()
+				return Response({"message": "تم الحذف بنجاح","status":  True})
+			except Account.DoesNotExist:
+				return Response({"message": "عفواً حدث خطأ أثناء الحذف","status":  False})
+		
 
 
 # endregion CUSTOMERS
@@ -192,17 +207,29 @@ def updateAccountManager(request,id):
 @api_view(['DELETE',])
 def deleteAccountManager(request,id):
 	if request.method == 'DELETE':
-		context = {}
 		try:
 			token = Token.objects.get(user_id=id)
 			account = Account.objects.get(pk=id)
+			token.delete()
+			account.delete()
+			return Response({"message": "تم الحذف بنجاح","status":  True})
+
 		except Account.DoesNotExist:
-			return Response(status=status.HTTP_404_NOT_FOUND)
-		token.delete()
-		account.delete()
-		context['message'] = "تم الحذف بنجاح ."
-		context['status'] = True
-		return Response(context)
+			try:
+				token = Token.objects.get(user_id=id)
+				token.delete()
+				return Response({"message": "تم الحذف بنجاح","status":  True})
+			except Token.DoesNotExist:
+				return Response({"message": "عفواً حدث خطأ أثناء الحذف","status":  False})
+
+		except Token.DoesNotExist:
+			try:
+				account = Account.objects.get(pk=id)
+				account.delete()
+				return Response({"message": "تم الحذف بنجاح","status":  True})
+			except Account.DoesNotExist:
+				return Response({"message": "عفواً حدث خطأ أثناء الحذف","status":  False})
+		
 
 # endregion USERS
 

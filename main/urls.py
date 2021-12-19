@@ -28,7 +28,6 @@ urlpatterns = [
 
     # REST FRAMEWORK APIs
     path('code/',include('fawryCodesApp.api.urls','fawry_api')),
-    path('api/vono/',include('vonoApp.api.urls','vono_api')),
     
     path('shakawa/', include('shakawaApp.urls')),
     # ACCOUNTS

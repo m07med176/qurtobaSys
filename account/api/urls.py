@@ -31,10 +31,10 @@ urlpatterns = [
     # http://127.0.0.1:8000/account/api/registerManagerCustomer/
     path('registerManagerCustomer/',manager.registerAccountManagerCustomer), 
 
-    # url: http://127.0.0.1:8000/account/api/deleteManager/<int:id>/
+    # url: http://127.0.0.1:8000/account/api/deleteManagerCustomer/<int:id>/
     path('deleteManagerCustomer/<int:id>/',manager.deleteAccountManagerCustomer),
 
-    # url: http://127.0.0.1:8000/account/api/updateManager/<int:id>/
+    # url: http://127.0.0.1:8000/account/api/updateManagerCustomer/<int:id>/
     path('updateManagerCustomer/<int:id>/',manager.updateAccountManagerCustomer),
     # endregion
 
