@@ -5,6 +5,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 
 
+# region Show Serializers
 class SAccountShow(serializers.ModelSerializer):
     class Meta:
         model = Account
@@ -14,6 +15,7 @@ class SAccountAll(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = '__all__'
+
 class SAccountResponse(serializers.ModelSerializer):
     token = serializers.SerializerMethodField('get_username_token')
     class Meta:
@@ -40,7 +42,9 @@ class SAccountantShort(serializers.ModelSerializer):
         model = Account
         fields = ('pk','username')
 
-# to save and get data
+# endregion Show Serializers
+
+# Manager User
 class SAccountManager(serializers.ModelSerializer):
     class Meta:
         model = Account
@@ -81,17 +85,16 @@ class SAccountManager(serializers.ModelSerializer):
         return instance
 
 
-# to save and get data
+# Manager Customer
 class SAccountManagerForCustomer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = ["password","email","username","phone","account_no","is_superuser","is_admin","is_staff","is_active","type"]
+        fields = ["password","username","phone","account_no","is_superuser","is_admin","is_staff","is_active","type"]
         extra_kwargs = { 'password':{'write_only':True} }
     
     def save(self):
         account_no      = self.validated_data['account_no']
         account= Account(
-            email           = self.validated_data['email'],
             username        = self.validated_data['username'],
             account_no      = account_no,
             phone           = self.validated_data['phone'],
@@ -106,7 +109,7 @@ class SAccountManagerForCustomer(serializers.ModelSerializer):
         try:
             customer = CustomerInfo.objects.get(deviceNo=account_no)
             account.save()
-            customer.accountant = account
+            customer.user = account
             customer.save()
             return Response({"message": "تم التسجيل بنجاح","status":  True})
         except CustomerInfo.DoesNotExist:
@@ -114,7 +117,6 @@ class SAccountManagerForCustomer(serializers.ModelSerializer):
         
 
     def update(self, instance):
-        instance.email = self.validated_data.get('email', instance.email)
         instance.username = self.validated_data.get('username', instance.username)
         instance.account_no = self.validated_data.get('account_no', instance.account_no)
         instance.phone = self.validated_data.get('phone', instance.phone)
@@ -129,7 +131,8 @@ class SAccountManagerForCustomer(serializers.ModelSerializer):
         instance.set_password(password)
         instance.save()
         return instance
-# to save from user
+
+# User
 class AccountS(serializers.ModelSerializer):
     password2 = serializers.CharField(style={'input_type':'password'},write_only=True)
     class Meta:

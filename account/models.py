@@ -7,16 +7,11 @@ from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 
 class MyAccountManager(BaseUserManager):
-	def create_user(self, phone,email, username, password=None):
-		if not email:
-			raise ValueError('Users must have an email address')
-		if not username:
-			raise ValueError('Users must have a username')
-		if not phone:
-			raise ValueError('Users must have a phone number')
+	def create_user(self, phone, username, password=None):
+		if not username: raise ValueError('Users must have a username')
+		if not phone: raise ValueError('Users must have a phone number')
 		
 		user = self.model(
-			email=self.normalize_email(email),
 			username=username,
 			phone=phone,
 		)
@@ -25,9 +20,8 @@ class MyAccountManager(BaseUserManager):
 		user.save(using=self._db)
 		return user
 
-	def create_superuser(self, phone,email, username, password):
+	def create_superuser(self, phone, username, password):
 		user = self.create_user(
-			email=self.normalize_email(email),
 			password=password,
 			username=username,
 			phone=phone,
@@ -42,10 +36,10 @@ class MyAccountManager(BaseUserManager):
 
 class Account(AbstractBaseUser):
 	""" email,username,phone,account_no,is_superuser,is_admin,is_staff,is_active,type"""
-	email = models.EmailField(verbose_name="الإيميل", max_length=60, unique=True,help_text='مطلوب إضافة الايميل')
+	email = models.EmailField(verbose_name="الإيميل", max_length=60,null=True, unique=False,help_text='مطلوب إضافة الايميل')
 	username = models.CharField(verbose_name="إسم المستخدم",max_length=30, unique=True,help_text='مطلوب إضافة الإســم')
 	phone = models.CharField(max_length=11,unique=True,blank=False,verbose_name = "رقم التليفون",help_text='مطلوب إضافة رقم التليفون')
-	account_no = models.IntegerField(blank=True,verbose_name="الرقم الكودى",null=True,unique=True,help_text='مطلوب إضافة رقم الحساب')
+	account_no = models.IntegerField(blank=True,verbose_name="الرقم الكودى",null=True,unique=False,help_text='مطلوب إضافة رقم الحساب')
 	
 	date_joined				= models.DateTimeField(verbose_name='تاريخ التسجيل', auto_now_add=True)
 	last_login				= models.DateTimeField(verbose_name='أخر دخول', auto_now=True)
@@ -65,7 +59,7 @@ class Account(AbstractBaseUser):
 	type				= models.IntegerField(choices=choices,default=0,verbose_name="نوع الحساب")
 
 	USERNAME_FIELD = 'phone'
-	REQUIRED_FIELDS = ['email','username']
+	REQUIRED_FIELDS = ['username']
 
 	objects = MyAccountManager()
 
