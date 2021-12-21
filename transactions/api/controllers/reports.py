@@ -39,6 +39,19 @@ class DateLogL(viewsets.ModelViewSet):
         super(DateLogL, self).destroy(request, *args, **kwargs)
         return Response({"message": "تم الحذف بنجاح","status":  True})
 
+def get_rest(records):
+    summitions = 0
+    for record in records:
+        start = "2021-09-06 19:00:59+00"
+        end = record.datetime
+        customer_id = record.customerData.id
+
+        value1 = Record.objects.filter(customerData_id=customer_id,isDown=False,datetime__range = (start,end)).aggregate(Sum('value'))['value__sum'] if Record.objects.filter(customerData_id=customer_id,isDown=False,datetime__range = (start,end)).aggregate(Sum('value'))['value__sum'] != None else 0
+        value2 = Record.objects.filter(customerData_id=customer_id,isDown=True,datetime__range = (start,end)).aggregate(Sum('value'))['value__sum'] if Record.objects.filter(customerData_id=customer_id,isDown=True,datetime__range = (start,end)).aggregate(Sum('value'))['value__sum'] != None else 0
+        sum  = value1 - value2
+        summitions+=sum
+    return summitions
+
 @api_view(['GET',])
 @permission_classes([IS_HEADER,])
 def getReports(request):
@@ -60,39 +73,42 @@ def getReports(request):
         pd = LogDate.objects.get(pk=int(id)-1).datetime.astimezone(tz)
         date1 = d.strftime("%m/%d/%Y %I:%M:%p")
         date2 = pd.strftime("%m/%d/%Y %I:%M:%p")
-        record = list(Record.objects.filter(datetime__range = (str(d),str(pd))).values('type').annotate(Sum('value')))
+        results = Record.objects.filter(datetime__range = (str(d),str(pd)))
+    
     elif df != None and dt != None:
         date1 = df
         date2 = dt
-        record = list(Record.objects.filter(date__range = (df,dt)).values('type').annotate(Sum('value')))
+        results = Record.objects.filter(date__range = (df,dt))
+
     elif dtf != None and dtt != None:
         dtf = dtf.replace(" ","+")
         dtt = dtt.replace(" ","+")
         #date_from_obj = datetime.datetime.strptime(dtf, '%Y-%m-%d %H:%M:%S.%f+%H:%H').astimezone(tz)
         #date_to_obj = datetime.datetime.strptime(dtt, '%Y-%m-%d %H:%M:%S.%f+%H:%H').astimezone(tz)
-        print(dtf)
         date_from_obj = datetime.datetime.fromisoformat(dtf)
         date_to_obj = datetime.datetime.fromisoformat(dtt)
         date1 = date_from_obj.strftime("%m/%d/%Y %I:%M:%p")
         date2 = date_to_obj.strftime("%m/%d/%Y %I:%M:%p")
-        record = list(Record.objects.filter(datetime__range = (str(date_from_obj),str(date_to_obj))).values('type').annotate(Sum('value')))
+        results = Record.objects.filter(datetime__range = (str(date_from_obj),str(date_to_obj)))
+
     elif dtfn != None and dttn != None:
         date_from_obj = datetime.datetime.strptime(dtfn, '%Y-%m-%d %H:%M:%S')
         date_to_obj = datetime.datetime.strptime(dttn, '%Y-%m-%d %H:%M:%S')
         date1 = date_from_obj.strftime("%m/%d/%Y %I:%M:%p")
         date2 = date_to_obj.strftime("%m/%d/%Y %I:%M:%p")
-        record = list(Record.objects.filter(datetime__range = (str(date_from_obj),str(date_to_obj))).values('type').annotate(Sum('value')))
+        results = Record.objects.filter(datetime__range = (str(date_from_obj),str(date_to_obj)))
    
     else:
         ld = LogDate.objects.order_by('id').last().datetime.astimezone(tz)
         cd = datetime.datetime.now().astimezone(tz)
         date1 = ld.strftime("%m/%d/%Y %I:%M:%p")
         date2 = cd.strftime("%m/%d/%Y %I:%M:%p")
-        record = list(Record.objects.filter(datetime__range = (str(ld),str(cd))).values('type').annotate(Sum('value')))
-
+        results = Record.objects.filter(datetime__range = (str(ld),str(cd)))
+    
+    record = list(results.values('type').annotate(Sum('value')))
     zeros = []
     for i in listData:
         if i not in [i['type'] for i in record]:
             zeros.append({'type':i,'value__sum':0})
-    zeros.append({'type':'المتبقى','value__sum':Rest.objects.all().aggregate(Sum('value'))['value__sum']})   
+    zeros.append({'type':'المتبقى','value__sum': get_rest(results) })   
     return Response({"df":date1,"dt":date2,"data":record + zeros})

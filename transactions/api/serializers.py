@@ -82,7 +82,9 @@ class SMainRest(serializers.ModelSerializer):
         fields = ['value','customer','date','time']
 
 
-        """
+# region JUNK
+
+"""
         
         class SMainRest(serializers.HyperlinkedModelSerializer):
         area = serializers.CharField(source='customerinfo.area')
@@ -121,3 +123,4 @@ class SRecord(serializers.ModelSerializer):
         return username
 
 """
+# endregion JUNK
