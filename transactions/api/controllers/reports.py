@@ -69,16 +69,18 @@ def getReports(request):
     dttn = request.query_params.get('dttn')
 
     if id != None and id.isdigit():
-        d = LogDate.objects.get(pk=int(id)).datetime.astimezone(tz)
-        pd = LogDate.objects.get(pk=int(id)-1).datetime.astimezone(tz)
-        date1 = d.strftime("%m/%d/%Y %I:%M:%p")
-        date2 = pd.strftime("%m/%d/%Y %I:%M:%p")
+        d       = LogDate.objects.get(pk=int(id)).datetime.astimezone(tz)
+        pd      = LogDate.objects.get(pk=int(id)-1).datetime.astimezone(tz)
+        date1   = d.strftime("%m/%d/%Y %I:%M:%p")
+        date2   = pd.strftime("%m/%d/%Y %I:%M:%p")
         results = Record.objects.filter(datetime__range = (str(d),str(pd)))
+        rest    = get_rest(results)
     
     elif df != None and dt != None:
-        date1 = df
-        date2 = dt
+        date1   = df
+        date2   = dt
         results = Record.objects.filter(date__range = (df,dt))
+        rest    = get_rest(results)
 
     elif dtf != None and dtt != None:
         dtf = dtf.replace(" ","+")
@@ -90,6 +92,7 @@ def getReports(request):
         date1 = date_from_obj.strftime("%m/%d/%Y %I:%M:%p")
         date2 = date_to_obj.strftime("%m/%d/%Y %I:%M:%p")
         results = Record.objects.filter(datetime__range = (str(date_from_obj),str(date_to_obj)))
+        rest  = get_rest(results)
 
     elif dtfn != None and dttn != None:
         date_from_obj = datetime.datetime.strptime(dtfn, '%Y-%m-%d %H:%M:%S')
@@ -97,6 +100,7 @@ def getReports(request):
         date1 = date_from_obj.strftime("%m/%d/%Y %I:%M:%p")
         date2 = date_to_obj.strftime("%m/%d/%Y %I:%M:%p")
         results = Record.objects.filter(datetime__range = (str(date_from_obj),str(date_to_obj)))
+        rest  = get_rest(results)
    
     else:
         ld = LogDate.objects.order_by('id').last().datetime.astimezone(tz)
@@ -104,11 +108,12 @@ def getReports(request):
         date1 = ld.strftime("%m/%d/%Y %I:%M:%p")
         date2 = cd.strftime("%m/%d/%Y %I:%M:%p")
         results = Record.objects.filter(datetime__range = (str(ld),str(cd)))
+        rest = Rest.objects.all().aggregate(Sum('value'))['value__sum']
     
     record = list(results.values('type').annotate(Sum('value')))
     zeros = []
     for i in listData:
         if i not in [i['type'] for i in record]:
             zeros.append({'type':i,'value__sum':0})
-    zeros.append({'type':'المتبقى','value__sum': get_rest(results) })   
+    zeros.append({'type':'المتبقى','value__sum': rest })   
     return Response({"df":date1,"dt":date2,"data":record + zeros})
