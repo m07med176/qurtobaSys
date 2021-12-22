@@ -129,27 +129,6 @@ def deleteCustomer(request,id):
 # endregion Delete Rank
 
 # region Trash
-    # def customSerializers(self):
-    #     queryset  =  CustomerInfo.objects.all().select_related('seller')
-    #     data = []
-    #     for i in queryset:
-    #         row =  {
-    #             "name":i.name,
-    #             "shopName":i.shopName,
-    #             "shopKind":i.shopKind,
-    #             "phoneNo":i.phoneNo,
-    #             "address":i.address,
-    #             "seller":{
-    #                 "id":i.seller.id,
-    #                 "name":i.seller.name,
-    #                 "email":i.seller.email
-    #             },
-    #             "accounts": i.accounts,
-    #             "time":i.time,
-    #             "date":i.date}
-    #         data.append(row)
-    #     return data
-
     # def get(self,request):
     #     return Response({"data":self.customSerializers()})
 
