@@ -38,7 +38,7 @@ def getOnItem(request):
         return Response(status = status.HTTP_404_NOT_FOUND)
     
     if request.method == "GET":
-        ser = FawryCodesSer(allCodes)
+        ser = SFawryCodes(allCodes)
         return Response(ser.data)
 
 @api_view(['PUT',])
@@ -49,7 +49,7 @@ def updateItem(request):
         return Response(status = status.HTTP_404_NOT_FOUND)
     
     if request.method == "PUT":
-        ser = FawryCodesSer(allCodes,data=request.data)
+        ser = SFawryCodes(allCodes,data=request.data)
         data = {}
         if ser.is_valid():
             ser.save()
@@ -77,7 +77,7 @@ def deleteItem(request):
 def createItem(request):
     item  = FawryCodes()
     if request.method == "POST":
-        ser = FawryCodesSer(data=request.data)
+        ser = SFawryCodes(data=request.data)
         if ser.is_valid():
             ser.save()
             return Response(ser.data,status = status.HTTP_201_CREATED)

@@ -1,8 +1,7 @@
 from django.contrib import admin
-from .models import CustomerInfo,MandopInfo,Areas       #,Customer_account #Customer_Image,
+from customers.models import CustomerInfo,MandopInfo       #,Customer_account #Customer_Image,
 #from search_admin_autocomplete.admin import SearchAutoCompleteAdmin
 
-admin.site.register(Areas)
 admin.site.register(MandopInfo)
 # admin.site.register(Customer_account)
 @admin.register(CustomerInfo)

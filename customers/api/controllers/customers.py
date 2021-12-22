@@ -11,10 +11,10 @@ from rest_framework.pagination import PageNumberPagination
 from main.utils.pagination import LargeResultsSetPagination
 from rest_framework.decorators import api_view
 # ------------ SERIALIZERS -----------#
-from  customers.api.serializers import SCustomer_info,SCustomerInfo,SMandopInfo_Normal,SCustomer,SMandopShort
+from  customers.api.serializers import SCustomerInfo,SCustomer
 # ------------ MODELS -----------#
 # MODELS
-from customers.models import CustomerInfo ,MandopInfo ,Areas
+from customers.models import CustomerInfo
 from transactions.models import Rest
 # UTILS
 from django.db.models import Q

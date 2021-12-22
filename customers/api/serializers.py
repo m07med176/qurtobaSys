@@ -39,5 +39,5 @@ class SCustomer(serializers.ModelSerializer):
     assistant = SMandopShort()
     class Meta:
         model = CustomerInfo
-        fields = ('id','name','surName','area','deviceNo','seller','assistant','user','shopName','shopKind','phoneNo','address','accounts','time','date','notes')
+        fields = ('id','name','surName','area','deviceNo','seller','assistant','user','shopName','shopKind','phoneNo','address','accounts','time','date','notes','grade')
 # endregion Read Serializers
