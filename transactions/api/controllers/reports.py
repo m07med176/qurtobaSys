@@ -74,13 +74,13 @@ def getReports(request):
         date1   = d.strftime("%m/%d/%Y %I:%M:%p")
         date2   = pd.strftime("%m/%d/%Y %I:%M:%p")
         results = Record.objects.filter(datetime__range = (str(d),str(pd)))
-        rest    = get_rest(results)
+        rest    = get_rest(results.distinct('customerData'))
     
     elif df != None and dt != None:
         date1   = df
         date2   = dt
         results = Record.objects.filter(date__range = (df,dt))
-        rest    = get_rest(results)
+        rest    = get_rest(results.distinct('customerData'))
 
     elif dtf != None and dtt != None:
         dtf = dtf.replace(" ","+")
@@ -92,7 +92,7 @@ def getReports(request):
         date1 = date_from_obj.strftime("%m/%d/%Y %I:%M:%p")
         date2 = date_to_obj.strftime("%m/%d/%Y %I:%M:%p")
         results = Record.objects.filter(datetime__range = (str(date_from_obj),str(date_to_obj)))
-        rest  = get_rest(results)
+        rest  = get_rest(results.distinct('customerData'))
 
     elif dtfn != None and dttn != None:
         date_from_obj = datetime.datetime.strptime(dtfn, '%Y-%m-%d %H:%M:%S')
@@ -100,7 +100,7 @@ def getReports(request):
         date1 = date_from_obj.strftime("%m/%d/%Y %I:%M:%p")
         date2 = date_to_obj.strftime("%m/%d/%Y %I:%M:%p")
         results = Record.objects.filter(datetime__range = (str(date_from_obj),str(date_to_obj)))
-        rest  = get_rest(results)
+        rest  = get_rest(results.distinct('customerData'))
    
     else:
         ld = LogDate.objects.order_by('id').last().datetime.astimezone(tz)

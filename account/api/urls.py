@@ -10,10 +10,18 @@ router = routers.DefaultRouter()
 router.register('',api.UsersMVS)
 urlpatterns = [
     # user crud
+    # http://127.0.0.1:8000/account/api/users/
     path('users/', include(router.urls)),
-    path('register/',api.register_account),
+
+    # http://127.0.0.1:8000/account/api/login/
     path('login/', api.ObtainAuthTokenView.as_view(), name="login"), 
+    
+    # http://127.0.0.1:8000/account/api/register/
+    path('register/',api.register_account),
+    
+    # http://127.0.0.1:8000/account/api/properties/
     path('properties/', api.account_properties_view, name="properties"),
+    # http://127.0.0.1:8000/account/api/properties/update/
 	path('properties/update/', api.update_account_view, name="update"),
 
         # region General    
