@@ -70,7 +70,7 @@ class Record(models.Model):
         verbose_name = "تحويل"
         verbose_name_plural = "سجل التحويلات"
         managed = True
-        ordering = ['-datetime']
+        #ordering = ['-datetime']
 
 class Talabat(models.Model):
     "sender,type,periority,stateTrans,date"
