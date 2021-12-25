@@ -34,6 +34,19 @@ class SRest(serializers.ModelSerializer):
         model = Rest
         fields = '__all__'
 
+class SRestDateCalc(serializers.ModelSerializer):
+    customer = SCustomerShort()
+    date = serializers.SerializerMethodField('get_last_date')
+    class Meta:
+        model = Rest
+        fields = ["cusotmer","value","date","time","types","type"]
+    
+    def get_last_date(self, rest):
+            try:
+                return str(Record.objects.filter(customerData_id=233,isDown=True).order_by('-datetime').first().date)
+            except Exception: # Record.DoesNotExist
+                return ""
+
 class SRecord(serializers.ModelSerializer):
     customerData = SCustomerShort()
     accountant = serializers.SerializerMethodField('get_username_from_author')

@@ -15,12 +15,12 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 # ------------ MODELS -----------#
 # MODELS
-from transactions.models import Rest,Record,Talabat
+from transactions.models import Rest,Record
 from customers.models import CustomerInfo, MandopInfo 
 # UTILS
 from django.db.models import Q,F,Prefetch
 # ------------ SERIALIZERS -----------#
-from transactions.api.serializers import SRecord,SRest ,SRecordSets,STalabat
+from transactions.api.serializers import SRest ,SRestDateCalc
 from account.api.pagination import LargeResultsSetPagination
 
 # --------------- PYTHON UTILS ------------------#
@@ -86,6 +86,13 @@ def getRestByCustomSerializer(objectData):
                 allData.append(row)
             
     return allData
+
+
+@api_view(['GET',])
+def getRestDateCalc(request):
+    rest=Rest.objects.all().order_by('date','time')
+    ser = SRestDateCalc(rest,many=True)
+    return Response(ser.data)
 
 @api_view(['GET',])
 def getSellerRestId(request,id):

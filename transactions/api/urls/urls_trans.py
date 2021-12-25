@@ -10,8 +10,7 @@ urlpatterns = [
         # region TRANSACTIONS USER
         path('api/dateTransUser/<str:type>/<str:dateSelect>/',trans.getTransactionsDateUser ),
         path('api/userToday/',trans.getTransactionsUserToday ),
-        path('api/userTransLimit/',trans.getTransactionsUserLimit ),
-        
+        path('api/userTransLimit/',trans.getTransactionsUserLimit ),  
         path('api/dateFromToTransUser/<str:type>/<str:dateFrom>/<str:dateTo>/',trans.getTransactionsDateFromToUser ),
         # endregion TRANSACTIONS USER
 

@@ -19,6 +19,7 @@ class LogDate(models.Model):
     
 
 class Rest(models.Model):
+    "cusotmer,value,date,time,types,type"
     customer    = models.OneToOneField(CustomerInfo,related_name="Rest.customer+",on_delete = models.CASCADE,verbose_name="العميل",null=False,blank=False)
     value       = models.FloatField(blank=True,null=True,verbose_name="المتبقى")
     date        = models.DateField(null=True,verbose_name = "Date",default=timezone.now)
