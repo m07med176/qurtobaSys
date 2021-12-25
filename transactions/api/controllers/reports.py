@@ -74,15 +74,15 @@ def getReports(request):
         date1   = d.strftime("%m/%d/%Y %I:%M:%p")
         date2   = pd.strftime("%m/%d/%Y %I:%M:%p")
         results = Record.objects.filter(datetime__range = (str(d),str(pd))) #.order_by('-datetime')
-        data = results.order_by('customerData_id').distinct("customerData_id")
-        rest    = get_rest(data)
+        # data = results.order_by('customerData_id').distinct("customerData_id")
+        # rest    = get_rest(data)
     
     elif df != None and dt != None:
         date1   = df
         date2   = dt
         results = Record.objects.filter(date__range = (df,dt))
-        data = results.order_by('customerData_id').distinct("customerData_id")
-        rest  = get_rest(data)
+        # data = results.order_by('customerData_id').distinct("customerData_id")
+        # rest  = get_rest(data)
 
     elif dtf != None and dtt != None:
         dtf = dtf.replace(" ","+")
@@ -94,8 +94,8 @@ def getReports(request):
         date1 = date_from_obj.strftime("%m/%d/%Y %I:%M:%p")
         date2 = date_to_obj.strftime("%m/%d/%Y %I:%M:%p")
         results = Record.objects.filter(datetime__range = (str(date_from_obj),str(date_to_obj)))
-        data = results.order_by('customerData_id').distinct("customerData_id")
-        rest  = get_rest(data)
+        # data = results.order_by('customerData_id').distinct("customerData_id")
+        # rest  = get_rest(data)
 
     elif dtfn != None and dttn != None:
         date_from_obj = datetime.datetime.strptime(dtfn, '%Y-%m-%d %H:%M:%S')
@@ -103,8 +103,8 @@ def getReports(request):
         date1 = date_from_obj.strftime("%m/%d/%Y %I:%M:%p")
         date2 = date_to_obj.strftime("%m/%d/%Y %I:%M:%p")
         results = Record.objects.filter(datetime__range = (str(date_from_obj),str(date_to_obj)))
-        data = results.order_by('customerData_id').distinct("customerData_id")
-        rest  = get_rest(data)
+        # data = results.order_by('customerData_id').distinct("customerData_id")
+        # rest  = get_rest(data)
    
     else:
         ld = LogDate.objects.order_by('id').last().datetime.astimezone(tz)
@@ -112,8 +112,8 @@ def getReports(request):
         date1 = ld.strftime("%m/%d/%Y %I:%M:%p")
         date2 = cd.strftime("%m/%d/%Y %I:%M:%p")
         results = Record.objects.filter(datetime__range = (str(ld),str(cd)))
-        rest = Rest.objects.all().aggregate(Sum('value'))['value__sum']
-    
+
+    rest = Rest.objects.all().aggregate(Sum('value'))['value__sum']
     record = list(results.values('type').annotate(Sum('value')))
     zeros = []
     for i in listData:
