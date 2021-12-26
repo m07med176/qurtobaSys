@@ -31,12 +31,12 @@ from django.db.models import Sum
 # region MainRest
 class RestL(viewsets.ModelViewSet):
     pagination_class = None
-    queryset = Rest.objects.all().order_by('date','time')
-    serializer_class = SRestDateCalc
-    filter_backends = [SearchFilter,OrderingFilter,DjangoFilterBackend]
-    filterset_fields = ['date']
-    search_fields = ["customer__seller__name"]
-    ordering_fields = ['date', 'time']
+    queryset            = Rest.objects.all().order_by('date','time')
+    serializer_class    = SRestDateCalc
+    filter_backends     = [SearchFilter,OrderingFilter,DjangoFilterBackend]
+    filterset_fields    = ['date']
+    search_fields       = ["customer__seller__name"]
+    ordering_fields     = ['date', 'time']
 
 # GET REST OF SEPCIFIC SELLER
 class GetRest(APIView):

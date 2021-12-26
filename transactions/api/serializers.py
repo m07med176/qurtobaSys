@@ -39,7 +39,7 @@ class SRestDateCalc(serializers.ModelSerializer):
     date = serializers.SerializerMethodField('get_last_date')
     class Meta:
         model = Rest
-        fields = ["customer","value","date","time"]
+        fields = ["id","customer","value","date","time"]
     
     def get_last_date(self, rest):
             try:
