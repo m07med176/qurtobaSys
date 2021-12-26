@@ -32,7 +32,7 @@ from django.db.models import Sum
 class RestL(viewsets.ModelViewSet):
     pagination_class = None
     queryset = Rest.objects.all().order_by('date','time')
-    serializer_class = SRest
+    serializer_class = SRestDateCalc
     filter_backends = [SearchFilter,OrderingFilter,DjangoFilterBackend]
     filterset_fields = ['date']
     search_fields = ["customer__seller__name"]
@@ -87,12 +87,6 @@ def getRestByCustomSerializer(objectData):
             
     return allData
 
-
-@api_view(['GET',])
-def getRestDateCalc(request):
-    rest=Rest.objects.all().order_by('date','time')
-    ser = SRestDateCalc(rest,many=True)
-    return Response(ser.data)
 
 @api_view(['GET',])
 def getSellerRestId(request,id):
