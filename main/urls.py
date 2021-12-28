@@ -20,6 +20,7 @@ urlpatterns = [
     path('dataEltogar/',include('dataEltogarApp.urls')),
     path('transactions/',include('transactions.urls')),
     path('fawryCodes/',include('fawryCodesApp.urls')),
+    path('follow/',include('FollowUpApp.urls')),
 
     path('store/',include('storeApp.urls')),
     path('productsSeles/',include('productsSelesApp.urls')),
