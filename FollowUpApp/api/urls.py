@@ -3,7 +3,8 @@ from FollowUpApp.api import views
 # -------------------------------------
 from rest_framework import routers
 router = routers.DefaultRouter()
-router.register('',views.FollowUpMVS)
+router.register('data',views.FollowUpMVS)
+router.register('user',views.EmployersMVS)
 
 urlpatterns = [
     # http://127.0.0.1:8000/follow/api/router/

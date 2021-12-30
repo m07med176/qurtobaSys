@@ -59,7 +59,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 REST_FRAMEWORK = {
-    'EXCEPTION_HANDLER': 'customers.utils.custom_exception_handler',
+    'EXCEPTION_HANDLER': 'main.utils.exceptions.custom_exception_handler',
     'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE':100,
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
@@ -118,16 +118,27 @@ TEMPLATES = [
 #     }
 # }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'd84lv9hqj4cvad',
+#         'HOST': 'ec2-34-254-69-72.eu-west-1.compute.amazonaws.com',
+#         'PORT': 5432,
+#         'USER': 'pkekjaplofajah',
+#         'PASSWORD': '5f23b729fd13ec1e966727ead1da9717e48c44bd830a6753ee23f54e14d3b099',
+#     }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd84lv9hqj4cvad',
-        'HOST': 'ec2-34-254-69-72.eu-west-1.compute.amazonaws.com',
+        'NAME': 'dcb33a91jj65i2',
+        'HOST': 'ec2-34-255-225-151.eu-west-1.compute.amazonaws.com',
         'PORT': 5432,
-        'USER': 'pkekjaplofajah',
-        'PASSWORD': '5f23b729fd13ec1e966727ead1da9717e48c44bd830a6753ee23f54e14d3b099',
+        'USER': 'bajyqqxqckvmfm',
+        'PASSWORD': 'a6510d62ce09fba9c9ddc094a4875a1c2a86f78b47d0e0a6425f1675bd4bb0ca',
     }
 }
+
 
 WSGI_APPLICATION = 'main.wsgi.application'
 AUTH_USER_MODEL = 'account.Account' 
