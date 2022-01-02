@@ -1,5 +1,4 @@
 # ------------ API AND  APIVIEW AND VIEWSETS-----------#
-
 from rest_framework.generics import ListAPIView
 from rest_framework.pagination import PageNumberPagination
 
@@ -13,25 +12,22 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.filters import SearchFilter,OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from account.api.pagination import LargeResultsSetPagination
-
 # VIEWSETS
 from rest_framework import viewsets
 # APIVIEW
 from rest_framework.views import APIView
-
-
 from FollowUpApp.models import FollowUp,Employers
 from FollowUpApp.api.serializers import SFollowUpAll,SEmployersAll
 
 class EmployersMVS(viewsets.ModelViewSet):
-	permission_classes = [AllowAny, ]
-	pagination_class =  LargeResultsSetPagination
-	queryset 		 =  Employers.objects.all()
-	serializer_class =  SEmployersAll
-	filter_backends  =  [SearchFilter,OrderingFilter,DjangoFilterBackend]
-	filterset_fields =  [ "uid","email","name","phone","date_joined","last_login","is_superuser","is_admin","is_staff","is_active","type"]
-	search_fields    =  ["uid","email","name"]
-	ordering_fields  =  ['email', 'name','uid','phone','date_joined','last_login','is_active','type']
+	permission_classes =  [AllowAny, ]
+	pagination_class   =  LargeResultsSetPagination
+	queryset 		   =  Employers.objects.all()
+	serializer_class   =  SEmployersAll
+	filter_backends    =  [SearchFilter,OrderingFilter,DjangoFilterBackend]
+	filterset_fields   =  ["uid","email","name","phone","date_joined","last_login","is_superuser","is_admin","is_staff","is_active","type"]
+	search_fields      =  ["uid","email","name"]
+	ordering_fields    =  ['email', 'name','uid','phone','date_joined','last_login','is_active','type']
 
 	def update(self, request, *args, **kwargs):
 		super(EmployersMVS, self).update(request, *args, **kwargs)
@@ -48,14 +44,14 @@ class EmployersMVS(viewsets.ModelViewSet):
 		return Response({"message": "تم الحذف بنجاح","status":  True})
 
 class FollowUpMVS(viewsets.ModelViewSet):
-	permission_classes = [AllowAny, ]
-	pagination_class = LargeResultsSetPagination
+	permission_classes  = [AllowAny, ]
+	pagination_class  	= LargeResultsSetPagination
 	queryset = FollowUp.objects.all()
-	serializer_class = SFollowUpAll
-	filter_backends = [SearchFilter,OrderingFilter,DjangoFilterBackend]
-	filterset_fields = ["user__name","user__email","user__uid","day","startTime","endTime","duration","dateTime","transport"]
-	search_fields = ["user__name","notes"]
-	ordering_fields = ['dateTime','duration','user__email', 'user__name','user__uid',"transport"]
+	serializer_class 	= SFollowUpAll
+	filter_backends 	= [SearchFilter,OrderingFilter,DjangoFilterBackend]
+	filterset_fields 	= ["user__name","user__email","user__uid","day","startTime","endTime","duration","dateTime","transport"]
+	search_fields 		= ["user__name","notes"]
+	ordering_fields 	= ['dateTime','duration','user__email', 'user__name','user__uid',"transport"]
 
 	def update(self, request, *args, **kwargs):
 		super(FollowUpMVS, self).update(request, *args, **kwargs)
@@ -66,7 +62,6 @@ class FollowUpMVS(viewsets.ModelViewSet):
 	def destroy(self, request, *args, **kwargs):
 		super(FollowUpMVS, self).destroy(request, *args, **kwargs)
 		return Response({"message": "تم الحذف بنجاح","status":  True})
-
 
 @api_view(['POST',])
 @permission_classes((AllowAny, ))
@@ -79,7 +74,7 @@ def startDay(request):
 		startTime = request.data.get('startTime', '')
 		# validation
 		if uid == '': return Response({"message": "حدثت مشكلة uid فارغ","status":  False})
-		if day == '': 		return Response({"message": "حدثت مشكلة التاريخ فارغ","status":  False})
+		if day == '': return Response({"message": "حدثت مشكلة التاريخ فارغ","status":  False})
 		if startTime == '': return Response({"message": "حدثت مشكلة بداية الوقت فارغ","status":  False})
 		# create or update row
 		values = {"startTime":startTime,"is_active":True }
@@ -114,7 +109,7 @@ def endDay(request):
 		values = {"endTime":endTime,"duration":duration,"is_active":False }
 		try:
 			employer = Employers.objects.get(uid=uid)
-			employer.is_active  = True
+			employer.is_active  = False
 			employer.save()
 			FollowUp.objects.update_or_create(
 					user=employer,
@@ -123,7 +118,6 @@ def endDay(request):
 			return Response({"message": "الحمد لله رب العالمين","status":  True})
 		
 		except Exception as e: return Response({"message": f"حدثت مشكلة {e}","status":  False})
-
 
 @api_view(['POST',])
 @permission_classes((AllowAny, ))
@@ -158,7 +152,6 @@ def addNotes(request):
 				return Response({"message": "تم حفظ الملاحظة","status":  True})
 			except Exception as e:
 				return Response({"message": f"حدثت مشكلة {e}","status":  False})
-
 
 @api_view(['POST',])
 @permission_classes((AllowAny, ))

@@ -33,7 +33,7 @@ class Employers(models.Model):
 
 class FollowUp(models.Model):
     "name,email,uid,day,startTime,endTime,duration,dateTime,transport,notes"
-    user      = models.ForeignKey(Employers,related_name="FollowUp.user+",on_delete = models.PROTECT,verbose_name="الموظف",null=True,blank=True)
+    user      = models.ForeignKey(Employers,related_name="FollowUp.user+",on_delete = models.CASCADE,verbose_name="الموظف",null=True,blank=True)
     is_active  = models.BooleanField(verbose_name="متاح",null=False,blank=False,default=False)
     
     day        = models.DateField(blank=True,null=True,verbose_name = "اليوم")
