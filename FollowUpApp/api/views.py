@@ -22,7 +22,7 @@ from datetime import datetime
 class EmployersMVS(viewsets.ModelViewSet):
 	permission_classes =  [AllowAny, ]
 	pagination_class   =  LargeResultsSetPagination
-	queryset 		   =  Employers.objects.filter(dateTime__month=int(datetime.now().date().month),dateTime__year=int(datetime.now().date().year))
+	queryset 		   =  Employers.objects.all() # dateTime__month=int(datetime.now().date().month),dateTime__year=int(datetime.now().date().year)
 	serializer_class   =  SEmployersAll
 	filter_backends    =  [SearchFilter,OrderingFilter,DjangoFilterBackend]
 	filterset_fields   =  ["uid","email","name","phone","date_joined","last_login","is_superuser","is_admin","is_staff","is_active","type"]
