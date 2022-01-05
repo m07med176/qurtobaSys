@@ -18,11 +18,11 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 from FollowUpApp.models import FollowUp,Employers
 from FollowUpApp.api.serializers import SFollowUpAll,SEmployersAll
-
+from datetime import datetime
 class EmployersMVS(viewsets.ModelViewSet):
 	permission_classes =  [AllowAny, ]
 	pagination_class   =  LargeResultsSetPagination
-	queryset 		   =  Employers.objects.all()
+	queryset 		   =  Employers.objects.filter(dateTime__month=int(datetime.now().date().month),dateTime__year=int(datetime.now().date().year))
 	serializer_class   =  SEmployersAll
 	filter_backends    =  [SearchFilter,OrderingFilter,DjangoFilterBackend]
 	filterset_fields   =  ["uid","email","name","phone","date_joined","last_login","is_superuser","is_admin","is_staff","is_active","type"]
@@ -46,7 +46,7 @@ class EmployersMVS(viewsets.ModelViewSet):
 class FollowUpMVS(viewsets.ModelViewSet):
 	permission_classes  = [AllowAny, ]
 	pagination_class  	= LargeResultsSetPagination
-	queryset = FollowUp.objects.all()
+	queryset 			= FollowUp.objects.filter()
 	serializer_class 	= SFollowUpAll
 	filter_backends 	= [SearchFilter,OrderingFilter,DjangoFilterBackend]
 	filterset_fields 	= ["user__name","user__email","user__uid","day","startTime","endTime","duration","dateTime","transport"]
