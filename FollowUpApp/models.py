@@ -40,7 +40,7 @@ class FollowUp(models.Model):
     startTime  = models.TimeField(blank=True,null=True,verbose_name = "بداية اليوم")
     endTime    = models.TimeField(blank=True,null=True,verbose_name = "نهاية اليوم")
     duration   = models.TimeField(blank=True,null=True,verbose_name = "الفترة")
-    dateTime   = models.DateTimeField(blank=True,null=True,verbose_name = "Date Time",default=timezone.datetime.today)
+    datetime   = models.DateTimeField(blank=True,null=True,verbose_name = "Date Time",default=timezone.datetime.today)
     transport  = models.FloatField(blank=True,null=True,verbose_name="تكلفة المواصلات",default=0)
     notes      = models.TextField(blank=True,null=True,verbose_name="الملاحظات",default="")
 
@@ -50,4 +50,4 @@ class FollowUp(models.Model):
     class Meta:
         verbose_name = "متابعه"
         verbose_name_plural = "المتابعات"
-        ordering = ['-dateTime']
+        ordering = ['-datetime']
