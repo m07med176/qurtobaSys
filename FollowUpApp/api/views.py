@@ -12,6 +12,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.filters import SearchFilter,OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from account.api.pagination import LargeResultsSetPagination
+from FollowUpApp.api.pagination import CustomPagination
 # VIEWSETS
 from rest_framework import viewsets
 # APIVIEW
@@ -22,7 +23,7 @@ from datetime import datetime
 class EmployersMVS(viewsets.ModelViewSet):
 	permission_classes =  [AllowAny, ]
 	pagination_class   =  LargeResultsSetPagination
-	queryset 		   =  Employers.objects.all() # dateTime__month=int(datetime.now().date().month),dateTime__year=int(datetime.now().date().year)
+	queryset 		   =  Employers.objects.all()
 	serializer_class   =  SEmployersAll
 	filter_backends    =  [SearchFilter,OrderingFilter,DjangoFilterBackend]
 	filterset_fields   =  ["uid","email","name","phone","date_joined","last_login","is_superuser","is_admin","is_staff","is_active","type"]
@@ -45,11 +46,11 @@ class EmployersMVS(viewsets.ModelViewSet):
 
 class FollowUpMVS(viewsets.ModelViewSet):
 	permission_classes  = [AllowAny, ]
-	pagination_class  	= LargeResultsSetPagination
-	queryset 			= FollowUp.objects.filter()
+	pagination_class  	= CustomPagination
+	queryset 			= FollowUp.objects.filter(dateTime__month=int(datetime.now().date().month),dateTime__year=int(datetime.now().date().year))
 	serializer_class 	= SFollowUpAll
 	filter_backends 	= [SearchFilter,OrderingFilter,DjangoFilterBackend]
-	filterset_fields 	= ["user__name","user__email","user__uid","day","startTime","endTime","duration","dateTime","transport"]
+	filterset_fields 	= ["dateTime","user__name","user__email","user__uid","day","startTime","endTime","duration","dateTime","transport"]
 	search_fields 		= ["user__name","notes"]
 	ordering_fields 	= ['dateTime','duration','user__email', 'user__name','user__uid',"transport"]
 
