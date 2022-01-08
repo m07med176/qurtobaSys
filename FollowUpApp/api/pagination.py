@@ -12,7 +12,7 @@ class CustomPagination(PageNumberPagination):
     year = datetime.now().date().year
     days  = monthrange(year=year,month= month)[1]
     constantDuration = [str(datetime.now().date().year)+"-"+str(datetime.now().date().month).zfill(2)+"-"+str(i).zfill(2) for i in range(1,days+1)]
-    constantDuration.reverse()
+
     def get_paginated_response(self, data):
         dataL = [d["day"] for d in data]
         customData = []
