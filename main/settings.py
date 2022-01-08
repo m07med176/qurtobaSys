@@ -20,7 +20,7 @@ SECRET_KEY = '-8s9ut4mjnvn3muph+%7cab8%7&ilw%bb&5w%mndt0rkp+7+k-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['qurtoba.herokuapp.com','127.0.0.1','192.168.1.109']
+ALLOWED_HOSTS = ['qurtoba.herokuapp.com','127.0.0.1','192.168.1.7']
 
 
 INSTALLED_APPS = [
