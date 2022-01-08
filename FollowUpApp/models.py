@@ -50,4 +50,4 @@ class FollowUp(models.Model):
     class Meta:
         verbose_name = "متابعه"
         verbose_name_plural = "المتابعات"
-        ordering = ['-dateTime']
+        ordering = ['dateTime']
