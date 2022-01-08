@@ -64,8 +64,8 @@ class SRecord(serializers.ModelSerializer):
             value2 = Record.objects.filter(customerData_id=customer_id,isDone=False,isDown=True,datetime__range = (start,end)).aggregate(Sum('value'))['value__sum'] if Record.objects.filter(customerData_id=customer_id,isDone=False,isDown=True,datetime__range = (start,end)).aggregate(Sum('value'))['value__sum'] != None else 0
             return value1 - value2
         else:
-            value1 = Record.objects.filter(customerData_id=customer_id,isDone=False,isDown=False,datetime__range = (start,end)).aggregate(Sum('value'))['value__sum'] if Record.objects.filter(customerData_id=customer_id,isDone=False,isDown=False,datetime__range = (start,end)).aggregate(Sum('value'))['value__sum'] != None else 0
-            value2 = Record.objects.filter(customerData_id=customer_id,isDone=False,isDown=True,datetime__range = (start,end)).aggregate(Sum('value'))['value__sum'] if Record.objects.filter(customerData_id=customer_id,isDone=False,isDown=True,datetime__range = (start,end)).aggregate(Sum('value'))['value__sum'] != None else 0
+            value1 = Record.objects.filter(customerData_id=customer_id,isDown=False,datetime__range = (start,end)).aggregate(Sum('value'))['value__sum'] if Record.objects.filter(customerData_id=customer_id,isDown=False,datetime__range = (start,end)).aggregate(Sum('value'))['value__sum'] != None else 0
+            value2 = Record.objects.filter(customerData_id=customer_id,isDown=True,datetime__range = (start,end)).aggregate(Sum('value'))['value__sum'] if Record.objects.filter(customerData_id=customer_id,isDown=True,datetime__range = (start,end)).aggregate(Sum('value'))['value__sum'] != None else 0
             return value1 - value2
 
     def get_username_from_author(self, record):
