@@ -56,3 +56,6 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns +=path('__debug__/', include(debug_toolbar.urls)),
+
+admin.site.site_header = 'موقع الإشباح'
+admin.site.site_title = 'الأشباح للإتصالات'
