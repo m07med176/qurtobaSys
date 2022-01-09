@@ -72,7 +72,7 @@ class RecordL(viewsets.ModelViewSet):
 def archiveTransactionsData(request):
     dateF = request.data.get('dateF')
     dateT = request.data.get('dateT')
-    for i in CustomerInfo.objects.all().values['id']:
+    for i in CustomerInfo.objects.all().values('id'):
         customerId = i['id']
         value1 = Record.objects.filter(date__range=(dateF,dateT),isDone=True,isDown=False,customerData_id=customerId).aggregate(Sum('value'))['value__sum']
         value1 = value1 if value1 != None else 0
