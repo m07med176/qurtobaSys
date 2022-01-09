@@ -8,6 +8,7 @@ urlpatterns = [
         # region transactions
 
         # region TRANSACTIONS USER
+        path('api/archive/',trans.archiveTransactionsData ),
         path('api/dateTransUser/<str:type>/<str:dateSelect>/',trans.getTransactionsDateUser ),
         path('api/userToday/',trans.getTransactionsUserToday ),
         path('api/userTransLimit/',trans.getTransactionsUserLimit ),  
@@ -30,6 +31,7 @@ urlpatterns = [
         # endregion
         
         # endregion
+
 
         
     ]

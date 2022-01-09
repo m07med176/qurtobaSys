@@ -18,14 +18,13 @@ from rest_framework import status
 from transactions.models import Rest,Record,Talabat
 from customers.models import CustomerInfo, MandopInfo 
 # UTILS
-from django.db.models import Q,F,Prefetch
+from django.db.models import Q,F,Prefetch,Sum
 # ------------ SERIALIZERS -----------#
 from transactions.api.serializers import SRecord,SRest ,SRecordSets,STalabat
 from account.api.pagination import LargeResultsSetPagination
 
 # --------------- PYTHON UTILS ------------------#
 import datetime
-from django.db.models import Sum
 # --------------- DATABASE MANAGER ------------------#
 import datetime
 from databaseManager import DatabaseManager
@@ -68,6 +67,40 @@ class RecordL(viewsets.ModelViewSet):
         return Response({"message": "فشل فى التسجيل","status":  False})
 #   region ACCOUNT TRANSACTION FILTER
 #       region TRANSACTION USER
+
+@api_view(['POST',])
+def archiveTransactionsData(request):
+    dateF = request.data.get('dateF')
+    dateT = request.data.get('dateT')
+    for i in CustomerInfo.objects.all().values['id']:
+        customerId = i['id']
+        value1 = Record.objects.filter(date__range=(dateF,dateT),isDone=True,isDown=False,customerData_id=customerId).aggregate(Sum('value'))['value__sum']
+        value1 = value1 if value1 != None else 0
+
+        value2 = Record.objects.filter(date__range=(dateF,dateT),isDone=True,isDown=True,customerData_id=customerId).aggregate(Sum('value'))['value__sum']
+        value2 = value2 if value2 != None else 0
+
+        value = value1 - value2
+
+        data = Record(       
+            value = value,  
+            date = dateF,     
+            time = '00:00:00',
+            customerData_id=customerId,
+            isDone = True,
+            type='أخرى',
+            isDown=False,
+            accountant_id=62,
+            notes='archive value',
+            rest = 0,
+            datetime='2021-09-01 00:00:00')    
+        data.save()
+
+        Record.objects.filter(date__range=(dateF,dateT),isDone=True,customerData_id=customerId).delete()
+
+    return Response({"result":'تم الأرشفة','status':True})
+
+
 @api_view(['GET',])
 def getTransactionsDateUser(request,type='الكل',dateSelect=''):
     id = request.user.id
