@@ -75,7 +75,7 @@ class SRecord(serializers.ModelSerializer):
             value1 = Record.objects.filter(customerData_id=customer_id,isDown=False,datetime__range = (start,end)).aggregate(Sum('value'))['value__sum'] if Record.objects.filter(customerData_id=customer_id,isDown=False,datetime__range = (start,end)).aggregate(Sum('value'))['value__sum'] != None else 0
             value2 = Record.objects.filter(customerData_id=customer_id,isDown=True,datetime__range = (start,end)).aggregate(Sum('value'))['value__sum'] if Record.objects.filter(customerData_id=customer_id,isDown=True,datetime__range = (start,end)).aggregate(Sum('value'))['value__sum'] != None else 0
             
-            finalValue = (value1 - value2)-valueDone
+            finalValue = abs((value1 - value2)-valueDone)
             return finalValue
 
     def get_username_from_author(self, record):
