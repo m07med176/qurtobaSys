@@ -88,6 +88,11 @@ class GetCustomersData(ListAPIView):
     queryset = CustomerInfo.objects.all().order_by('area','name')
     serializer_class = SCustomer
     pagination_class = LargeResultsSetPagination
+    filter_backends  =  [SearchFilter,OrderingFilter,DjangoFilterBackend]
+    filterset_fields =  ['pk','name','surName','shopName','deviceNo','shopKind','phoneNo','address','area','accounts','accounts_data','grade','assistant','assistant__name','seller','seller__name','user','date','time','notes','areas']
+    search_fields    =  ["^name","=grade","^seller__name","^assistant__name","=deviceNo"]
+    ordering_fields  =  ['pk','name','surName','shopName','deviceNo','shopKind','phoneNo','address','area','accounts','accounts_data','grade','assistant','seller','user','date','time','notes','areas']
+    
 
 
 # get customer names and account no list
