@@ -72,6 +72,7 @@ class RecordL(viewsets.ModelViewSet):
 def archiveTransactionsData(request):
     dateF = request.data.get('dateF')
     dateT = request.data.get('dateT')
+    time = '00:00:00'
     for i in CustomerInfo.objects.all().values('id'):
         customerId = i['id']
         value1 = Record.objects.filter(date__range=(dateF,dateT),isDone=True,isDown=False,customerData_id=customerId).aggregate(Sum('value'))['value__sum']
@@ -81,19 +82,19 @@ def archiveTransactionsData(request):
         value2 = value2 if value2 != None else 0
 
         value = value1 - value2
-
+        
         data = Record(       
             value = value,  
-            date = dateF,     
-            time = '00:00:00',
-            customerData_id=customerId,
+            date = dateT,     
+            time = time,
+            customerData_id=int(customerId),
             isDone = True,
             type='أخرى',
             isDown=False,
             accountant_id=62,
             notes='archive value',
             rest = 0,
-            datetime='2021-09-01 00:00:00')    
+            datetime=f'{dateT} {time}')    
         data.save()
 
         Record.objects.filter(date__range=(dateF,dateT),isDone=True,customerData_id=customerId).delete()
