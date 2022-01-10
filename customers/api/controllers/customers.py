@@ -19,9 +19,18 @@ from transactions.models import Rest
 # UTILS
 from django.db.models import Q
 
+
+from rest_framework.filters import SearchFilter,OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.pagination import PageNumberPagination
+
 class Customer_infoL(viewsets.ModelViewSet):
     queryset = CustomerInfo.objects.all()
     serializer_class = SCustomerInfo
+    filter_backends  =  [SearchFilter,OrderingFilter,DjangoFilterBackend]
+    filterset_fields =  ['pk','name','surName','shopName','deviceNo','shopKind','phoneNo','address','area','accounts','accounts_data','grade','assistant','assistant__name','seller','seller__name','user','date','time','notes','areas']
+    search_fields    =  ["^name","=grade","^seller__name","^assistant__name","=deviceNo"]
+    ordering_fields  =  ['pk','name','surName','shopName','deviceNo','shopKind','phoneNo','address','area','accounts','accounts_data','grade','assistant','seller','user','date','time','notes','areas']
     def update(self, request, *args, **kwargs):
         if request.user.is_admin:
             super(Customer_infoL, self).update(request, *args, **kwargs)
