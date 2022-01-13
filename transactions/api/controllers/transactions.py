@@ -246,8 +246,8 @@ def getRestValueForCustomer(customer_id):
     value2 = Record.objects.filter(customerData_id=customer_id,isDown=True,isDone=False).aggregate(Sum('value'))['value__sum'] if Record.objects.filter(customerData_id=customer_id,isDown=True,isDone=False).aggregate(Sum('value'))['value__sum'] != None else 0
     sum  = value1 - value2
 
-    date = str(datetime.datetime.now().date())
-    time = str(datetime.datetime.now().time()).split(".")[0]
+    #date = str(datetime.datetime.now().date())
+    #time = str(datetime.datetime.now().time()).split(".")[0]
 
     # Rest.objects.update_or_create(
     # customer_id=customer_id, 
