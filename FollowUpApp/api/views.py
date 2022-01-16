@@ -48,9 +48,9 @@ class FollowUpMVS(viewsets.ModelViewSet):
 	queryset 			= FollowUp.objects.filter(dateTime__month=int(datetime.now().date().month),dateTime__year=int(datetime.now().date().year))
 	serializer_class 	= SFollowUpAll
 	filter_backends 	= [SearchFilter,OrderingFilter,DjangoFilterBackend]
-	filterset_fields 	= ["dateTime","user__name","user__id","user__email","day","startTime","endTime","duration","dateTime","transport"]
-	search_fields 		= ["user__name","notes"]
-	ordering_fields 	= ['dateTime','duration','user__email',"user__id", 'user__name',"transport"]
+	filterset_fields 	= ["dateTime","user__username","user__id","user__email","day","startTime","endTime","duration","dateTime","transport"]
+	search_fields 		= ["user__username","notes"]
+	ordering_fields 	= ['dateTime','duration','user__email',"user__id", 'user__username',"transport"]
 
 	def update(self, request, *args, **kwargs):
 		super(FollowUpMVS, self).update(request, *args, **kwargs)
