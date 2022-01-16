@@ -67,16 +67,18 @@ class FollowUpMVS(viewsets.ModelViewSet):
 def startDay(request):
 	if request.method == 'POST':
 		# static varialble
+		id       = request.data.get('id', '')
 		day       = request.data.get('day', '')
 		# change varialble
 		startTime = request.data.get('startTime', '')
 		# validation
+		if id == '': return Response({"message": "حدثت مشكلة المستخدم غير موجود","status":  False})
 		if day == '': return Response({"message": "حدثت مشكلة التاريخ فارغ","status":  False})
 		if startTime == '': return Response({"message": "حدثت مشكلة بداية الوقت فارغ","status":  False})
 		# create or update row
 		values = {"startTime":startTime,"is_active":True }
 		try:
-			employer = request.user
+			employer = Account.objects.get(id=id)
 			employer.is_open  = True
 			employer.save()
 			FollowUp.objects.update_or_create(
@@ -92,18 +94,20 @@ def startDay(request):
 def endDay(request):
 	if request.method == 'POST':
 		# static varialble
+		id       = request.data.get('id', '')
 		day       = request.data.get('day', '')
 		# change varialble
 		endTime = request.data.get('endTime', '')
 		duration 	  = request.data.get('duration', '')
 		# validation
+		if id == '': return Response({"message": "حدثت مشكلة المستخدم غير موجود","status":  False})
 		if day == '': return Response({"message": "حدثت مشكلة التاريخ فارغ","status":  False})
 		if endTime == '': return Response({"message": "حدثت مشكلة نهاية الوقت فارغ","status":  False})
 		if duration == '': return Response({"message": "حدثت مشكلة الفتره فارغة","status":  False})
 		# create or update row
 		values = {"endTime":endTime,"duration":duration,"is_active":False }
 		try:
-			employer = request.user
+			employer = Account.objects.get(id=id)
 			employer.is_open  = False
 			employer.save()
 			FollowUp.objects.update_or_create(
@@ -119,16 +123,18 @@ def endDay(request):
 def addNotes(request):
 	if request.method == 'POST':
 		# static varialble
+		id       = request.data.get('id', '')
 		day       = request.data.get('day', '')
 		# change varialble
 		notes1     = request.data.get('notes', '')
 		# validation
+		if id == '': return Response({"message": "حدثت مشكلة المستخدم غير موجود","status":  False})
 		if day    == '': 	return Response({"message": "حدثت مشكلة التاريخ فارغ","status":  False})
 		if notes1 == '': 	return Response({"message": "حدثت مشكلة الملاحظة فارغة","status":  False})
 		
 		try:
 			# if you have a row
-			employer = request.user
+			employer = Account.objects.get(id=id)
 			notes2 = FollowUp.objects.filter(user=employer,day=day).first().notes
 			values = {"notes":notes1+"\n"+notes2 }
 			try:
@@ -152,15 +158,17 @@ def addTransport(request):
 	if request.method == 'POST':
 		# static varialble
 		day       = request.data.get('day', '')
+		id       = request.data.get('id', '')
 		# change varialble
 		transport = int(request.data.get('transport', 0))
 		# validation
+		if id == '': return Response({"message": "حدثت مشكلة المستخدم غير موجود","status":  False})
 		if day == '': 		return Response({"message": "حدثت مشكلة التاريخ فارغ","status":  False})
 		if transport == 0: 	return Response({"message": "حدثت مشكلة القيمة فارغة","status":  False})
 		
 		try:
 			# if you have a row
-			employer = request.user
+			employer = Account.objects.get(id=id)
 			transport_ = FollowUp.objects.filter(user=employer,day=day).first().transport
 			values = {"transport":transport+transport_ }
 			try:
