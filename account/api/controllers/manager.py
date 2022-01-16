@@ -20,10 +20,10 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 # ------------ SERIALIZERS -----------#
 from account.api.serializers import (
-	SAccountResponse,
-	SAccountAll,
-	SAccountManager,
-	SAccountManagerForCustomer)
+									SAccountResponse,
+									SAccountAll,
+									SAccountManager,
+									SAccountManagerForCustomer)
 from rest_framework.authtoken.models import Token
 # ------------ MODELS -----------#
 from account.models import Account

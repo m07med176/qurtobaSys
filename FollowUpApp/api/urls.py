@@ -1,10 +1,10 @@
 from django.urls import path,include
 from FollowUpApp.api import views
-# -------------------------------------
+# ------------------------------------- #
 from rest_framework import routers
 router = routers.DefaultRouter()
 router.register('data',views.FollowUpMVS)
-router.register('user',views.EmployersMVS)
+router.register('user',views.UsersMVS)
 
 urlpatterns = [
     # http://127.0.0.1:8000/follow/api/router/

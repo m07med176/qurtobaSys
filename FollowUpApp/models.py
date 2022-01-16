@@ -1,10 +1,13 @@
 from django.db import models
 from django.utils import timezone
 import datetime
+from account.models import Account
 
-
+"""
 class Employers(models.Model):
-    """ uid,email,name,image,phone,date_joined,last_login,is_superuser,is_admin,is_staff,is_active,type"""
+    # uid,email,name,image,phone,date_joined,last_login,is_superuser,is_admin,is_staff,is_active,type
+
+    user      = models.ForeignKey(Account,related_name="FollowUp.user+",on_delete = models.CASCADE,verbose_name="الموظف",null=True,blank=True)
 
     uid        = models.CharField(verbose_name="UID",null=False,blank=False,max_length=100, unique=False,help_text='مطلوب إضافة الايميل')
     email      = models.CharField(verbose_name="الايميل",null=False,blank=False,max_length=100)
@@ -30,10 +33,11 @@ class Employers(models.Model):
         verbose_name = "الموظف"
         verbose_name_plural = "الموظفين"
         ordering = ['-last_login']
+"""
 
 class FollowUp(models.Model):
     "name,email,uid,day,startTime,endTime,duration,dateTime,transport,notes"
-    user      = models.ForeignKey(Employers,related_name="FollowUp.user+",on_delete = models.CASCADE,verbose_name="الموظف",null=True,blank=True)
+    user      = models.ForeignKey(Account,related_name="FollowUp.user+",on_delete = models.CASCADE,verbose_name="الموظف",null=True,blank=True)
     is_active  = models.BooleanField(verbose_name="متاح",null=False,blank=False,default=False)
     
     day        = models.DateField(blank=True,null=True,verbose_name = "اليوم")

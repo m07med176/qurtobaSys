@@ -48,6 +48,8 @@ class Account(AbstractBaseUser):
 	is_admin				= models.BooleanField(default=False,verbose_name = 'مدير')
 	is_staff				= models.BooleanField(default=False,verbose_name = 'محاسب')
 	is_active				= models.BooleanField(default=False,verbose_name = 'نشط')
+	is_open				    = models.BooleanField(null=False,blank=False,default=False,verbose_name = 'متاح')
+
 	choices = [
 		(0, 'محاسب'),
 		(1, 'مندوب'),
