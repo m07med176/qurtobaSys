@@ -22,7 +22,7 @@ class SAccountResponse(serializers.ModelSerializer):
         model = Account
         fields = ['pk', 'email', 
         'username','phone','account_no' ,
-        'is_admin','is_active','is_staff',
+        'is_admin','is_active','is_staff','is_open',
         'is_superuser','token','password','type','date_joined','last_login']
     def get_username_token(self, account):
         try:
@@ -35,7 +35,7 @@ class SAccountantState(serializers.ModelSerializer):
     token = serializers.SerializerMethodField('get_username_token')
     class Meta:
         model = Account
-        fields = ['is_admin','is_active','is_staff','is_superuser','token','password','type']
+        fields = ['is_open','is_admin','is_active','is_staff','is_superuser','token','password','type']
 
 class SAccountantShort(serializers.ModelSerializer):
     class Meta:
@@ -48,7 +48,7 @@ class SAccountantShort(serializers.ModelSerializer):
 class SAccountManager(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = ["password","email","username","phone","account_no","is_superuser","is_admin","is_staff","is_active","type"]
+        fields = ["password","email","username","phone","account_no","is_open","is_superuser","is_admin","is_staff","is_active","type"]
         extra_kwargs = { 'password':{'write_only':True} }
     
     def save(self):
@@ -61,6 +61,7 @@ class SAccountManager(serializers.ModelSerializer):
             is_admin        = self.validated_data['is_admin'],
             is_staff        = self.validated_data['is_staff'],
             is_active       = self.validated_data['is_active'],
+            is_open         = self.validated_data['is_open'],
             type            = self.validated_data['type']
         )
         password = self.validated_data['password']
@@ -77,6 +78,7 @@ class SAccountManager(serializers.ModelSerializer):
         instance.is_admin = self.validated_data.get('is_admin', instance.is_admin)
         instance.is_staff = self.validated_data.get('is_staff', instance.is_staff)
         instance.is_active = self.validated_data.get('is_active', instance.is_active)
+        instance.is_active = self.validated_data.get('is_open', instance.is_active)
         instance.type = self.validated_data.get('type', instance.type)
 
         password = self.validated_data['password']
@@ -89,7 +91,7 @@ class SAccountManager(serializers.ModelSerializer):
 class SAccountManagerForCustomer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = ["password","username","phone","account_no","is_superuser","is_admin","is_staff","is_active","type"]
+        fields = ["password","username","phone","account_no","is_open","is_superuser","is_admin","is_staff","is_active","type"]
         extra_kwargs = { 'password':{'write_only':True} }
     
     def save(self):
@@ -102,6 +104,7 @@ class SAccountManagerForCustomer(serializers.ModelSerializer):
             is_admin        = self.validated_data['is_admin'],
             is_staff        = self.validated_data['is_staff'],
             is_active       = self.validated_data['is_active'],
+            is_open       = self.validated_data['is_open'],
             type            = self.validated_data['type']
         )
         password = self.validated_data['password']
@@ -124,6 +127,7 @@ class SAccountManagerForCustomer(serializers.ModelSerializer):
             instance.is_admin = self.validated_data.get('is_admin', instance.is_admin)
             instance.is_staff = self.validated_data.get('is_staff', instance.is_staff)
             instance.is_active = self.validated_data.get('is_active', instance.is_active)
+            instance.is_open = self.validated_data.get('is_open', instance.is_open)
             instance.type = self.validated_data.get('type', instance.type)
 
             password = self.validated_data['password']
