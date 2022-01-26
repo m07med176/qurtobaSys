@@ -45,7 +45,7 @@ class SRestDateCalc(serializers.ModelSerializer):
             try:
                 record = Record.objects.filter(customerData=rest.customer,isDown=True).order_by('-datetime').first()
                 if record.isDone: 
-                    return Record.objects.filter(customerData=rest.customer,isDown=False,isDone=False).order_by('-datetime').last()
+                    return str(Record.objects.filter(customerData=rest.customer,isDown=False,isDone=False).order_by('-datetime').last().date)
                 return str(record.date)
             except Exception: # Record.DoesNotExist
                 return rest.date
