@@ -43,8 +43,10 @@ class SRestDateCalc(serializers.ModelSerializer):
     
     def get_last_date(self, rest):
             try:
-                if rest.value == 0: return str(rest.date)
-                return str(Record.objects.filter(customerData=rest.customer,isDown=True).order_by('-datetime').first().date)
+                
+                record = Record.objects.filter(customerData=rest.customer,isDown=True).order_by('-datetime').first()
+                if record.isDone: return str(rest.date)
+                return str(record.date)
             except Exception: # Record.DoesNotExist
                 return rest.date
 
