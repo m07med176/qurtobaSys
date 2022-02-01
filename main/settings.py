@@ -24,14 +24,16 @@ ALLOWED_HOSTS = ['qurtoba.herokuapp.com','127.0.0.1','192.168.1.7']
 
 
 INSTALLED_APPS = [
-    # Third Party #
+    #1) Third Party #
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Utils #
+    'django_extensions',
+    'drf_yasg',
+    #2) Utils #
     'phone_field',
     'crispy_forms',
     'search_admin_autocomplete',
@@ -39,7 +41,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'debug_toolbar',
     'django_filters',
-    # Apps #
+    #3) Apps #
     'account',
     'homeApp',
     'customers',
