@@ -11,6 +11,7 @@ router.register('talabat',api.TalabatMVS)
 router.register('record',transactions.RecordL)
 router.register('report',reports.DateLogL)
 router.register('rest',mainRest.RestL)
+router.register('rest-comulate',mainRest.RestComulate)
 
 # Urls -----------------------
 from transactions.api.urls import urls_firebase,urls_trans,urls_accounts,urls_rest,urls_reports

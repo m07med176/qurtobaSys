@@ -20,12 +20,15 @@ from customers.models import CustomerInfo, MandopInfo
 # UTILS
 from django.db.models import Q,F,Prefetch
 # ------------ SERIALIZERS -----------#
-from transactions.api.serializers import SRest ,SRestDateCalc
+from transactions.api.serializers import SRest ,SRestDateCalc,SRestDateCalcComulate
 from account.api.pagination import LargeResultsSetPagination
 
 # --------------- PYTHON UTILS ------------------#
 import datetime
 from django.db.models import Sum
+
+# swagger 
+from drf_yasg.utils import swagger_auto_schema
 # endregion MODULE
 
 # region MainRest
@@ -37,6 +40,16 @@ class RestL(viewsets.ModelViewSet):
     filterset_fields    = ['date']
     search_fields       = ["customer__seller__name"]
     ordering_fields     = ['date', 'time']
+
+class RestComulate(viewsets.ModelViewSet):
+    pagination_class = None
+    queryset            = Rest.objects.all().order_by('date','time')
+    serializer_class    = SRestDateCalcComulate
+    filter_backends     = [SearchFilter,OrderingFilter,DjangoFilterBackend]
+    filterset_fields    = ['date']
+    search_fields       = ["customer__seller__name"]
+    ordering_fields     = ['date', 'time']
+
 
 # GET REST OF SEPCIFIC SELLER
 class GetRest(APIView):
@@ -51,6 +64,7 @@ class GetRest(APIView):
         if len(rest) != 0: return str(rest[0].value)
         else: return "0"
 
+    @swagger_auto_schema( tags=["The Rest"])
     def get(self,request,name):
         return Response({"data":self.customSerializers(name)})
 
@@ -87,14 +101,16 @@ def getRestByCustomSerializer(objectData):
             
     return allData
 
-
+@swagger_auto_schema(tags=["The Rest"],method='GET')
 @api_view(['GET',])
 def getSellerRestId(request,id):
+    """get rest value of customer by id"""
     rest=Rest.objects.filter(customer__seller=id).select_related('customer').order_by('customer__area','date')
     if len(rest) == 0:return Response({"data": []})
     return Response({"data": getRestByCustomSerializer(rest)})
 
 # region Collector , Assistance , Seller
+@swagger_auto_schema(tags=["The Rest"],method='GET')
 @api_view(['GET',])
 def getAssistanceRest(request,email):
     assistant = MandopInfo.objects.filter(Q(email=email))
@@ -107,6 +123,8 @@ def getAssistanceRest(request,email):
     if len(rest) == 0:return Response({"data": [],"date":""})
     return Response({"data": getRestByCustomSerializer(rest),"date":f"أخر تحويل: {latestDate.date} {latestDate.time}"})
     
+
+@swagger_auto_schema(tags=["The Rest"],method='GET')
 @api_view(['GET',])
 def getSellerRest(request,email):
     seller = MandopInfo.objects.filter(Q(email=email))
@@ -119,12 +137,14 @@ def getSellerRest(request,email):
     if len(rest) == 0:return Response({"data": [],"date":""})
     return Response({"data": getRestByCustomSerializer(rest),"date":f"أخر تحويل: {latestDate.date} {latestDate.time}"})
     # region All Customers Main Rest
+@swagger_auto_schema(tags=["The Rest"],method='GET')
 @api_view(['GET',])
 def getAllRest(request):
     rest=Rest.objects.all().select_related('customer').order_by('customer__area','date')
     if len(rest) == 0:return Response({"data": []})
     return Response({"data": getRestByCustomSerializer(rest)})
 
+@swagger_auto_schema(tags=["The Rest"],method='GET')
 @api_view(['GET',])
 def getAllRestGte(request,value):
     rest=Rest.objects.filter(value__gte=value).select_related('customer').order_by('customer__area','date')

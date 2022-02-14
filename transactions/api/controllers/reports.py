@@ -25,10 +25,18 @@ from transactions.api.serializers import SLogDate
 
 # --------------- PYTHON UTILS ------------------#
 import datetime
+# swagger 
+from drf_yasg.utils import swagger_auto_schema
+from django.utils.decorators import method_decorator
 
+@method_decorator(name='list', 
+decorator=swagger_auto_schema(
+    operation_description="description from swagger_auto_schema via method_decorator"
+))
 class DateLogL(viewsets.ModelViewSet):
     queryset = LogDate.objects.all()
     serializer_class = SLogDate
+    
     def update(self, request, *args, **kwargs):
         super(DateLogL, self).update(request, *args, **kwargs)
         return Response({"message": "تم التعديل بنجاح","status":  True})
@@ -52,6 +60,7 @@ def get_rest(records):
         summitions+=sum
     return summitions
 
+@swagger_auto_schema(tags=["Reports"],method='GET')
 @api_view(['GET',])
 @permission_classes([IS_HEADER,])
 def getReports(request):

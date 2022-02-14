@@ -28,6 +28,8 @@ import datetime
 from django.db.models import Sum
 # endregion MODULE
 
+# swagger 
+from drf_yasg.utils import swagger_auto_schema
 
 class TalabatMVS(viewsets.ModelViewSet):
     pagination_class = LargeResultsSetPagination
@@ -37,6 +39,7 @@ class TalabatMVS(viewsets.ModelViewSet):
     filterset_fields = ['type','periority','stateTrans','date']
     search_fields = ["user__username"]
     ordering_fields = ['date', 'dateTime']
+    
     def update(self, request, *args, **kwargs):
         super(TalabatMVS, self).update(request, *args, **kwargs)
         return Response({"message": "تم تعديل الطلب بنجاح","status":  True})
