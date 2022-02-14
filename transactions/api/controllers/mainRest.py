@@ -39,7 +39,7 @@ class RestL(viewsets.ModelViewSet):
     filter_backends     = [SearchFilter,OrderingFilter,DjangoFilterBackend]
     filterset_fields    = ['date']
     search_fields       = ["customer__seller__name"]
-    ordering_fields     = ['date', 'time']
+    ordering_fields     = ['date', 'time','value']
 
 class RestLast(viewsets.ModelViewSet):
     pagination_class = None
@@ -48,7 +48,7 @@ class RestLast(viewsets.ModelViewSet):
     filter_backends     = [SearchFilter,OrderingFilter,DjangoFilterBackend]
     filterset_fields    = ['date']
     search_fields       = ["customer__seller__name"]
-    ordering_fields     = ['date', 'time']
+    ordering_fields     = ['date', 'time','value']
 
 class RestComulate(viewsets.ModelViewSet):
     pagination_class = None
@@ -57,7 +57,7 @@ class RestComulate(viewsets.ModelViewSet):
     filter_backends     = [SearchFilter,OrderingFilter,DjangoFilterBackend]
     filterset_fields    = ['date']
     search_fields       = ["customer__seller__name"]
-    ordering_fields     = ['date', 'time']
+    ordering_fields     = ['date', 'time','value']
 
 
 # GET REST OF SEPCIFIC SELLER
