@@ -52,7 +52,7 @@ class RestLast(viewsets.ModelViewSet):
 
 class RestComulate(viewsets.ModelViewSet):
     pagination_class = None
-    queryset            = Rest.objects.all().order_by('date','time')
+    queryset            = Rest.objects.all()
     serializer_class    = SRestDateCalcComulate
     filter_backends     = [SearchFilter,OrderingFilter,DjangoFilterBackend]
     filterset_fields    = ['date']
