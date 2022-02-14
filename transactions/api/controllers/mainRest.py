@@ -20,7 +20,7 @@ from customers.models import CustomerInfo, MandopInfo
 # UTILS
 from django.db.models import Q,F,Prefetch
 # ------------ SERIALIZERS -----------#
-from transactions.api.serializers import SRest ,SRestDateCalc,SRestDateCalcComulate
+from transactions.api.serializers import SRest ,SRestDateCalc,SRestDateCalcComulate,SRestDateLast
 from account.api.pagination import LargeResultsSetPagination
 
 # --------------- PYTHON UTILS ------------------#
@@ -36,6 +36,15 @@ class RestL(viewsets.ModelViewSet):
     pagination_class = None
     queryset            = Rest.objects.all().order_by('date','time')
     serializer_class    = SRestDateCalc
+    filter_backends     = [SearchFilter,OrderingFilter,DjangoFilterBackend]
+    filterset_fields    = ['date']
+    search_fields       = ["customer__seller__name"]
+    ordering_fields     = ['date', 'time']
+
+class RestLast(viewsets.ModelViewSet):
+    pagination_class = None
+    queryset            = Rest.objects.all().order_by('date','time')
+    serializer_class    = SRestDateLast
     filter_backends     = [SearchFilter,OrderingFilter,DjangoFilterBackend]
     filterset_fields    = ['date']
     search_fields       = ["customer__seller__name"]

@@ -12,6 +12,7 @@ router.register('record',transactions.RecordL)
 router.register('report',reports.DateLogL)
 router.register('rest',mainRest.RestL)
 router.register('rest-comulate',mainRest.RestComulate)
+router.register('rest-last',mainRest.RestLast)
 
 # Urls -----------------------
 from transactions.api.urls import urls_firebase,urls_trans,urls_accounts,urls_rest,urls_reports

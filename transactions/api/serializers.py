@@ -63,6 +63,15 @@ class SRestDateCalc(serializers.ModelSerializer):
                 return str(record.date)
             except Exception: # Record.DoesNotExist
                 return rest.date
+class SRestDateLast(serializers.ModelSerializer):
+    customer = SCustomerShort()
+    date = serializers.SerializerMethodField('get_last_date')
+    class Meta:
+        model = Rest
+        fields = ["id","customer","value","date","time"]
+    
+    def get_last_date(self, rest):
+            return rest.date
 
 class SRecord(serializers.ModelSerializer):
     customerData = SCustomerShort()
