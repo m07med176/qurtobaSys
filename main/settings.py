@@ -197,3 +197,13 @@ STATICFILES_DIRS = (
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
+}
