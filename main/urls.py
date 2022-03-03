@@ -34,11 +34,14 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # ROOT
     path('', include('homeApp.urls')),     
+    path('cash/',include('vcashApp.urls')),
+    path('follow/',include('FollowUpApp.urls')),
+    
     path('customers/',include('customers.urls')),
     path('dataEltogar/',include('dataEltogarApp.urls')),
     path('transactions/',include('transactions.urls')),
     path('fawryCodes/',include('fawryCodesApp.urls')),
-    path('follow/',include('FollowUpApp.urls')),
+    
 
     path('store/',include('storeApp.urls')),
     path('productsSeles/',include('productsSelesApp.urls')),

@@ -148,12 +148,8 @@ def deleteAccountManagerCustomer(request,id):
 def registerAccountManager(request):
 	if request.method == 'POST':
 		context = {}
-		email = request.data.get('email', '0').lower()
-		if validate_email(email) != None:
-			context['message'] = 'هذا الإيميل مستخدم من قبل.'
-			context['status'] = False
-			return Response(context)
 
+		# region Validation Step
 		username = request.data.get('username', '0')
 		if validate_username(username) != None:
 			context['message'] = 'هذا الإسم مستخدم من قبل.'
@@ -171,6 +167,7 @@ def registerAccountManager(request):
 			context['response'] = 'رقم المحمول هذا مستخدم من قبل.'
 			context['status'] = False
 			return Response(context)
+		# endregion Validation Step
 
 		serializers = SAccountManager(data=request.data)
 		if serializers.is_valid():

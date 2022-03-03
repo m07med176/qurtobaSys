@@ -9,7 +9,7 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 router.register('',api.UsersMVS)
 urlpatterns = [
-    # user crud
+    # region user crud
     # http://127.0.0.1:8000/account/api/users/
     path('users/', include(router.urls)),
 
@@ -17,45 +17,45 @@ urlpatterns = [
     path('login/', api.ObtainAuthTokenView.as_view(), name="login"), 
     
     # http://127.0.0.1:8000/account/api/register/
-    path('register/',api.register_account),
+    path('register/',api.register_account,name = "register"),
     
     # http://127.0.0.1:8000/account/api/properties/
     path('properties/', api.account_properties_view, name="properties"),
+
     # http://127.0.0.1:8000/account/api/properties/update/
 	path('properties/update/', api.update_account_view, name="update"),
 
-        # region General    
     # url: http://127.0.0.1:8000/account/api/state/<int:id>/
-    path('state/<int:id>/',manager.getUserState),
+    path('state/<int:id>/',manager.getUserState,name = "state"),
 
     # url: http://127.0.0.1:8000/account/api/updateActivation/<int:id>/
-    path('updateActivation/<int:id>/',manager.updateUserActivationAccountManager),
+    path('updateActivation/<int:id>/',manager.updateUserActivationAccountManager,name = "updateActivation"),
 
-    # url: http://127.0.0.1:8000/account/api/getManager/
-    path('getManager/',manager.GetAccountManage.as_view()), 
-    # endregion General
-    
+    # endregion user
+     
     # region Customers
     # http://127.0.0.1:8000/account/api/registerManagerCustomer/
-    path('registerManagerCustomer/',manager.registerAccountManagerCustomer), 
+    path('registerManagerCustomer/',manager.registerAccountManagerCustomer,name = "registerManagerCustomer"), 
 
     # url: http://127.0.0.1:8000/account/api/deleteManagerCustomer/<int:id>/
-    path('deleteManagerCustomer/<int:id>/',manager.deleteAccountManagerCustomer),
+    path('deleteManagerCustomer/<int:id>/',manager.deleteAccountManagerCustomer,name = "deleteManagerCustomer"),
 
     # url: http://127.0.0.1:8000/account/api/updateManagerCustomer/<int:id>/
-    path('updateManagerCustomer/<int:id>/',manager.updateAccountManagerCustomer),
+    path('updateManagerCustomer/<int:id>/',manager.updateAccountManagerCustomer,name = "updateManagerCustomer"),
     # endregion
 
-    # region Users
+    # region Manager Control Users  01010286080
+    # url: http://127.0.0.1:8000/account/api/getManager/
+    path('getManager/',manager.GetAccountManage.as_view(),name = "getManager"), 
+    
     # url: http://127.0.0.1:8000/account/api/registerAccountManager/
-    path('registerManager/',manager.registerAccountManager),
+    path('registerManager/',manager.registerAccountManager,name = "registerManager"),
 
     # url: http://127.0.0.1:8000/account/api/deleteManager/<int:id>/
-    path('deleteManager/<int:id>/',manager.deleteAccountManager),
-
+    path('deleteManager/<int:id>/',manager.deleteAccountManager,name = "deleteManager"),
 
     # url: http://127.0.0.1:8000/account/api/updateManager/<int:id>/
-    path('updateManager/<int:id>/',manager.updateAccountManager),
+    path('updateManager/<int:id>/',manager.updateAccountManager,name = "updateManager"),
     # endregion
 
     ]
