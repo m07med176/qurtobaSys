@@ -59,10 +59,12 @@ class TransactionsCash(models.Model):
     messagedate = models.CharField(max_length=100, blank=True, null=True)  
     note = models.TextField(blank=True, null=True)
     isSend = models.BooleanField(blank=True, null=True)
-    date = models.DateField(blank=True, null=True,default=timezone.now)
-    time = models.TimeField(blank=True, null=True,default=timezone.now)
-    datetime = models.DateTimeField(blank=True, null=True,default=timezone.now)
-    timestamp = models.DateTimeField(blank=True, null=True,default=timezone.now)
+
+    date = models.DateField(blank=True, null=True,auto_now_add=True)
+    time = models.TimeField(blank=True, null=True,auto_now_add=True)
+    datetime = models.DateTimeField(blank=True, null=True,auto_now_add=True)
+    timestamp = models.DateTimeField(blank=True, null=True,auto_now_add=True)
+    
     seller    = models.ForeignKey(MandopInfo,related_name="TransactionsCash.MandopInfo+",on_delete = models.CASCADE,null=True,blank=True)
 
     def __str__(self):return str(self.value)
