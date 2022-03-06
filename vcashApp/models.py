@@ -1,6 +1,7 @@
 from django.db import models
 from account.models import Account
 from customers.models import MandopInfo
+from django.utils import timezone
 class Device(models.Model):
     name = models.CharField(max_length=45, blank=True, null=True)
     deviceid = models.CharField(max_length=50, blank=True, null=True) 
@@ -58,10 +59,10 @@ class TransactionsCash(models.Model):
     messagedate = models.CharField(max_length=100, blank=True, null=True)  
     note = models.TextField(blank=True, null=True)
     isSend = models.BooleanField(blank=True, null=True)
-    date = models.DateField(blank=True, null=True)
-    time = models.TimeField(blank=True, null=True)
-    datetime = models.DateTimeField(blank=True, null=True)
-    timestamp = models.DateTimeField(blank=True, null=True)
+    date = models.DateField(blank=True, null=True,default=timezone.now)
+    time = models.TimeField(blank=True, null=True,default=timezone.now)
+    datetime = models.DateTimeField(blank=True, null=True,default=timezone.now)
+    timestamp = models.DateTimeField(blank=True, null=True,default=timezone.now)
     seller    = models.ForeignKey(MandopInfo,related_name="TransactionsCash.MandopInfo+",on_delete = models.CASCADE,null=True,blank=True)
 
     def __str__(self):return str(self.value)
