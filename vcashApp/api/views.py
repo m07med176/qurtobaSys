@@ -95,6 +95,7 @@ class SimMVS(viewsets.ModelViewSet):
 
 
     def create(self, request, *args, **kwargs):
+        request.data['user'] = request.user.id
         super(SimMVS, self).create(request, *args, **kwargs)
         return Response({"message": "تم إضافه الشريحة بنجاح","status":  True})
     def destroy(self, request, *args, **kwargs):
@@ -111,6 +112,7 @@ class SimLogMVS(viewsets.ModelViewSet):
         super(SimLogMVS, self).update(request, *args, **kwargs)
         return Response({"message": "تم تعديل الشريحة بنجاح","status":  True})
     def create(self, request, *args, **kwargs):
+        request.data['user'] = request.user.id
         super(SimLogMVS, self).create(request, *args, **kwargs)
         return Response({"message": "تم إضافه الشريحة بنجاح","status":  True})
     def destroy(self, request, *args, **kwargs):
@@ -148,6 +150,7 @@ class DeviceMVS(viewsets.ModelViewSet):
         super(DeviceMVS, self).update(request, *args, **kwargs)
         return Response({"message": "تم تعديل الجهاز بنجاح","status":  True})
     def create(self, request, *args, **kwargs):
+        request.data['user'] = request.user.id
         super(DeviceMVS, self).create(request, *args, **kwargs)
         return Response({"message": "تم إضافه الجهاز بنجاح","status":  True})
     def destroy(self, request, *args, **kwargs):
@@ -174,13 +177,12 @@ class TransactionsCashMVS(viewsets.ModelViewSet):
         super(TransactionsCashMVS, self).update(request, *args, **kwargs)
         return Response({"message": "تم تعديل التحويل بنجاح","status":  True})
     def create(self, request, *args, **kwargs):
+        request.data['user'] = request.user.id
         super(TransactionsCashMVS, self).create(request, *args, **kwargs)
         return Response({"message": "تم إضافه التحويل بنجاح","status":  True})
     def destroy(self, request, *args, **kwargs):
         super(TransactionsCashMVS, self).destroy(request, *args, **kwargs)
         return Response({"message": "تم حذف التحويل بنجاح","status":  True})
-
-
 
 """
 class SimLogMVS(viewsets.ModelViewSet):
