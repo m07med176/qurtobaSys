@@ -44,7 +44,7 @@ urlpatterns = [
     path('updateManagerCustomer/<int:id>/',manager.updateAccountManagerCustomer,name = "updateManagerCustomer"),
     # endregion
 
-    # region Manager Control Users  01010286080
+    # region Manager Control Users
     # url: http://127.0.0.1:8000/account/api/getManager/
     path('getManager/',manager.GetAccountManage.as_view(),name = "getManager"), 
     
@@ -57,6 +57,9 @@ urlpatterns = [
     # url: http://127.0.0.1:8000/account/api/updateManager/<int:id>/
     path('updateManager/<int:id>/',manager.updateAccountManager,name = "updateManager"),
     # endregion
+
+    # region New Design
+    # endregion New Design
 
     ]
 

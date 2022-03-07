@@ -109,16 +109,16 @@ class STransactionsCash(serializers.ModelSerializer):
         fields = '__all__'
 
 class STransactionsCashCollection(serializers.ModelSerializer):
-    seller = serializers.SerializerMethodField('get_username')
-    device = serializers.SerializerMethodField('get_device')
-    sim = serializers.SerializerMethodField('get_sim')
+    seller  = serializers.SerializerMethodField('get_username')
+    device  = serializers.SerializerMethodField('get_device')
+    sim     = serializers.SerializerMethodField('get_sim')
     class Meta:
         model = TransactionsCash
         fields = '__all__'
     
     
     def get_username(self, tranc):
-        try: return tranc.seller.username
+        try: return tranc.user.username
         except Exception: return ""
 
     def get_device(self, tranc):

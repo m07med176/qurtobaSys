@@ -18,6 +18,8 @@ from customers.models import CustomerInfo ,MandopInfo
 # UTILS
 from django.db.models import Q
 
+from customers.api.serializers import SMandopShort
+
 class Mandop_InfoL(viewsets.ModelViewSet):
     queryset = MandopInfo.objects.all()
     serializer_class = SMandopInfo_Normal
@@ -42,13 +44,19 @@ def getSellerByAccountNoOrName(request,name):
 # endregion Get By Number Or Name
 
 # region All DATA
-# Get All Seller
+    # Get All Seller
 @api_view(['GET',])
 def getAllSellers(request):
     sellers = MandopInfo.objects.all()
     serializer = SMandopInfo_Normal(sellers, many=True)
     return Response({"results":serializer.data})
 
+    # Get All Seller Short
+@api_view(['GET',])
+def getAllSellersShort(request):
+    sellers = MandopInfo.objects.all()
+    serializer = SMandopShort(sellers, many=True)
+    return Response({"results":serializer.data})
 # endregion All DATA
 
 # region get List
