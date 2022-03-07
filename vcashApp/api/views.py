@@ -90,7 +90,6 @@ class SimMVS(viewsets.ModelViewSet):
         return super(SimMVS, self).list(request, *args, **kwargs)
 
     def retrieve(self, request, *args, **kwargs):
-        self.serializer_class = SSimCollection
         return super(SimMVS, self).retrieve(request, *args, **kwargs)
 
 
