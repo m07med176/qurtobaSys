@@ -40,7 +40,36 @@ class SSimCollection(serializers.ModelSerializer):
                 return ""
             return username
     
-
+class SSimCollectionRetrieve(serializers.ModelSerializer):
+    month = serializers.SerializerMethodField('get_month')
+    day = serializers.SerializerMethodField('get_day')
+    class Meta:
+        model = Sim
+        fields = ['phone','number','note','value','isused','device','user','month','day']
+    
+    def get_month(self, sim):
+        value = TransactionsCash.objects.filter(sim=sim,isSend=True,datetime__year=datetime.datetime.now().year,datetime__month=datetime.datetime.now().month).aggregate(Sum('value'))['value__sum']
+        return value if value != None else 0
+    
+    def get_day(self, sim):
+        """ get transactions of this sim in current day """
+        value = TransactionsCash.objects.filter(sim=sim,isSend=True,date=datetime.datetime.now().date()).aggregate(Sum('value'))['value__sum']
+        return value if value != None else 0
+    
+    def get_username(self, sim):
+            try:
+                username = sim.user.username
+            except Exception:
+                return ""
+            return username
+    
+    def get_device(self, sim):
+            try:
+                username = sim.device.name
+            except Exception:
+                return ""
+            return username
+    
 class SSimLog(serializers.ModelSerializer):
     class Meta:
         model = SimLog

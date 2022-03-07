@@ -19,7 +19,9 @@ from rest_framework import viewsets  			 # VIEWSETS
 from rest_framework.views import APIView  		 # APIVIEW
 # ------------ SERIALIZERS AND MODEL -----------#
 from vcashApp.models import SimLog,Sim,Device,TransactionsCash
-from vcashApp.api.serializers import SSim,SSimLog,SDevice,STransactionsCash,SSimCollection,SDeviceCollection,STransactionsCashCollection
+from vcashApp.api.serializers import (
+    SSim,SSimLog,SDevice,STransactionsCash,SSimCollection,SDeviceCollection,
+    STransactionsCashCollection,SSimCollectionRetrieve)
 
 @api_view(['POST',])
 def insertAndRemoveSim(request):
@@ -90,6 +92,7 @@ class SimMVS(viewsets.ModelViewSet):
         return super(SimMVS, self).list(request, *args, **kwargs)
 
     def retrieve(self, request, *args, **kwargs):
+        self.serializer_class = SSimCollectionRetrieve
         return super(SimMVS, self).retrieve(request, *args, **kwargs)
 
 
