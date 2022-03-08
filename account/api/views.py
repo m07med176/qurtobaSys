@@ -198,8 +198,10 @@ def loginVCashApp(request):
 	device_name = request.data.get('device_name','')
 	account = authenticate(phone=phone, password=password)
 	if account:
-		try: Device.objects.get(imei=device_id)
-		except Account.DoesNotExist: Device(name=device_name, user =account, imei=device_id).save()
+		Device.objects.get_or_create( 
+			name=device_name, 
+			user =account, 
+			defaults={'imei':device_id} )
 		return Response(SAccountResponse(account).data)
 	else:
 		return Response({'state': False,'message':'يوجد مشكلة حدثت'})
@@ -212,10 +214,12 @@ def userStateVCashApp(request):
 		device_id = request.query_params.get('device_id','')
 		device_name = request.query_params.get('device_name','')
 		account = Account.objects.get(pk=id)
-
-		try: Device.objects.get(imei=device_id)
-		except Account.DoesNotExist: Device(name=device_name, user =account, imei=device_id).save()
-
+		
+		Device.objects.get_or_create( 
+			name=device_name, 
+			user =account, 
+			defaults={'imei':device_id} )
+			
 		return Response(SAccountResponse(account).data)
 	except Account.DoesNotExist:
 		return Response({'state': False,'message':'لا يوجد مستخدم'})
