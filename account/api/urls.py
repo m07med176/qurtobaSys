@@ -9,6 +9,12 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 router.register('',api.UsersMVS)
 urlpatterns = [
+    # region VCash App
+    path('login-vcash/', api.loginVCashApp, name="login-vcash"), 
+    path('state-vcash/', api.userStateVCashApp, name="state-vcash"), 
+    # endregion VCash App
+
+    
     # region user crud
     # http://127.0.0.1:8000/account/api/users/
     path('users/', include(router.urls)),

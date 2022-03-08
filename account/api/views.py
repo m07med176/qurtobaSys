@@ -27,6 +27,7 @@ from account.api.serializers import (
 from rest_framework.authtoken.models import Token
 # ------------ MODELS -----------#
 from account.models import Account
+from vcashApp.models import Device
 
 
 class UsersMVS(viewsets.ModelViewSet):
@@ -185,6 +186,44 @@ def validate_account_no(account_no):
 		return account_no
 
 
+
+# region Vodafone Cash 
+# LOGIN
+@api_view(['POST', ])
+@permission_classes((AllowAny, ))
+def loginVCashApp(request):
+	phone = request.data.get('phone','')
+	password = request.data.get('password','')
+	device_id = request.data.get('device_id','')
+	device_name = request.data.get('device_name','')
+	account = authenticate(phone=phone, password=password)
+	if account:
+		print(device_id)
+		print(device_name)
+		Device.objects.update_or_create( 
+			name=device_name, 
+			user =account, 
+			defaults={'imei':device_id} )
+		return Response(SAccountResponse(account).data)
+	else:
+		return Response({'state': False,'message':'يوجد مشكلة حدثت'})
+
+# STATE
+@api_view(['GET', ])
+def userStateVCashApp(request):
+	try:
+		id = request.query_params.get('id','')
+		device_id = request.query_params.get('device_id','')
+		device_name = request.query_params.get('device_name','')
+		account = Account.objects.get(pk=id)
+		Device.objects.update_or_create( 
+					name=device_name, 
+					user =account, 
+					defaults={'imei':device_id} )
+		return Response(SAccountResponse(account).data)
+	except Account.DoesNotExist:
+		return Response({'state': False,'message':'لا يوجد مستخدم'})
+# endregion Vodafone Cash 
 # from account.api.pagination import LargeResultsSetPagination
 # class UsersMVS(viewsets.ModelViewSet):
 # 	queryset = Account.objects.get_queryset().order_by('id')

@@ -59,7 +59,8 @@ class RecordL(viewsets.ModelViewSet):
 
                 Rest.objects.update_or_create(
                 customer_id=customer_id, 
-                defaults={ 'value' :sum, 'date'  :date, 'time'  :time } )
+                defaults={ 'value' :sum, 'date'  :date, 'time'  :time } 
+                )
 
                 return Response({"message": "تم التسجيل بنجاح","status":  True})
             else:
