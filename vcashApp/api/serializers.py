@@ -51,7 +51,7 @@ class SSimCollectionRetrieve(serializers.ModelSerializer):
     day = serializers.SerializerMethodField('get_day')
     class Meta:
         model = Sim
-        fields = ['phone','number','note','value','isused','device','user','month','day']
+        fields = ['id','phone','number','note','value','isused','device','user','month','day']
     
     def get_month(self, sim):
         value = TransactionsCash.objects.filter(sim=sim,isSend=True,datetime__year=datetime.datetime.now().year,datetime__month=datetime.datetime.now().month).aggregate(Sum('value'))['value__sum']

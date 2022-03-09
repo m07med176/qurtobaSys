@@ -127,7 +127,7 @@ class DeviceMVS(viewsets.ModelViewSet):
     filter_backends     = [OrderingFilter,DjangoFilterBackend]
     filterset_fields    = '__all__'
     ordering_fields     = '__all__'
-    lookup_field        = 'imei'
+    #lookup_field        = 'imei'
 
     def list(self, request, *args, **kwargs):
         self.serializer_class = SDeviceCollection
