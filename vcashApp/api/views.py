@@ -163,7 +163,7 @@ class TransactionsCashMVS(viewsets.ModelViewSet):
     queryset = TransactionsCash.objects.all()
     serializer_class    = STransactionsCash
     filter_backends     = [SearchFilter,OrderingFilter,DjangoFilterBackend]
-    filterset_fields    = ["device","sim","sim__isused","sim__phone","sim__number","user","user__username","customer","value","isSend"]
+    filterset_fields    = ["device","sim","sim__isused","sim__phone","sim__number","user","user__username","customer","value","isSend","seller"]
     search_fields       = ["note","customer","operationno"]
     ordering_fields     = ['timestamp','datetime','time','value', 'rest']
     

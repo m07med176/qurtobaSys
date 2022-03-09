@@ -103,7 +103,7 @@ class STransactionsCash(serializers.ModelSerializer):
         fields = '__all__'
 
 class STransactionsCashCollection(serializers.ModelSerializer):
-    seller  = serializers.SerializerMethodField('get_username')
+    user  = serializers.SerializerMethodField('get_username')
     device  = serializers.SerializerMethodField('get_device')
     sim     = serializers.SerializerMethodField('get_sim')
     class Meta:
