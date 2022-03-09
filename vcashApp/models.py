@@ -4,9 +4,9 @@ from customers.models import MandopInfo
 from django.utils import timezone
 class Device(models.Model):
     name = models.CharField(max_length=45, blank=True, null=True)
-    deviceid = models.CharField(max_length=50, blank=True, null=True) 
-    imei = models.CharField(max_length=50, blank=True, null=True) 
-    baddress = models.CharField(max_length=50, blank=True, null=True) 
+    deviceid = models.CharField(unique = True,max_length=50, blank=True, null=True) 
+    imei = models.CharField(unique = True,max_length=50, blank=True, null=True) 
+    baddress = models.CharField(unique = True,max_length=50, blank=True, null=True) 
     user = models.ForeignKey(Account,related_name="Device.Account+", on_delete = models.CASCADE,blank=True, null=True)
 
     def __str__(self):
