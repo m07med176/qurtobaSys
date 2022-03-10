@@ -2,6 +2,7 @@ from django.db import models
 from account.models import Account
 from customers.models import MandopInfo
 from django.utils import timezone
+
 class Device(models.Model):
     name = models.CharField(max_length=45, blank=True, null=True)
     deviceid = models.CharField(unique = True,max_length=50, blank=True, null=True) 

@@ -7,6 +7,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from django.urls import reverse
 
+
+from django_filters import rest_framework as filters
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.authentication import TokenAuthentication
@@ -50,7 +52,14 @@ def insertAndRemoveSim(request):
             oSim.dateremove = date
             oSim.save()
 
+            oSi = oSim.sim
+            oSi.isused = False
+            oSi.save()
+            cSim.isused = True
+            cSim.save()
             # insert new sim
+            
+
             nSim = SimLog()
             nSim.sim = cSim
             nSim.value = cSim.value
@@ -92,6 +101,9 @@ class SimMVS(viewsets.ModelViewSet):
         return super(SimMVS, self).list(request, *args, **kwargs)
 
     def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.isused = True
+        instance.save()
         self.serializer_class = SSimCollectionRetrieve
         return super(SimMVS, self).retrieve(request, *args, **kwargs)
 
@@ -159,11 +171,19 @@ class DeviceMVS(viewsets.ModelViewSet):
         super(DeviceMVS, self).destroy(request, *args, **kwargs)
         return Response({"message": "تم حذف الجهاز بنجاح","status":  True})
 
+class DateFilter(filters.FilterSet):
+    month = filters.NumberFilter(field_name='date__month', lookup_expr='exact')
+    year = filters.NumberFilter(field_name='date__year', lookup_expr='exact')
+
+    class Meta:
+        model = TransactionsCash
+        fields = ["device","sim","sim__isused","sim__phone","sim__number","user","user__username","customer","value","isSend","seller","date",'month','year']
+
 class TransactionsCashMVS(viewsets.ModelViewSet):
     queryset = TransactionsCash.objects.all()
     serializer_class    = STransactionsCash
     filter_backends     = [SearchFilter,OrderingFilter,DjangoFilterBackend]
-    filterset_fields    = ["device","sim","sim__isused","sim__phone","sim__number","user","user__username","customer","value","isSend","seller"]
+    filter_class        = DateFilter
     search_fields       = ["note","customer","operationno"]
     ordering_fields     = ['timestamp','datetime','time','value', 'rest']
     
