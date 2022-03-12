@@ -69,6 +69,11 @@ class CustomerInfo(models.Model):
 
     def __str__(self):
         return str(self.name)
+    
+    def save(self): 
+      self.deviceNo = CustomerInfo.objects.all().order_by('deviceNo').last().deviceNo+1
+      super(CustomerInfo, self).save()
+
     class Meta:
         verbose_name = "عميل"
         verbose_name_plural = "العملاء"
