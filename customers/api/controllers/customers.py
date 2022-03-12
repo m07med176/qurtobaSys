@@ -25,7 +25,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
 
 class Customer_infoL(viewsets.ModelViewSet):
-    queryset = CustomerInfo.objects.all()
+    queryset = CustomerInfo.objects.all().order_by('-deviceNo')
     serializer_class = SCustomerInfo
     filter_backends  =  [SearchFilter,OrderingFilter,DjangoFilterBackend]
     filterset_fields =  ['id','name','surName','shopName','deviceNo','shopKind','phoneNo','address','area','accounts','accounts_data','grade','assistant','assistant__name','seller','seller__name','user','date','time','notes','areas']
@@ -43,8 +43,7 @@ class Customer_infoL(viewsets.ModelViewSet):
                 self.deviceNo = CustomerInfo.objects.all().order_by('deviceNo').last().deviceNo+1
                 super(Customer_infoL, self).create(request, *args, **kwargs)
                 return Response({"message": "تم إضافة العميل بنجاح","status":  True})
-            else:
-                return Response({"message": "غير مسموح لك بالإضافة","status":  False})
+            else: return Response({"message": "غير مسموح لك بالإضافة","status":  False})
 
 
 class GetCustomersDataBySeller(viewsets.ReadOnlyModelViewSet):
