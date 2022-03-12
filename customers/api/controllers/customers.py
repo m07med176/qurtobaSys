@@ -40,7 +40,7 @@ class Customer_infoL(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
             if request.user.is_admin:
-                self.deviceNo = CustomerInfo.objects.all().order_by('deviceNo').last().deviceNo+1
+                self.get_object().deviceNo = CustomerInfo.objects.all().order_by('deviceNo').last().deviceNo+1
                 super(Customer_infoL, self).create(request, *args, **kwargs)
                 return Response({"message": "تم إضافة العميل بنجاح","status":  True})
             else: return Response({"message": "غير مسموح لك بالإضافة","status":  False})
