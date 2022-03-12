@@ -62,7 +62,7 @@ class CustomerInfo(models.Model):
     user  = models.ForeignKey(Account,related_name="CustomerInfo.user+",on_delete=models.SET_NULL,verbose_name="تابع لحساب",null=True,blank=True)
     # metadata
     date        = models.DateField(null=True,verbose_name = "Date",default=timezone.now)
-    time        = models.TimeField(null=True,verbose_name = "Time",default=timezone.now) #default=date.today
+    time        = models.TimeField(null=True,verbose_name = "Time",default=timezone.now)            #default=date.today
     notes       = models.TextField(max_length=150,verbose_name="الملاحظات",null=True,blank=True)
 
     areas       = models.ForeignKey(Areas,related_name="CustomerInfo.areas+",on_delete = models.PROTECT,verbose_name="إسم المنطقة",null=True,blank=True)
@@ -70,9 +70,9 @@ class CustomerInfo(models.Model):
     def __str__(self):
         return str(self.name)
     
-    def save(self): 
+    def save(self, *args, **kwargs): 
       self.deviceNo = CustomerInfo.objects.all().order_by('deviceNo').last().deviceNo+1
-      super(CustomerInfo, self).save()
+      super(CustomerInfo, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = "عميل"
