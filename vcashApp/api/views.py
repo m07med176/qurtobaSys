@@ -40,11 +40,12 @@ def insertAndRemoveSim(request):
     """
     number = request.query_params.get('number','')
     try:
-        cSim = Sim.objects.get(phone = number)
-        oSim = SimLog.objects.all().last()
         date  = datetime.datetime.now().date()
         time  = datetime.datetime.now().time()
-        datetime  = datetime.datetime.now()
+        dateTime  = datetime.datetime.now()
+        cSim = Sim.objects.get(phone = number)
+        oSim = SimLog.objects.all().last()
+
 
         if oSim == None:  # if there is no log
             cSim.isused = True
@@ -54,15 +55,15 @@ def insertAndRemoveSim(request):
             nSim.sim = cSim
             nSim.value = cSim.value
             nSim.timeinsert = time
-            nSim.datetimeinsert = datetime
+            nSim.datetimeinsert = dateTime
             nSim.dateinsert = date
             nSim.save()
             return Response({"result":'تم تغيير الشريحه بنجاح','status':True})
-            
+
         if oSim.sim.phone != cSim.phone:
             # update remove
             oSim.timeremove = time
-            oSim.datetimeremove = datetime
+            oSim.datetimeremove = dateTime
             oSim.dateremove = date
             oSim.save()
 
@@ -77,7 +78,7 @@ def insertAndRemoveSim(request):
             nSim.sim = cSim
             nSim.value = cSim.value
             nSim.timeinsert = time
-            nSim.datetimeinsert = datetime
+            nSim.datetimeinsert = dateTime
             nSim.dateinsert = date
             nSim.save()
             return Response({"result":'تم تغيير الشريحه بنجاح','status':True})
