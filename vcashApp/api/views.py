@@ -38,7 +38,7 @@ def insertAndRemoveSim(request):
     4- update remove record date ,time and datetime of last number
     5 - record insert record date,time and datetime of new number
     """
-    number = request.data.get('number','')
+    number = request.query_params.get('number','')
     try:
         cSim = Sim.objects.get(phone = number)
         oSim = SimLog.objects.all().last()
