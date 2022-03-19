@@ -146,6 +146,7 @@ def getSellerRest(request,email):
     if len(rest) == 0:return Response({"data": [],"date":""})
     return Response({"data": getRestByCustomSerializer(rest),"date":f"أخر تحويل: {latestDate.date} {latestDate.time}"})
     # region All Customers Main Rest
+    
 @swagger_auto_schema(tags=["The Rest"],method='GET')
 @api_view(['GET',])
 def getAllRest(request):

@@ -53,6 +53,7 @@ class Record(models.Model):
         ("الدفع", "الدفع"),
         ]
     type            = models.CharField(max_length=50,choices=accounts,null=False,verbose_name = "نوع الحساب",default=1)
+    accountNumber   = models.CharField(max_length=50,blank=True,null=True,verbose_name = "رقم الحساب")
     rest            = models.FloatField(default=0,blank=True,null=True,verbose_name="المتبقى")
     value           = models.FloatField(blank=False,null=False,verbose_name="المبلغ")
     isDone          = models.BooleanField(default=False,blank=True,null=True,verbose_name="انتهاء السداد")
