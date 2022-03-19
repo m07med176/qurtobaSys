@@ -29,7 +29,7 @@ class Customer_infoL(viewsets.ModelViewSet):
     serializer_class = SCustomerInfo
     filter_backends  =  [SearchFilter,OrderingFilter,DjangoFilterBackend]
     filterset_fields =  ['id','name','surName','shopName','deviceNo','shopKind','phoneNo','address','area','accounts','accounts_data','grade','assistant','assistant__name','seller','seller__name','user','date','time','notes','areas']
-    search_fields    =  ["^name","=grade","^seller__name","^assistant__name","=deviceNo"]
+    search_fields    =  ["^name","=grade","^seller__name","^assistant__name","=deviceNo","$accounts"]
     ordering_fields  =  ['id','name','surName','shopName','deviceNo','shopKind','phoneNo','address','area','accounts','accounts_data','grade','assistant','seller','user','date','time','notes','areas']
     def update(self, request, *args, **kwargs):
         if request.user.is_admin:
