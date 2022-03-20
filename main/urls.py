@@ -19,25 +19,25 @@ admin.site.site_title = 'الأشباح للإتصالات'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # ROOT
+
     path('', include('homeApp.urls')),     
     path('cash/',include('vcashApp.urls')),
     path('follow/',include('FollowUpApp.urls')),
     
     path('customers/',include('customers.urls')),
-    path('dataEltogar/',include('dataEltogarApp.urls')),
     path('transactions/',include('transactions.urls')),
-    path('fawryCodes/',include('fawryCodesApp.urls')),
-    
 
+    path('sellers/',include('sellersApp.urls')),
     path('store/',include('storeApp.urls')),
     path('productsSeles/',include('productsSelesApp.urls')),
     path('fawrySeles/',include('fawrySelesApp.urls')),
-    path('sellers/',include('sellersApp.urls')),
+
+    path('fawryCodes/',include('fawryCodesApp.urls')),
+    path('dataEltogar/',include('dataEltogarApp.urls')),
     path('code/',include('fawryCodesApp.api.urls','fawry_api')),
     path('shakawa/', include('shakawaApp.urls')),
 
-    # ACCOUNTS
+    # region ACCOUNTS
     path('account/', include('account.urls')),
     path('register/',register_view,name= "register"),
     path('logout/',logout_view,name= "logout"),
@@ -50,6 +50,7 @@ urlpatterns = [
     path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='password_reset/password_reset_complete.html'),name='password_reset_complete'),
     path('search/', account_search_view, name="search"),
+    # endregion ACCOUNTS
 ]
 
 

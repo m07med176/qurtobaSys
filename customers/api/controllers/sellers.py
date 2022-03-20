@@ -47,7 +47,7 @@ def getSellerByAccountNoOrName(request,name):
     # Get All Seller
 @api_view(['GET',])
 def getAllSellers(request):
-    sellers = MandopInfo.objects.all()
+    sellers = MandopInfo.objects.all().order_by('name')
     serializer = SMandopInfo_Normal(sellers, many=True)
     return Response({"results":serializer.data})
 
