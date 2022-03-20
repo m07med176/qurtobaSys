@@ -160,6 +160,27 @@ def getAllRestGte(request,value):
     rest=Rest.objects.filter(value__gte=value).select_related('customer').order_by('customer__area','date')
     if len(rest) == 0:return Response({"data": []})
     return Response({"data": getRestByCustomSerializer(rest)})
+
+
+@swagger_auto_schema(tags=["The Rest"],method='GET')
+@api_view(['GET',])
+def getDues(request):
+    gte = request.query_params.get("gte","null")
+    repo = request.query_params.get("repo","null")
+    if gte == "null" and repo == "null":
+        rest=Rest.objects.all().select_related('customer').order_by('customer__area','date')
+    if gte != "null" and repo == "null":
+        rest=Rest.objects.filter(value__gte=gte).select_related('customer').order_by('customer__area','date')
+    if gte == "null" and repo != "null":
+        print(repo)
+        rest=Rest.objects.filter(customer__seller=int(repo)).select_related('customer').order_by('customer__area','date')
+    if gte != "null" and repo != "null":
+        print(gte,repo)
+        rest=Rest.objects.filter(customer__seller=repo,value__gte=gte).select_related('customer').order_by('customer__area','date')
+    
+    if len(rest) == 0:return Response({"data": []})
+    return Response({"data": getRestByCustomSerializer(rest)})
+
     # endregion
 # endregion
 # endregion MainRest
