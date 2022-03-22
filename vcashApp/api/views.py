@@ -131,8 +131,8 @@ class SimMVS(viewsets.ModelViewSet):
         return Response({"message": "تم حذف الشريحة بنجاح","status":  True})
 
 class SimLogMVS(viewsets.ModelViewSet):
-    queryset = SimLog.objects.all()
-    serializer_class = SSimLog
+    queryset            = SimLog.objects.all()
+    serializer_class    = SSimLog
     filter_backends     = [OrderingFilter,DjangoFilterBackend]
     filterset_fields    = '__all__'
     ordering_fields     = '__all__'
@@ -158,7 +158,6 @@ class DeviceMVS(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         self.serializer_class = SDeviceCollection
         return super(DeviceMVS, self).list(request, *args, **kwargs)
-
     def retrieve(self, request, *args, **kwargs):
         try:
             data = Device.objects.get(imei=kwargs[self.lookup_field])
@@ -172,8 +171,6 @@ class DeviceMVS(viewsets.ModelViewSet):
             data.user = request.user
             data.save()
             return Response(SDeviceCollection(data,many=False).data)
-
-
     def update(self, request, *args, **kwargs):
         super(DeviceMVS, self).update(request, *args, **kwargs)
         return Response({"message": "تم تعديل الجهاز بنجاح","status":  True})

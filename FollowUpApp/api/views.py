@@ -10,6 +10,8 @@ from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.filters import SearchFilter,OrderingFilter
+from django_filters import rest_framework as filters
+
 from django_filters.rest_framework import DjangoFilterBackend
 from account.api.pagination import LargeResultsSetPagination
 from FollowUpApp.api.pagination import CustomPagination
@@ -41,23 +43,44 @@ class UsersMVS(viewsets.ModelViewSet):
         super(UsersMVS, self).destroy(request, *args, **kwargs)
         return Response({"message": "تم حذف المستخدم بنجاح","status":  True})
 
+class DateFilter(filters.FilterSet):
+    month 	= filters.NumberFilter(field_name='day__month', lookup_expr='exact')
+    year 	= filters.NumberFilter(field_name='day__year', lookup_expr='exact')
+    class Meta:
+        model = FollowUp
+        fields = [
+			"dateTime",
+			"user__username",
+			"user__id",
+			"user__email",
+			"day",
+			"startTime",
+			"endTime",
+			"duration",
+			"dateTime",
+			"transport",
+			'month',
+			'year' ]
 
+# queryset = FollowUp.objects.filter(dateTime__month=int(datetime.now().date().month),dateTime__year=int(datetime.now().date().year))
 class FollowUpMVS(viewsets.ModelViewSet):
 	permission_classes  = [IsAuthenticated, ]
 	pagination_class  	= CustomPagination
-	queryset 			= FollowUp.objects.filter(dateTime__month=int(datetime.now().date().month),dateTime__year=int(datetime.now().date().year))
+	queryset 			= FollowUp.objects.all()
 	serializer_class 	= SFollowUpAll
 	filter_backends 	= [SearchFilter,OrderingFilter,DjangoFilterBackend]
-	filterset_fields 	= ["dateTime","user__username","user__id","user__email","day","startTime","endTime","duration","dateTime","transport"]
+	filter_class        = DateFilter
 	search_fields 		= ["user__username","notes"]
 	ordering_fields 	= ['dateTime','duration','user__email',"user__id", 'user__username',"transport"]
 
 	def update(self, request, *args, **kwargs):
 		super(FollowUpMVS, self).update(request, *args, **kwargs)
 		return Response({"message": "تم التعديل بنجاح","status":  True})
+
 	def create(self, request, *args, **kwargs):
 		super(FollowUpMVS, self).create(request, *args, **kwargs)
 		return Response({"message": "تم الإضافة بنجاح","status":  True})
+
 	def destroy(self, request, *args, **kwargs):
 		super(FollowUpMVS, self).destroy(request, *args, **kwargs)
 		return Response({"message": "تم الحذف بنجاح","status":  True})
