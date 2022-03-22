@@ -3,19 +3,20 @@ from rest_framework.response import Response
 from datetime import datetime
 from calendar import monthrange
 
-
 class CustomPagination(PageNumberPagination):
     page_size = 60
     page_size_query_param = 'page_size'
     max_page_size = 60
 
+        
 
-    def get_paginated_response(self, data,request):
-        month = request.query_params.get("month",datetime.now().date().month)
-        year =  request.query_params.get("year",datetime.now().date().year)
-        days  = monthrange(year=year,month= month)[1]
+    def get_paginated_response(self, data):
+        month = self.request.query_params.get("month",str(datetime.now().date().month))
+        year =  self.request.query_params.get("year",str(datetime.now().date().year))
+        days  = monthrange(year=int(year),month= int(month))[1]
 
-        constantDuration = [str(datetime.now().date().year)+"-"+str(datetime.now().date().month).zfill(2)+"-"+str(i).zfill(2) for i in range(1,days+1)]
+        constantDuration = [year+"-"+month.zfill(2)+"-"+str(i).zfill(2) for i in range(1,days+1)]
+        print(month,year,days,len(constantDuration))
 
         dataL = [d["day"] for d in data]
         customData = []
