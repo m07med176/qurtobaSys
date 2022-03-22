@@ -8,15 +8,18 @@ class CustomPagination(PageNumberPagination):
     page_size = 60
     page_size_query_param = 'page_size'
     max_page_size = 60
-    month = datetime.now().date().month
-    year = datetime.now().date().year
-    days  = monthrange(year=year,month= month)[1]
-    constantDuration = [str(datetime.now().date().year)+"-"+str(datetime.now().date().month).zfill(2)+"-"+str(i).zfill(2) for i in range(1,days+1)]
 
-    def get_paginated_response(self, data):
+
+    def get_paginated_response(self, data,request):
+        month = request.query_params.get("month",datetime.now().date().month)
+        year =  request.query_params.get("year",datetime.now().date().year)
+        days  = monthrange(year=year,month= month)[1]
+
+        constantDuration = [str(datetime.now().date().year)+"-"+str(datetime.now().date().month).zfill(2)+"-"+str(i).zfill(2) for i in range(1,days+1)]
+
         dataL = [d["day"] for d in data]
         customData = []
-        for date in self.constantDuration:
+        for date in constantDuration:
             if date in dataL:
                 item = data[dataL.index(date)]
             else:
