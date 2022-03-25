@@ -209,10 +209,27 @@ class TransactionsCashMVS(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         super(TransactionsCashMVS, self).update(request, *args, **kwargs)
         return Response({"message": "تم تعديل التحويل بنجاح","status":  True})
+
     def create(self, request, *args, **kwargs):
         request.data['user'] = request.user.id
-        super(TransactionsCashMVS, self).create(request, *args, **kwargs)
-        return Response({"message": "تم إضافه التحويل بنجاح","status":  True})
+        
+        obj = TransactionsCashMVS.objects.filter(
+            customer = request.data.get("customer",""),
+            value=request.data.get("value",""),
+            date = request.data.get("date",""),
+            device=request.data.get("device",""),
+            sim=request.data.get("sim",""),
+            user=request.user.id,
+            isSend=True)
+        if len(obj) == 0:
+            super(TransactionsCashMVS, self).create(request, *args, **kwargs)
+            return Response({"message": "تم إضافه التحويل بنجاح","status":  True})
+        else:
+            if True if len([ i for i in [( datetime.datetime.now() - o.datetime ).total_seconds() <= 60 for o in obj ] if i]) == 0 else False:
+                super(TransactionsCashMVS, self).create(request, *args, **kwargs)
+                return Response({"message": "تم إضافه التحويل بنجاح","status":  True})
+
+        
     def destroy(self, request, *args, **kwargs):
         super(TransactionsCashMVS, self).destroy(request, *args, **kwargs)
         return Response({"message": "تم حذف التحويل بنجاح","status":  True})
