@@ -213,21 +213,23 @@ class TransactionsCashMVS(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         request.data['user'] = request.user.id
         
-        obj = TransactionsCashMVS.objects.filter(
+        obj = TransactionsCash.objects.filter(
             customer = request.data.get("customer",""),
             value=request.data.get("value",""),
-            date = request.data.get("date",""),
+            date = str(datetime.datetime.now().date()),
             device=request.data.get("device",""),
             sim=request.data.get("sim",""),
             user=request.user.id,
             isSend=True)
+            
         if len(obj) == 0:
             super(TransactionsCashMVS, self).create(request, *args, **kwargs)
             return Response({"message": "تم إضافه التحويل بنجاح","status":  True})
         else:
-            if True if len([ i for i in [( datetime.datetime.now() - o.datetime ).total_seconds() <= 60 for o in obj ] if i]) == 0 else False:
+            if True if len([ i for i in [( datetime.datetime.now() - o.datetime ).total_seconds() <= 30 for o in obj ] if i]) == 0 else False:
                 super(TransactionsCashMVS, self).create(request, *args, **kwargs)
                 return Response({"message": "تم إضافه التحويل بنجاح","status":  True})
+        return Response({"message": "التحويل متكرر","status":  False})
 
         
     def destroy(self, request, *args, **kwargs):
