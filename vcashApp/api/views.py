@@ -98,6 +98,10 @@ def updateCoast(request):
         return Response({"result":'لم يتم تسجيل هذه الشريحه','status':False})
     return Response({"result":'تم تحديث الرصيد','status':True})
 
+@api_view(['GET',])
+def getPhoneList(request):
+    return Response([i['customer'] for i in  TransactionsCash.objects.all().values('customer').order_by('customer').distinct('customer')])
+    
 class SimMVS(viewsets.ModelViewSet):
     queryset = Sim.objects.all()
     serializer_class = SSim

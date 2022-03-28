@@ -10,6 +10,7 @@ router.register('device',api.DeviceMVS)
 urlpatterns = [
     path('', include(router.urls)),
     path('update-coast/',api.updateCoast,name = 'update-coast'),
-    path('simLogInset/',api.insertAndRemoveSim,name = 'simLogInset')
+    path('simLogInset/',api.insertAndRemoveSim,name = 'simLogInset'),
+    path('phone-list/',api.getPhoneList,name = 'phone-list')
     ]
 
